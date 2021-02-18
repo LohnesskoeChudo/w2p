@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="19G73" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDArtwork" representedClassName="CDArtwork" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="gameItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="artworks" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDCollection" representedClassName="CDCollection" syncable="YES">
+        <attribute name="gameIds" optional="YES" attributeType="Transformable" valueTransformerName="" customClassName="[Int]"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="gameItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="collection" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDCover" representedClassName="CDCover" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="gameItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="cover" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDFranchise" representedClassName="CDFranchise" syncable="YES">
+        <attribute name="gameIds" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="gameItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="franchise" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDGameItem" representedClassName="CDGameItem" syncable="YES">
+        <attribute name="ageCategory" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="ageRating" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="aggregatedRating" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
+        <attribute name="category" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="firstReleaseDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="gameModes" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="inFavorites" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="similarGames" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Int]"/>
+        <attribute name="status" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="storyline" optional="YES" attributeType="String"/>
+        <attribute name="summary" optional="YES" attributeType="String"/>
+        <relationship name="artworks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDArtwork" inverseName="gameItem" inverseEntity="CDArtwork"/>
+        <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCollection" inverseName="gameItems" inverseEntity="CDCollection"/>
+        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCover" inverseName="gameItem" inverseEntity="CDCover"/>
+        <relationship name="franchise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDFranchise" inverseName="gameItems" inverseEntity="CDFranchise"/>
+        <relationship name="genres" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGenre" inverseName="gameItems" inverseEntity="CDGenre"/>
+        <relationship name="platforms" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDPlatform" inverseName="gameItems" inverseEntity="CDPlatform"/>
+        <relationship name="screenshots" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDScreenshot" inverseName="gameItem" inverseEntity="CDScreenshot"/>
+        <relationship name="themes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDTheme" inverseName="gameItems" inverseEntity="CDTheme"/>
+        <relationship name="websites" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDWebsite" inverseName="gameItmes" inverseEntity="CDWebsite"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDGenre" representedClassName="CDGenre" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="gameItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="genres" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDPlatform" representedClassName="CDPlatform" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="gameItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="platforms" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDScreenshot" representedClassName="CDScreenshot" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="gameItem" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="screenshots" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDTheme" representedClassName="CDTheme" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="gameItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="themes" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="CDWebsite" representedClassName="CDWebsite" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="gameItmes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGameItem" inverseName="websites" inverseEntity="CDGameItem"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <elements>
+        <element name="CDArtwork" positionX="18" positionY="153" width="128" height="133"/>
+        <element name="CDCollection" positionX="-18" positionY="117" width="128" height="103"/>
+        <element name="CDCover" positionX="0" positionY="117" width="128" height="133"/>
+        <element name="CDFranchise" positionX="0" positionY="126" width="128" height="103"/>
+        <element name="CDGameItem" positionX="-63" positionY="-18" width="128" height="373"/>
+        <element name="CDGenre" positionX="-63" positionY="72" width="128" height="88"/>
+        <element name="CDPlatform" positionX="-54" positionY="81" width="128" height="88"/>
+        <element name="CDScreenshot" positionX="36" positionY="162" width="128" height="133"/>
+        <element name="CDTheme" positionX="-36" positionY="90" width="128" height="88"/>
+        <element name="CDWebsite" positionX="-9" positionY="135" width="128" height="88"/>
+    </elements>
+</model>
