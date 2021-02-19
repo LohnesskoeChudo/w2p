@@ -31,15 +31,15 @@ class GameCardCell: UICollectionViewCell{
         self.contentView.layer.borderColor = UIColor.black.cgColor
         self.contentView.layer.cornerRadius = 15
     }
+
     
     override func prepareForReuse() {
         coverImageView.superview!.isHidden = false
         genreLabel.superview!.isHidden = false
         coverImageView.image = nil
-        genreLabel.text = ""
     }
     
-    func setupActionsForEvents(){
+    private func setupActionsForEvents(){
         for subview in contentView.subviews{
             subview.isUserInteractionEnabled = false
         }
@@ -53,7 +53,7 @@ class GameCardCell: UICollectionViewCell{
     
     @objc func touchDown(){
         touchDownAnimationFinished = false
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: 0.1, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
             self.contentView.transform = CGAffineTransform(scaleX: 0.95 , y: 0.95)
             self.contentView.alpha = 0.7
         }, completion: {
@@ -63,21 +63,19 @@ class GameCardCell: UICollectionViewCell{
     }
     
     @objc func touchUp(){
-        UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+        UIView.animate(withDuration: 0.1, delay: touchDownAnimationFinished ? 0 : 0.1, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
             self.contentView.alpha = 1
-        }, completion: {
-            _ in
-        })
+        }){ _ in
+            self.action?()
+        }
     }
     
     @objc func touchDragExit(){
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
             self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
             self.contentView.alpha = 1
-        }, completion: {
-            _ in
-        })
+        }
     }
 }
 

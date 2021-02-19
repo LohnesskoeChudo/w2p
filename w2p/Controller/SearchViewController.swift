@@ -55,22 +55,30 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        navigationController?.setNavigationBarHidden(true, animated: false)
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidLayoutSubviews()
         setupSearchField()
         setupButtons()
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "filter":
             let navigationVC = segue.destination as! UINavigationController
-            let destinationVC = navigationVC.viewControllers.first as! FilterViewController
-            destinationVC.filter = searchFilter
+            let filterVC = navigationVC.viewControllers.first as! FilterViewController
+            filterVC.filter = searchFilter
             
+        case "detailed":
+            let detailedVC = segue.destination as! DetailedViewController
+
         default:
             return
         }
@@ -147,7 +155,7 @@ extension SearchViewController: UICollectionViewDataSource{
         let gameItem = searchedGameItems[indexPath.item]
         configureCell(cardCell, gameItem: gameItem)
         setCoverToCardCell(cardCell, gameItem: gameItem)
-        
+        cardCell.reusing = true
         return cardCell
     }
     
@@ -160,6 +168,13 @@ extension SearchViewController: UICollectionViewDataSource{
         }
         cell.nameLabel.text = gameItem.name
         cell.coverImageView.backgroundColor = .red
+        if !cell.reusing {
+            cell.action = { [weak self] in
+                if let vc = self{
+                    vc.performSegue(withIdentifier: "detailed", sender: nil)
+                }
+            }
+        }
     }
     
     func setCoverToCardCell(_ cell: GameCardCell, gameItem: GameItem){
