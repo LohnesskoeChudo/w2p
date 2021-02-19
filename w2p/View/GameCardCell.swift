@@ -8,9 +8,16 @@
 import UIKit
 
 class GameCardCell: UICollectionViewCell{
+        
+    
+    var reusing: Bool = false
+    var action: (() -> Void)?
+    
     
     override func awakeFromNib() {
-        setup()
+        appearanceSetup()
+        setupActionsForEvents()
+        contentView.isExclusiveTouch = true
     }
     
     @IBOutlet weak var nameLabel: UILabel!
@@ -18,7 +25,7 @@ class GameCardCell: UICollectionViewCell{
     @IBOutlet weak var genreLabel: UILabel!
     var id: String = ""
     
-    func setup(){
+    func appearanceSetup(){
         nameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         self.contentView.layer.borderWidth = 2.5
         self.contentView.layer.borderColor = UIColor.black.cgColor
@@ -30,6 +37,47 @@ class GameCardCell: UICollectionViewCell{
         genreLabel.superview!.isHidden = false
         coverImageView.image = nil
         genreLabel.text = ""
+    }
+    
+    func setupActionsForEvents(){
+        for subview in contentView.subviews{
+            subview.isUserInteractionEnabled = false
+        }
+        let cv = contentView as! UIControl
+        cv.addTarget(self, action: #selector(touchDown), for: .touchDown)
+        cv.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+        cv.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
+    }
+    
+    var touchDownAnimationFinished = true
+    
+    @objc func touchDown(){
+        touchDownAnimationFinished = false
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
+            self.contentView.transform = CGAffineTransform(scaleX: 0.95 , y: 0.95)
+            self.contentView.alpha = 0.7
+        }, completion: {
+            _ in
+            self.touchDownAnimationFinished = true
+        })
+    }
+    
+    @objc func touchUp(){
+        UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+            self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
+            self.contentView.alpha = 1
+        }, completion: {
+            _ in
+        })
+    }
+    
+    @objc func touchDragExit(){
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+            self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
+            self.contentView.alpha = 1
+        }, completion: {
+            _ in
+        })
     }
 }
 

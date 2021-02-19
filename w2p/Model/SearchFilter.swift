@@ -9,23 +9,23 @@ import Foundation
 
 class SearchFilter{
     
-    var genres: [Genre] = []
-    var themes: [Theme] = []
-    var platforms: [Platform] = []
+    var genres: [GameGenre] = []
+    var themes: [GameTheme] = []
+    var platforms: [GamePlatform] = []
     var rating: ClosedRange<Double>? = nil
-    var released: Bool? = nil
+    var isReleased: Bool? = nil
     var releasedDateRange: ClosedRange<Date>? = nil
     
-    var allGenres: [String] = []
-    var allThemes: [String] = []
-    var allPlatforms: [String] = []
+    var allGenres: [GameGenre] = []
+    var allThemes: [GameTheme] = []
+    var allPlatforms: [GamePlatform] = []
     
-    private var jsonLoader = JsonLoader()
-    
-    
-    
-}
-
-protocol SearchFilterItem {
-    var name: String {get set}
+    func resetToDefault(){
+        genres = []
+        themes = []
+        platforms = []
+        rating = nil
+        isReleased = nil
+        releasedDateRange = nil
+    }
 }

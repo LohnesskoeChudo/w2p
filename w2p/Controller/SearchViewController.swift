@@ -9,6 +9,7 @@ import UIKit
 class SearchViewController: UIViewController {
     
     var searchedGameItems = [GameItem]()
+    let searchFilter = SearchFilter()
     let jsonLoader = JsonLoader()
     let mediaDispatcher = GameMediaDispatcher()
     let imageResizer = ImageResizer()
@@ -61,6 +62,18 @@ class SearchViewController: UIViewController {
         super.viewDidLayoutSubviews()
         setupSearchField()
         setupButtons()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "filter":
+            let navigationVC = segue.destination as! UINavigationController
+            let destinationVC = navigationVC.viewControllers.first as! FilterViewController
+            destinationVC.filter = searchFilter
+            
+        default:
+            return
+        }
     }
     
     func setupCollectionView(){
@@ -130,6 +143,7 @@ extension SearchViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameCardCell", for: indexPath) as! GameCardCell
+        
         let gameItem = searchedGameItems[indexPath.item]
         configureCell(cardCell, gameItem: gameItem)
         setCoverToCardCell(cardCell, gameItem: gameItem)
