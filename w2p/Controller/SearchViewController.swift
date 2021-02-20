@@ -43,19 +43,12 @@ class SearchViewController: UIViewController {
         jsonLoader.load(request: request, completion: completion)
     }
     @IBAction func filterTapped(_ sender: UIButton) {
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
-    }
-    
-    
 
-    
-    
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,7 +70,9 @@ class SearchViewController: UIViewController {
             filterVC.filter = searchFilter
             
         case "detailed":
+            let gameItem = sender as! GameItem
             let detailedVC = segue.destination as! DetailedViewController
+            detailedVC.gameItem = gameItem
 
         default:
             return
@@ -171,7 +166,7 @@ extension SearchViewController: UICollectionViewDataSource{
         if !cell.reusing {
             cell.action = { [weak self] in
                 if let vc = self{
-                    vc.performSegue(withIdentifier: "detailed", sender: nil)
+                    vc.performSegue(withIdentifier: "detailed", sender: gameItem)
                 }
             }
         }

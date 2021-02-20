@@ -29,16 +29,19 @@ class CacheManager{
         
     }
     
-    func saveCover(for gameItem: GameItem){
+    func save(coverData: Data,for gameItem: GameItem){
         guard let cover = gameItem.cover else {return}
         let gameEntity = NSEntityDescription.entity(forEntityName: "CDGameItem", in: moc)!
         let cdGameItem = CDGameItem(entity: gameEntity, insertInto: moc)
         cdGameItem.id = Int64(gameItem.id)
         let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: moc)!
-        let cdCover = CDCover(entity: coverEntity, insertInto: moc, cover: cover)
+        let cdCover = CDCover(entity: coverEntity, insertInto: moc, cover: cover, data: coverData)
         cdGameItem.cover = cdCover
         try! moc.save()
     }
+    
+    
+    
     
     func loadCover(for gameItem: GameItem, completion: (Data?) -> Void){
         let fetchRequest = NSFetchRequest<CDGameItem>(entityName: "CDGameItem")

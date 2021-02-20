@@ -15,14 +15,12 @@ class GameMediaDispatcher{
         CacheManager.shared.loadCover(for: gameItem){
             data in
             if let data = data {
-                gameItem.cover?.data = data
                 completion(data)
             } else {
                 loadCoverFromInet(gameItem: gameItem){
                     data in
                     if let data = data {
-                        gameItem.cover?.data = data
-                        CacheManager.shared.saveCover(for: gameItem)
+                        CacheManager.shared.save(coverData: data, for: gameItem)
                     }
                     completion(data)
                 }
