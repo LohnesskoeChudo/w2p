@@ -12,7 +12,7 @@ class GameCardCell: UICollectionViewCell{
     
     var reusing: Bool = false
     var action: (() -> Void)?
-    
+    var id: Int = 0
     
     override func awakeFromNib() {
         appearanceSetup()
@@ -23,8 +23,7 @@ class GameCardCell: UICollectionViewCell{
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var genreLabel: UILabel!
-    var id: String = ""
-    
+
     func appearanceSetup(){
         nameLabel.font = UIFont.boldSystemFont(ofSize: 20)
         self.contentView.layer.borderWidth = 2.5

@@ -9,16 +9,16 @@ import Foundation
 
 class SearchFilter{
     
-    var genres: [GameGenre] = []
-    var themes: [GameTheme] = []
-    var platforms: [GamePlatform] = []
+    var genres: [Genre] = []
+    var themes: [Theme] = []
+    var platforms: [Platform] = []
     var rating: ClosedRange<Double>? = nil
     var isReleased: Bool? = nil
     var releasedDateRange: ClosedRange<Date>? = nil
     
-    var allGenres: [GameGenre] = []
-    var allThemes: [GameTheme] = []
-    var allPlatforms: [GamePlatform] = []
+    var allGenres: [Genre] = []
+    var allThemes: [Theme] = []
+    var allPlatforms: [Platform] = []
     
     func resetToDefault(){
         genres = []

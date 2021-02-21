@@ -9,7 +9,8 @@ import UIKit
 
 class DetailedViewController: UIViewController{
     
-    var gameItem: GameItem!
+    var game: Game!
+    var mediaDispatcher = GameMediaDispatcher()
     var imageBlurrer = ImageBlurrer()
     
     @IBOutlet weak var coverView: UIImageView!
@@ -17,37 +18,70 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var genreStack: UIStackView!
     
+    @IBOutlet weak var themeStack: UIStackView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        blurredBackground.image = imageBlurrer.blurImage(with: UIImage(named: "test")!, radius: 30)
-        coverView.layer.borderWidth = 3
-        coverView.layer.borderColor = UIColor.black.cgColor
-        coverView.image = UIImage(named: "test")
-    }
+    @IBOutlet weak var platformStack: UIStackView!
     
-    
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewWillAppear(_ animated: Bool) {
         layoutCover()
         setupCover()
+        setupGameAttributesViews()
+        
     }
     
+    func setupGameAttributesViews(){
+        if let genres = game.genres, !genres.isEmpty{
+            genreStack.superview!.isHidden = false
+            for genre in genres{
+                let genreView = GameAttributeView()
+                genreView.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
+                genreStack.addArrangedSubview(genreView)
+            }
+        }
+        if let themes = game.themes, !themes.isEmpty{
+            themeStack.superview!.isHidden = false
+            for theme in themes{
+                let themeView = GameAttributeView()
+                themeView.setup(text: theme.name, color: UIColor.blue.withAlphaComponent(0.2))
+                themeStack.addArrangedSubview(themeView)
+            }
+        }
+        if let platforms = game.platforms, !platforms.isEmpty{
+            platformStack.superview!.isHidden = false
+            for platform in platforms{
+                let platformView = GameAttributeView()
+                platformView.setup(text: platform.name, color: UIColor.green.withAlphaComponent(0.2))
+                platformStack.addArrangedSubview(platformView)
+            }
+        }
+    }
+   
     private func setupCover(){
-        /*
-        blurredBackground.image = imageBlurrer.blurImage(with: UIImage(data: (gameItem.cover?.data)!)!, radius: 25)
-        coverView.image = UIImage(data: (gameItem.cover?.data)!)!
- */
+        
+        DispatchQueue.global(qos: .userInitiated).async{
+            self.mediaDispatcher.fetchCoverFor(game: self.game, cache: true){
+                data, error in
+                if let data = data, let image = UIImage(data: data){
+                    let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
+                    DispatchQueue.main.async {
+                        self.coverView.image = image
+                        self.blurredBackground.image = blurred
+                    }
+                }
+            }
+        }
+        
+        coverView.layer.borderWidth = 3
+        coverView.layer.borderColor = UIColor.black.cgColor
     }
     
     private func layoutCover(){
         
-        let heightPercentage: CGFloat = 0.66
-        
-        
-        guard let aspect = gameItem.cover?.aspect else {return}
+        let heightPercentage: CGFloat = 0.58
+
+        guard let aspect = game.cover?.aspect else {return}
         if CGFloat(aspect) > (view.frame.height * heightPercentage) / view.frame.width {
             print("<")
             coverHeightConstraint.constant = view.frame.height * heightPercentage

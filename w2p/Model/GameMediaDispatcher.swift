@@ -11,33 +11,42 @@ class GameMediaDispatcher{
     private let dataLoader = DataLoader()
     
     
-    func fetchCover(gameItem: GameItem, completion: @escaping (Data?) -> Void){
-        CacheManager.shared.loadCover(for: gameItem){
+    func fetchCoverFor(game: Game, cache: Bool, completion: @escaping (Data?, FetchingError?) -> Void){
+        
+        CacheManager.shared.loadCover(for: game){
             data in
             if let data = data {
-                completion(data)
+                completion(data, nil)
             } else {
-                loadCoverFromInet(gameItem: gameItem){
-                    data in
+                self.loadCoverFromInet(game: game){
+                    data, error in
                     if let data = data {
-                        CacheManager.shared.save(coverData: data, for: gameItem)
+                        if cache{
+                            CacheManager.shared.save(coverData: data, for: game)
+                        }
+                        completion(data, nil)
+                    } else {
+                        completion(nil, error)
                     }
-                    completion(data)
                 }
             }
         }
     }
     
-    private func loadCoverFromInet(gameItem: GameItem, completion: @escaping (Data?) -> Void){
-        guard let basicUrlString = gameItem.cover?.basicUrlStr else {return}
+    private func loadCoverFromInet(game: Game, completion: @escaping (Data?, FetchingError?) -> Void){
+        guard let basicUrlString = game.cover?.url else {return}
         guard let request = RequestFormer.shared.formSizedImageRequest(basicImageUrl: basicUrlString, sizeKey: .S264X374) else {return}
         dataLoader.load(with: request){
             data, error in
-
             if let data = data {
-                completion(data)
+                completion(data, nil)
+            } else {
+                completion(nil, .connectionError)
             }
         }
     }
-    
+}
+
+enum FetchingError: Error{
+    case connectionError
 }
