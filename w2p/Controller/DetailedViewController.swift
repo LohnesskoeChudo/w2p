@@ -18,17 +18,30 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var genreStack: UIStackView!
     
     @IBOutlet weak var themeStack: UIStackView!
     
     @IBOutlet weak var platformStack: UIStackView!
     
+    override func viewDidLoad() {
+        setupNameLabel()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         layoutCover()
         setupCover()
         setupGameAttributesViews()
-        
+    }
+    
+    func setupNameLabel(){
+        if let gameName = game.name{
+            nameLabel.text = gameName
+            nameLabel.font = UIFont.boldSystemFont(ofSize: 25)
+        } else {
+            nameLabel.isHidden = true
+        }
     }
     
     func setupGameAttributesViews(){
