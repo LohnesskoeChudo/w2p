@@ -19,20 +19,32 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var genreStack: UIStackView!
     
-    @IBOutlet weak var themeStack: UIStackView!
-    
+    @IBOutlet weak var genreThemeStack: UIStackView!
+    @IBOutlet weak var gameModeStack: UIStackView!
     @IBOutlet weak var platformStack: UIStackView!
+    
+    @IBOutlet weak var summaryLabel: UILabel!
+    
+    @IBOutlet weak var storylineLabel: UILabel!
+    
+    @IBOutlet weak var attributesContainer: UIView!
     
     override func viewDidLoad() {
         setupNameLabel()
+        setupGameAttributesViews()
+        setupCover()
+        setupSummaryLabel()
+        setupStorylineLabel()
+        if let gamemodes = game.gameModes{
+            for k in gamemodes{
+                print(k.name)
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         layoutCover()
-        setupCover()
-        setupGameAttributesViews()
     }
     
     func setupNameLabel(){
@@ -40,34 +52,79 @@ class DetailedViewController: UIViewController{
             nameLabel.text = gameName
             nameLabel.font = UIFont.boldSystemFont(ofSize: 25)
         } else {
-            nameLabel.isHidden = true
+            nameLabel.superview?.isHidden = true
+        }
+    }
+    
+    func setupSummaryLabel(){
+        if let summary = game.summary{
+            summaryLabel.text = summary
+        } else {
+            summaryLabel.superview?.isHidden = true
+        }
+    }
+    
+    func setupStorylineLabel(){
+        if let storyline = game.storyline{
+            storylineLabel.text = storyline
+        } else {
+            storylineLabel.superview?.isHidden = true
         }
     }
     
     func setupGameAttributesViews(){
-        if let genres = game.genres, !genres.isEmpty{
-            genreStack.superview!.isHidden = false
-            for genre in genres{
-                let genreView = GameAttributeView()
-                genreView.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
-                genreStack.addArrangedSubview(genreView)
+        
+        var genresThemesViews = [GameAttributeView]()
+        if let genres = game.genres{
+            genresThemesViews += genres.map{
+                genre in
+                let gav = GameAttributeView()
+                gav.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
+                return gav
             }
         }
-        if let themes = game.themes, !themes.isEmpty{
-            themeStack.superview!.isHidden = false
-            for theme in themes{
-                let themeView = GameAttributeView()
-                themeView.setup(text: theme.name, color: UIColor.blue.withAlphaComponent(0.2))
-                themeStack.addArrangedSubview(themeView)
+        if let themes = game.themes{
+            genresThemesViews += themes.map{
+                theme in
+                let gav = GameAttributeView()
+                gav.setup(text: theme.name, color: UIColor.green.withAlphaComponent(0.2))
+                return gav
             }
         }
+        if !genresThemesViews.isEmpty{
+            for (index, gav) in genresThemesViews.enumerated(){
+                genreThemeStack.insertArrangedSubview(gav, at: index + 1)
+            }
+        } else {
+            genreThemeStack.superview?.isHidden = true
+        }
+        
+        
+        if let gameModes = game.gameModes, !gameModes.isEmpty{
+            gameModeStack.superview!.isHidden = false
+            for (index, gameMode) in gameModes.enumerated(){
+                let gameModeView = GameAttributeView()
+                gameModeView.setup(text: gameMode.name, color: UIColor.blue.withAlphaComponent(0.2))
+                gameModeStack.insertArrangedSubview(gameModeView, at: index + 1)
+            }
+        } else {
+            gameModeStack.superview?.isHidden = true
+        }
+        
         if let platforms = game.platforms, !platforms.isEmpty{
             platformStack.superview!.isHidden = false
-            for platform in platforms{
+            for (index,platform) in platforms.enumerated(){
                 let platformView = GameAttributeView()
-                platformView.setup(text: platform.name, color: UIColor.green.withAlphaComponent(0.2))
-                platformStack.addArrangedSubview(platformView)
+                platformView.setup(text: platform.name, color: UIColor.purple.withAlphaComponent(0.2))
+                platformStack.insertArrangedSubview(platformView, at: index + 1)
             }
+        } else {
+            platformStack.superview?.isHidden = true
+        }
+        
+        
+        if platformStack.superview!.isHidden && genreThemeStack.superview!.isHidden && gameModeStack.superview!.isHidden {
+            attributesContainer.isHidden = true
         }
     }
    
@@ -85,9 +142,6 @@ class DetailedViewController: UIViewController{
                 }
             }
         }
-        
-        coverView.layer.borderWidth = 3
-        coverView.layer.borderColor = UIColor.black.cgColor
     }
     
     private func layoutCover(){

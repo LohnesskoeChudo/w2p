@@ -9,13 +9,20 @@ import Foundation
 
 class SearchFilter{
     
-    var genres: [Genre] = []
-    var themes: [Theme] = []
-    var platforms: [Platform] = []
-    var rating: ClosedRange<Double>? = nil
+    var searchString: String?
+    var genres: Set<Genre> = []
+    var themes: Set<Theme> = []
+    var platforms: Set<Platform> = []
+    var gameModes: Set<GameMode> = []
+    var ratingUpperBound: Date?
+    var ratingLowerBound: Date?
     var isReleased: Bool? = nil
-    var releasedDateRange: ClosedRange<Date>? = nil
     
+    
+    
+    var releaseDateUpperBound: Date?
+    var releaseDateLowerBound: Date?
+
     var allGenres: [Genre] = []
     var allThemes: [Theme] = []
     var allPlatforms: [Platform] = []
@@ -24,8 +31,6 @@ class SearchFilter{
         genres = []
         themes = []
         platforms = []
-        rating = nil
         isReleased = nil
-        releasedDateRange = nil
     }
 }

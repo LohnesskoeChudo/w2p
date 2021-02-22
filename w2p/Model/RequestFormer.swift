@@ -7,40 +7,41 @@ class RequestFormer{
     private init() { }
    
     //var api = "http://192.168.1.64:8002/"
-    var basicFields = """
-        fields
-        name,
-        category,
-        summary,
-        storyline,
-        aggregated_rating,
-        status,
-        first_release_date,
-        similar_games,
-        cover.animated, cover.height, cover.width, cover.url,
-        genres.name,
-        platforms.name,
-        game_modes.name,
-        websites.url, websites.category,
-        themes.name,
-        artworks.animated, artworks.height, artworks.width, artworks.url,
-        screenshots.animated, screenshots.height, screenshots.width, screenshots.url,
-        videos.name, videos.video_id,
-        franchise.games, franchise.name,
-        collection.games, collection.name,
-        age_ratings.category, age_ratings.rating, age_ratings.rating_cover_url;
-
-        where aggregated_rating < 80;
-
-        limit 100;
-        """
     
     func formRequestForSearching(filter: SearchFilter) -> URLRequest{
         var request = URLRequest(url: URL(string: api)!)
         request.httpMethod = "POST"
+        
+        var requestBody = RequestFields.basicFields
+        
+        var filterComponents = [String]()
+        if !filter.genres.isEmpty{
+            filterComponents.append("genres = [\(filter.genres.map{String($0.id)}.joined(separator: ","))]")
+        }
+        
+        if !filter.themes.isEmpty{
+            filterComponents.append("themes = [\(filter.themes.map{String($0.id)}.joined(separator: ","))]")
+        }
+        
+        if !filter.platforms.isEmpty{
+            filterComponents.append("platforms = [\(filter.platforms.map{String($0.id)}.joined(separator: ","))]")
+        }
+        
+        if let releaseUpperBound = filter.releaseDateUpperBound{
+            filterComponents.append("first_release_date < \(releaseUpperBound.timeIntervalSince1970)")
+        }
+        
+        if let releaseLowerBound = filter.releaseDateLowerBound{
+            filterComponents.append("first_release_date > \(releaseLowerBound.timeIntervalSince1970)")
+        }
+        
+        
+        
+
         request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
         request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"
-        request.httpBody = basicFields.data(using: .utf8)
+        request.httpBody = RequestFields.basicFields.data(using: .utf8)
+        
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return request
     }

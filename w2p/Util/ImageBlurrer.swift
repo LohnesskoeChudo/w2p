@@ -18,7 +18,7 @@ class ImageBlurrer{
         filter?.setValue(radius, forKey: "inputRadius")
         let result = filter?.value(forKey: kCIOutputImageKey) as? CIImage
 
-        let cgImage = context.createCGImage(result ?? CIImage(), from: inputImage.extent.inset(by: UIEdgeInsets(top: -3*radius, left: -3*radius, bottom: -3*radius, right: -3*radius)))
+        let cgImage = context.createCGImage(result ?? CIImage(), from: inputImage.extent.inset(by: UIEdgeInsets(top: radius, left: radius, bottom: radius, right: radius)))
         let retVal = UIImage(cgImage: cgImage!)
         return retVal
     }

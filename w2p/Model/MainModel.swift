@@ -1,6 +1,6 @@
 import Foundation
 
-struct Game: Decodable{
+struct Game: Codable{
 
     var id: Int?
     var name: String?
@@ -26,29 +26,30 @@ struct Game: Decodable{
     
 }
 
-struct Genre: Codable{
+struct Genre: Codable, Hashable{
     var name: String
     var id: Int
 }
 
-struct Platform: Codable{
+struct Platform: Codable, Hashable{
     var id: Int
     var name: String
     
 }
 
-struct GameMode: Codable{
+struct GameMode: Codable, Hashable{
+    var id: Int
     var name: String
 }
 
-struct Website: Decodable{
+struct Website: Codable{
     var id: Int
     var url: String
     var category: Int?
     
 }
 
-struct Theme: Codable{
+struct Theme: Codable, Hashable{
     var id: Int
     var name: String
 }
