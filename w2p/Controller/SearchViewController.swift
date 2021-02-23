@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchField: UITextField!
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
-        let request = RequestFormer.shared.formRequestForSearching(filter: SearchFilter())
+        let request = RequestFormer.shared.formRequestForSearching(filter: SearchFilter(), limit: nil)
         let completion = {
             (games: [Game]?, error: NetworkError?) in
             if let games = games {

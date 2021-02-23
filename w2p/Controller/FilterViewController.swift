@@ -10,22 +10,29 @@ import UIKit
 class FilterViewController: UIViewController {
     
     var filter: SearchFilter!
-    @IBOutlet var sectionBackgroundViews: [UIView]!
-
+    
+    @IBOutlet weak var flow: LabelFlowView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        setupSectionBackViews()
-        
+
     }
     
     func setup(){
         navigationItem.title = "Filter"
-    }
-    
-    func setupSectionBackViews(){
-        for backView in sectionBackgroundViews{
-            backView.layer.cornerRadius = 20
+        
+        var arr = ["asdfafd ","adfk ","asdkfjlas ","askf ","adfjkdfadf ","aksdf ","asda ","asdfsdf "]
+        
+        for k in arr{
+            let label = UILabel()
+            label.text = k
+            label.backgroundColor = .red
+            label.layer.cornerRadius = 8
+            label.translatesAutoresizingMaskIntoConstraints = false
+            flow.addSubview(label)
         }
     }
+    
+    
 }

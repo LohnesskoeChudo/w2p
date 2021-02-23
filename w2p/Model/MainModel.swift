@@ -26,18 +26,18 @@ struct Game: Codable{
     
 }
 
-struct Genre: Codable, Hashable{
+struct Genre: Codable, Hashable, Identifiable{
     var name: String
     var id: Int
 }
 
-struct Platform: Codable, Hashable{
+struct Platform: Codable, Hashable, Identifiable{
     var id: Int
     var name: String
     
 }
 
-struct GameMode: Codable, Hashable{
+struct GameMode: Codable, Hashable, Identifiable{
     var id: Int
     var name: String
 }
@@ -49,7 +49,7 @@ struct Website: Codable{
     
 }
 
-struct Theme: Codable, Hashable{
+struct Theme: Codable, Hashable, Identifiable{
     var id: Int
     var name: String
 }

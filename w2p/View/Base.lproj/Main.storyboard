@@ -58,27 +58,31 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="tmr-3C-CFe">
                                                 <rect key="frame" x="0.0" y="56" width="414" height="242"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ni9-kK-oQS">
-                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="242"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x9f-PY-f4D">
+                                                        <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="By genre" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZPi-pR-HqR">
-                                                                <rect key="frame" x="71" y="111.5" width="68" height="20.5"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wDU-yN-dqV">
-                                                                <rect key="frame" x="333" y="106" width="49" height="31"/>
-                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            </switch>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AIV-4r-k0y" customClass="LabelFlowView" customModule="w2p" customModuleProvider="target">
+                                                                <rect key="frame" x="100" y="0.0" width="214" height="128"/>
+                                                                <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                                            </view>
                                                         </subviews>
+                                                        <color key="backgroundColor" systemColor="systemPurpleColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="trailing" secondItem="AIV-4r-k0y" secondAttribute="trailing" constant="100" id="31q-sp-DDy"/>
+                                                            <constraint firstItem="AIV-4r-k0y" firstAttribute="leading" secondItem="x9f-PY-f4D" secondAttribute="leading" constant="100" id="A8R-JC-T9N"/>
+                                                            <constraint firstAttribute="height" constant="128" placeholder="YES" id="QzZ-YB-7CJ"/>
+                                                            <constraint firstItem="AIV-4r-k0y" firstAttribute="top" secondItem="x9f-PY-f4D" secondAttribute="top" id="Sra-gC-xsQ"/>
+                                                            <constraint firstAttribute="bottom" secondItem="AIV-4r-k0y" secondAttribute="bottom" id="XaK-Oc-1na"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ni9-kK-oQS">
+                                                        <rect key="frame" x="0.0" y="128" width="414" height="114"/>
                                                         <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="114" id="pHV-VI-sc2"/>
+                                                        </constraints>
                                                     </view>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="242" id="CbJ-rb-LPA"/>
-                                                </constraints>
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -112,6 +116,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="VdA-7l-H3J"/>
                     <size key="freeformSize" width="414" height="1300"/>
+                    <connections>
+                        <outlet property="flow" destination="AIV-4r-k0y" id="WzO-Wc-8jx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q8o-Sk-23G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

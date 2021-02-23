@@ -32,6 +32,7 @@ class RequestFields{
         franchise.games, franchise.name,
         collection.games, collection.name,
         age_ratings.category, age_ratings.rating, age_ratings.rating_cover_url;
+
     """
     
     

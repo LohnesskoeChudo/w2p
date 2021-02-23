@@ -14,12 +14,11 @@ class SearchFilter{
     var themes: Set<Theme> = []
     var platforms: Set<Platform> = []
     var gameModes: Set<GameMode> = []
-    var ratingUpperBound: Date?
-    var ratingLowerBound: Date?
-    var isReleased: Bool? = nil
     
-    
-    
+    var ratingUpperBound: Int?
+    var ratingLowerBound: Int?
+
+    var onlyNotReleasedYet: Bool = false
     var releaseDateUpperBound: Date?
     var releaseDateLowerBound: Date?
 
@@ -31,6 +30,5 @@ class SearchFilter{
         genres = []
         themes = []
         platforms = []
-        isReleased = nil
     }
 }
