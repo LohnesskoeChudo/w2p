@@ -22,13 +22,11 @@ class FilterViewController: UIViewController {
     func setup(){
         navigationItem.title = "Filter"
         
-        var arr = ["asdfafd ","adfk ","asdkfjlas ","askf ","adfjkdfadf ","aksdf ","asda ","asdfsdf "]
+        var arr = ["asdfafd ","adfk ","asdkfjlas ","askf ","adfjkdfadf ","aksdf ","asda ","asdfsdf ", "lsdkjflasdjkfljsdlfkfdkjasdfjskddskfj"]
         
         for k in arr{
-            let label = UILabel()
-            label.text = k
-            label.backgroundColor = .red
-            label.layer.cornerRadius = 8
+            let label = GameAttributeView()
+            label.setup(text: k, color: UIColor.purple)
             label.translatesAutoresizingMaskIntoConstraints = false
             flow.addSubview(label)
         }

@@ -12,44 +12,68 @@ class LabelFlowView: UIView{
     
     var vertivalSpacing: CGFloat = 10
     var horizontalSpacing: CGFloat = 10
+    var height: CGFloat = 0
     
+    
+    //MARK: called twice
     override func layoutSubviews(){
         super.layoutSubviews()
         flowLayout()
-
+        invalidateIntrinsicContentSize()
     }
+    
     override var intrinsicContentSize: CGSize{
-        return CGSize(width: 0, height: calculateHeight())
+        return CGSize(width: 0, height: height)
     }
     
     private func flowLayout(){
+            
+        guard let subviewHeight = subviews.first?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height else {return}
         
-        
-    }
-        
-    private func layoutSubviewsLineInCenter(){
-       
-    }
- 
-    private func calculateHeight() -> CGFloat {
-        guard let subviewHeight = subviews.first?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height else {
-            return .zero
-        }
+        var lineBuffer = [(UIView, CGFloat)]()
         var yOffset: CGFloat = 0
-        var xOffset: CGFloat = 0
-        let selfSize = self.bounds.size
-        
-        for subview in subviews{
-            let subviewSize = subview.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-            if subviewSize.width < selfSize.width - xOffset{
-                xOffset += subviewSize.width
+        var subviewsLineWidth: CGFloat = 0
+        var subviewIndex = 0
+        while subviewIndex < subviews.count {
+            
+            let subview = subviews[subviewIndex]
+            let subviewWidth = subview.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
+            
+            let lineWidth = subviewsLineWidth + subviewWidth + CGFloat(lineBuffer.count) * horizontalSpacing
+            
+            if bounds.width > lineWidth {
+                lineBuffer.append((subview, subviewWidth))
+                subviewsLineWidth += subviewWidth
+                subviewIndex += 1
             } else {
-                xOffset = 0
-                yOffset += subviewSize.height + vertivalSpacing
-                xOffset += min(subviewSize.width, selfSize.width)
+                if lineBuffer.isEmpty {
+                    layoutSubviewsLineInCenter(subviews: [(subview, min(bounds.width,subviewWidth))], yOffset: yOffset, subviewHeight: subviewHeight, lineWidth: bounds.width)
+                    subviewIndex += 1
+                } else {
+                    layoutSubviewsLineInCenter(subviews: lineBuffer, yOffset: yOffset, subviewHeight: subviewHeight, lineWidth: subviewsLineWidth  + CGFloat(max(lineBuffer.count - 1, 0)) * horizontalSpacing)
+                }
+                subviewsLineWidth = 0
+                lineBuffer = []
+                yOffset += subviewHeight + vertivalSpacing
             }
         }
-        return xOffset == 0 ? yOffset : yOffset + subviewHeight
+        if !lineBuffer.isEmpty {
+            layoutSubviewsLineInCenter(subviews: lineBuffer, yOffset: yOffset, subviewHeight: subviewHeight, lineWidth: subviewsLineWidth  + CGFloat(max(lineBuffer.count - 1, 0)) * horizontalSpacing)
+            yOffset += subviewHeight
+        } else {
+            yOffset -= vertivalSpacing
+        }
+        height = yOffset
+    }
+        
+    private func layoutSubviewsLineInCenter(subviews: [(UIView, CGFloat)], yOffset: CGFloat, subviewHeight: CGFloat, lineWidth: CGFloat){
+        
+        var offset = (bounds.width - lineWidth) / 2
+
+        for (subview, width) in subviews {
+            subview.frame = CGRect(x: offset, y: yOffset, width: width, height: subviewHeight)
+            offset += width + horizontalSpacing
+        }
     }
 }
 
