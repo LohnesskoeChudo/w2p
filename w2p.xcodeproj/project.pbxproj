@@ -177,8 +177,8 @@
 		5D530F1825D7FC9D00DF5621 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				5D530EFC25D7E44300DF5621 /* SearchViewController.swift */,
 				5D0AA4D825DBE7750026543E /* FilterViewController.swift */,
+				5D530EFC25D7E44300DF5621 /* SearchViewController.swift */,
 				5D530F3525D82ECE00DF5621 /* DetailedViewController.swift */,
 				5D530F2A25D8144000DF5621 /* FavoritesViewController.swift */,
 				5D530F2D25D8148A00DF5621 /* SettingsViewController.swift */,

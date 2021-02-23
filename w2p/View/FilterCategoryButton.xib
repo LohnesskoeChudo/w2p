@@ -16,12 +16,12 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view userInteractionEnabled="NO" contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="761" height="175"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYk-kO-QP9">
-                    <rect key="frame" x="20" y="64" width="671" height="77"/>
+                    <rect key="frame" x="20" y="64" width="64" height="77"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -40,7 +40,6 @@
             <constraints>
                 <constraint firstItem="OyQ-Ka-of8" firstAttribute="bottom" secondItem="dYk-kO-QP9" secondAttribute="bottom" id="4XO-bH-uhA"/>
                 <constraint firstItem="dYk-kO-QP9" firstAttribute="top" secondItem="OyQ-Ka-of8" secondAttribute="top" constant="20" id="7H7-Qx-FqE"/>
-                <constraint firstItem="GtG-4H-3ji" firstAttribute="leading" secondItem="dYk-kO-QP9" secondAttribute="trailing" constant="20" id="ADC-yu-ejG"/>
                 <constraint firstItem="GtG-4H-3ji" firstAttribute="centerY" secondItem="dYk-kO-QP9" secondAttribute="centerY" id="LDq-rz-jqa"/>
                 <constraint firstItem="dYk-kO-QP9" firstAttribute="leading" secondItem="OyQ-Ka-of8" secondAttribute="leading" constant="20" id="LKT-H6-J5F"/>
                 <constraint firstItem="OyQ-Ka-of8" firstAttribute="trailing" secondItem="GtG-4H-3ji" secondAttribute="trailing" constant="20" id="zNc-nN-pYc"/>
