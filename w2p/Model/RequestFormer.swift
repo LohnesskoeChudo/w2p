@@ -59,7 +59,7 @@ class RequestFormer{
             requestBody += "limit \(limit);"
         }
         
-        
+        print(requestBody)
         
         request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
         request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"

@@ -1,0 +1,63 @@
+[
+    
+    {
+        "id": 8,
+        "name": "PlayStation 2"
+    },
+    {
+        "id": 39,
+        "name": "iOS"
+    },
+    {
+        "id": 6,
+        "name": "PC (Microsoft Windows)"
+    },
+    {
+        "id": 130,
+        "name": "Nintendo Switch"
+    },
+    {
+        "id": 11,
+        "name": "Xbox"
+    },
+    {
+        "id": 14,
+        "name": "Mac"
+    },
+    {
+        "id": 34,
+        "name": "Android"
+    },
+    {
+        "id": 9,
+        "name": "PlayStation 3"
+    },
+    {
+        "id": 48,
+        "name": "PlayStation 4"
+    },
+    {
+        "id": 49,
+        "name": "Xbox One"
+    },
+    {
+        "id": 12,
+        "name": "Xbox 360"
+    },
+    {
+        "id": 167,
+        "name": "PlayStation 5"
+    },
+    {
+        "id": 7,
+        "name": "PlayStation"
+    },
+    {
+        "id": 169,
+        "name": "Xbox Series"
+    },
+    {
+        "id": 3,
+        "name": "Linux"
+    },
+]

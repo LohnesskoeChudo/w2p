@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FilterCategoryShowButton: UIControl {
+class CategoryShowButton: UIControl {
     
     @IBOutlet var contentView: UIView!
     @IBOutlet var nameLabel: UILabel!
@@ -30,7 +30,7 @@ class FilterCategoryShowButton: UIControl {
     }
     
     func commonInit(){
-        Bundle.main.loadNibNamed("FilterCategoryButton", owner: self, options: nil)
+        Bundle.main.loadNibNamed("CategoryShowButton", owner: self, options: nil)
         contentView.fixIn(view: self)
     }
     
@@ -47,7 +47,7 @@ class FilterCategoryShowButton: UIControl {
     
     @objc func touchUp(){
         self.opened.toggle()
-        UIView.animate(withDuration: 0.1, delay: 0.1, options: [.allowUserInteraction], animations: {
+        UIView.animate(withDuration: 0.1, delay: 0.1) {
             self.nameLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
             if self.opened{
@@ -55,26 +55,17 @@ class FilterCategoryShowButton: UIControl {
             } else {
                 self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
             }
-            
-        }, completion: {
-            _ in
-        })
-
+        }
     }
     
     @objc func touchDown(){
-        UIView.animate(withDuration: 0.1 , delay: 0, options: [.allowUserInteraction], animations: {
-            
+        UIView.animate(withDuration: 0.1 , delay: 0) {
             self.nameLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             self.imageView.transform = self.imageView.transform.scaledBy(x: 0.9, y: 0.9)
-            
-        }, completion: {
-            _ in
-        })
+        }
     }
     
     @objc func touchDragExit(){
         
     }
-    
 }

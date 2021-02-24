@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchField: UITextField!
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
-        let request = RequestFormer.shared.formRequestForSearching(filter: SearchFilter(), limit: nil)
+        let request = RequestFormer.shared.formRequestForSearching(filter: searchFilter, limit: 500)
         let completion = {
             (games: [Game]?, error: NetworkError?) in
             if let games = games {
@@ -109,15 +109,7 @@ extension SearchViewController: UICollectionViewDelegate, WaterfallCollectionVie
         let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
         
         var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
-        
 
-        if let rating = gameItem.aggregatedRating, rating > 0 {
-            additionHeight += CardViewComponentsHeight.rating.rawValue
-        }
-        if gameItem.genres?.first != nil{
-            additionHeight += CardViewComponentsHeight.genre.rawValue
-        }
-        
         return height + additionHeight
     }
     var numberOfColumns: Int { traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
@@ -156,13 +148,8 @@ extension SearchViewController: UICollectionViewDataSource{
     
     func configureCell(_ cell: GameCardCell, game: Game){
         cell.id = game.id ?? -1
-        if let genre = game.genres?.first {
-            cell.genreLabel.text = genre.name
-        } else {
-            cell.genreLabel.superview!.isHidden = true
-        }
         cell.nameLabel.text = game.name
-        cell.coverImageView.backgroundColor = .red
+        cell.coverImageView.backgroundColor = .blue
         cell.action = { [weak self] in
             if let vc = self{
                 vc.performSegue(withIdentifier: "detailed", sender: game)
