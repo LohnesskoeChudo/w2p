@@ -34,6 +34,7 @@
 		5DDA01AB25DAFBF300FF2C1C /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01AA25DAFBF300FF2C1C /* CacheManager.swift */; };
 		5DDA01AE25DAFD7E00FF2C1C /* GameMediaDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01AD25DAFD7E00FF2C1C /* GameMediaDispatcher.swift */; };
 		5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01B325DB157400FF2C1C /* BinarySearch.swift */; };
+		5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */; };
 		5DE47E1025E63AA900439FB7 /* CommonButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E0F25E63AA900439FB7 /* CommonButton.xib */; };
 		5DE47E1325E63B6F00439FB7 /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE47E1225E63B6F00439FB7 /* CommonButton.swift */; };
 		5DE47E1625E6402B00439FB7 /* genres.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E1525E6402B00439FB7 /* genres.json */; };
@@ -89,6 +90,7 @@
 		5DDA01AA25DAFBF300FF2C1C /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		5DDA01AD25DAFD7E00FF2C1C /* GameMediaDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMediaDispatcher.swift; sourceTree = "<group>"; };
 		5DDA01B325DB157400FF2C1C /* BinarySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinarySearch.swift; sourceTree = "<group>"; };
+		5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleSlider.swift; sourceTree = "<group>"; };
 		5DE47E0F25E63AA900439FB7 /* CommonButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommonButton.xib; sourceTree = "<group>"; };
 		5DE47E1225E63B6F00439FB7 /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
 		5DE47E1525E6402B00439FB7 /* genres.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = genres.json; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				5D530F0325D7E44300DF5621 /* LaunchScreen.storyboard */,
 				5DE47E1225E63B6F00439FB7 /* CommonButton.swift */,
 				5D530F3225D828A000DF5621 /* GameCardCell.swift */,
+				5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */,
 				5DE9937025E56A08004AB0B1 /* CategoryShowButton.swift */,
 				5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */,
 				5DA6099225E50DA400F7B814 /* LabelFlowView.swift */,
@@ -352,6 +355,7 @@
 				5D530F0E25D7E45400DF5621 /* DataLoader.swift in Sources */,
 				5DDA01AB25DAFBF300FF2C1C /* CacheManager.swift in Sources */,
 				5D530EFB25D7E44300DF5621 /* SceneDelegate.swift in Sources */,
+				5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */,
 				5DF85F3125E1A64E00359227 /* CDWebsite.swift in Sources */,
 				5DF85F2225E1A61900359227 /* CDCover.swift in Sources */,
 				5D530F2E25D8148A00DF5621 /* SettingsViewController.swift in Sources */,

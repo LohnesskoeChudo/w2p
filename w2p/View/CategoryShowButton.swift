@@ -24,14 +24,11 @@ class CategoryShowButton: UIControl {
         super.init(coder: coder)
         commonInit()
     }
-    
-    override func awakeFromNib() {
-        setupActions()
-    }
-    
+
     func commonInit(){
         Bundle.main.loadNibNamed("CategoryShowButton", owner: self, options: nil)
         contentView.fixIn(view: self)
+        setupActions()
     }
     
     func setup(name: String){

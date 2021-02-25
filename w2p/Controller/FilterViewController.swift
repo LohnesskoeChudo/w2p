@@ -11,41 +11,129 @@ class FilterViewController: UIViewController {
     
     var filter: SearchFilter!
     
+    //flows
     @IBOutlet weak var genreFlow: LabelFlowView!
     @IBOutlet weak var themeFlow: LabelFlowView!
     @IBOutlet weak var platformFlow: LabelFlowView!
-    
-    
     @IBOutlet weak var genreControl: CategoryShowButton!
     @IBOutlet weak var themeControl: CategoryShowButton!
     @IBOutlet weak var platformControl: CategoryShowButton!
-    
     @IBAction func genreControlAction(_ sender: CategoryShowButton) {
-        show(flowView: genreFlow)
+        if sender.opened{
+            show(section: genreFlow.superview, subview: genreFlow, animated: true)
+        } else {
+            hide(section: genreFlow.superview, subview: genreFlow, animated: true)
+        }
     }
     @IBAction func themeControlAction(_ sender: CategoryShowButton) {
-        show(flowView: themeFlow)
+        if sender.opened{
+            show(section: themeFlow.superview, subview: themeFlow, animated: true)
+        } else {
+            hide(section: themeFlow.superview, subview: themeFlow, animated: true)
+        }
     }
     @IBAction func platformControlAction(_ sender: CategoryShowButton) {
-        show(flowView: platformFlow)
+        if sender.opened{
+            show(section: platformFlow.superview, subview: platformFlow, animated: true)
+        } else {
+            hide(section: platformFlow.superview, subview: platformFlow, animated: true)
+        }
+    }
+    
+    //rating
+    @IBOutlet weak var ratingSwitch: UISwitch!
+    @IBAction func switchRatingAction(_ sender: UISwitch) {
+        if sender.isOn {
+            
+            filter.ratingLowerBound = 1
+            filter.ratingUpperBound = 100
+
+        } else {
+            
+            filter.ratingLowerBound = nil
+            filter.ratingUpperBound = nil
+        }
+        updateRatingUI(animated: true)
+        print(ratingSliderContainer.isHidden)
+    }
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var ratingSliderContainer: UIView!
+    var ratingSlider: DoubleSlider!
+   
+    
+    //gameMode
+    
+    @IBOutlet weak var singleplayerSwitch: UISwitch!
+    @IBOutlet weak var multiplayerSwitch: UISwitch!
+    
+    @IBAction func singleplayerSwitch(_ sender: UISwitch) {
+        filter.singleplayer = sender.isOn
+    }
+    @IBAction func multiplayerSwitch(_ sender: UISwitch) {
+        filter.multiplayer = sender.isOn
     }
     
     
-    private func show(flowView: UIView){
-        UIView.animate(withDuration: 0.3, delay: 0, animations: {
-            flowView.superview?.isHidden.toggle()
-        })
-        UIView.animate(withDuration: 0.15, delay: 0.15, animations: {
-            flowView.alpha = abs(flowView.alpha - 1)
-        })
+    
+    private func show(section: UIView?, subview: UIView, animated: Bool){
+        
+        let showSection = {section?.isHidden = false}
+        let showSubview = {subview.alpha = 1}
+            
+        if animated{
+            UIView.animate(withDuration: 0.3) { showSection() }
+            UIView.animate(withDuration: 0.15, delay: 0.15) { showSubview() }
+        } else {
+            showSection()
+            showSubview()
+        }
     }
     
+    private func hide(section: UIView?, subview: UIView, animated: Bool){
+            
+        let hideSection = { section?.isHidden = true }
+        let hideSubview = { subview.alpha = 0 }
+        
+        if animated{
+            UIView.animate(withDuration: 0.3){hideSection()}
+            UIView.animate(withDuration: 0.15, delay: 0.15) { hideSubview()}
+        } else {
+            hideSection()
+            hideSubview()
+        }
+    }
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Filter"
         setupFlows()
         setupControls()
         setupNavigationBar()
+        setupRating()
+        updateGameModesUI()
+    }
+    
+    private func updateGameModesUI(){
+        singleplayerSwitch.isOn = filter.singleplayer
+        multiplayerSwitch.isOn = filter.multiplayer
+    }
+    
+    private func setupRating(){
+        ratingSlider = DoubleSlider(frame: .zero, maxValue: 100, minValue: 1, thumbColor: .black , trackColor: .lightGray)
+
+        ratingSlider.delegate = self
+        ratingSlider.translatesAutoresizingMaskIntoConstraints = false
+        ratingSliderContainer.addSubview(ratingSlider)
+        NSLayoutConstraint.activate([
+            ratingSlider.topAnchor.constraint(equalTo: ratingSliderContainer.topAnchor, constant: 20),
+            ratingSlider.leadingAnchor.constraint(equalTo: ratingSliderContainer.leadingAnchor, constant: 20),
+            ratingSlider.trailingAnchor.constraint(equalTo: ratingSliderContainer.trailingAnchor, constant: -20),
+            ratingSlider.bottomAnchor.constraint(equalTo: ratingSliderContainer.bottomAnchor),
+            ratingSlider.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        
+        updateRatingUI(animated: false)
     }
     
     private func setupNavigationBar(){
@@ -130,8 +218,15 @@ class FilterViewController: UIViewController {
         let genreAttrs = genreFlow.subviews.compactMap{$0 as? GameAttributeView}
         let themeAttrs = themeFlow.subviews.compactMap{$0 as? GameAttributeView}
         let platformAttrs = platformFlow.subviews.compactMap{$0 as? GameAttributeView}
-        print(genreAttrs.count)
+
         clear(gameAttrs: genreAttrs + themeAttrs + platformAttrs)
+        
+        //UIkit bug?
+        if ratingSwitch.isOn {
+            updateRatingUI(animated: true)
+        }
+        updateGameModesUI()
+        
     }
     
     private func clear(gameAttrs: [GameAttributeView]){
@@ -139,4 +234,46 @@ class FilterViewController: UIViewController {
             attr.clear()
         }
     }
+    
+    
+    private func updateRatingUI(animated: Bool){
+        if let upperValue = filter.ratingUpperBound, let lowerValue = filter.ratingLowerBound {
+            ratingLabel.text = "\(lowerValue) - \(upperValue)"
+            ratingSwitch.setOn(true, animated: animated)
+            show(section: ratingSliderContainer, subview: ratingSlider, animated: animated)
+            ratingLabel.isHidden = false
+            ratingSlider.lowerValue = CGFloat(lowerValue)
+            ratingSlider.upperValue = CGFloat(upperValue)
+            ratingSlider.updateAppeareance()
+            UIView.animate(withDuration: 0.3){
+                self.ratingLabel.alpha = 1
+            }
+        } else {
+            ratingSwitch.setOn(false, animated: animated)
+            hide(section: ratingSliderContainer, subview: ratingSlider, animated: animated)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.ratingLabel.alpha = 0
+            }){
+                _ in
+                self.ratingLabel.isHidden = true
+            }
+        }
+    }
+    
 }
+
+extension FilterViewController: DoubleSliderDelegate{
+    
+    func sliderValuesChanged(newLowerValue: CGFloat, newUpperValue: CGFloat) {
+        
+        ratingLabel.text = "\(Int(newLowerValue)) - \(Int(newUpperValue))"
+        filter.ratingUpperBound = Int(newUpperValue)
+        filter.ratingLowerBound = Int(newLowerValue)
+        
+    }
+    
+}
+
+
+
+

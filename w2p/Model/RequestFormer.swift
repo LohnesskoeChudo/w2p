@@ -25,9 +25,11 @@ class RequestFormer{
         if !filter.platforms.isEmpty{
             filterComponents.append("platforms = \(filter.platforms.toIdArrayString())")
         }
+        /*
         if !filter.gameModes.isEmpty{
             filterComponents.append("game_modes = \(filter.gameModes.toIdArrayString())")
         }
+ */
         
         if let aggrRatingUpperBound = filter.ratingUpperBound{
             filterComponents.append("aggregated_rating <= \(aggrRatingUpperBound)")

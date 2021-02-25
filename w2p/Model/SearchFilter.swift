@@ -13,8 +13,10 @@ class SearchFilter{
     var genres: Set<Genre> = []
     var themes: Set<Theme> = []
     var platforms: Set<Platform> = []
-    var gameModes: Set<GameMode> = []
     
+    var singleplayer: Bool = false
+    var multiplayer: Bool = false
+
     var ratingUpperBound: Int?
     var ratingLowerBound: Int?
 
@@ -53,5 +55,9 @@ class SearchFilter{
         genres = []
         themes = []
         platforms = []
+        singleplayer = false
+        multiplayer = false
+        ratingUpperBound = nil
+        ratingLowerBound = nil
     }
 }
