@@ -9,7 +9,7 @@ import UIKit
 
 class ImageResizer {
     
-    func resizeImageToFit(width: CGFloat, image: UIImage) -> UIImage {
+    static func resizeImageToFit(width: CGFloat, image: UIImage) -> UIImage {
         let aspect = image.size.height / image.size.width
         let newWidth = width
         let newHeight = newWidth * aspect

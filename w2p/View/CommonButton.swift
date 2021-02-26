@@ -23,13 +23,10 @@ class CommonButton: UIControl{
         commonInit()
     }
     
-    override func awakeFromNib() {
-        setupActions()
-    }
-    
     func commonInit(){
         Bundle.main.loadNibNamed("CommonButton", owner: self, options: nil)
         contentView.fixIn(view: self)
+        setupActions()
     }
     
     func setup(name: String){
@@ -61,6 +58,10 @@ class CommonButton: UIControl{
             self.textLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
+    }
+    
+    override var intrinsicContentSize: CGSize{
+        textLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
     }
     
 }

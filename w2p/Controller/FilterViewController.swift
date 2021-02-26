@@ -74,6 +74,50 @@ class FilterViewController: UIViewController {
     }
     
     
+    //release date
+    @IBOutlet weak var lowerDateBoundSwitch: UISwitch!
+    @IBOutlet weak var upperDateBoundSwitch: UISwitch!
+    @IBAction func lowerBoundSwitch(_ sender: UISwitch) {
+        if sender.isOn{
+            filter.releaseDateLowerBound = Date(timeIntervalSince1970: 0)
+        } else {
+            filter.releaseDateLowerBound = nil
+        }
+        updateReleaseDateUI(animated: true)
+    }
+    @IBAction func upperBoundSwitch(_ sender: UISwitch) {
+        if sender.isOn{
+            filter.releaseDateUpperBound = Date(timeIntervalSince1970: 2147400000)
+        } else {
+            filter.releaseDateUpperBound = nil
+        }
+        updateReleaseDateUI(animated: true)
+    }
+    
+    @IBOutlet weak var dateLowerBound: UIDatePicker!
+    @IBOutlet weak var dateUpperBound: UIDatePicker!
+    @IBAction func lowerDateChange(_ sender: UIDatePicker) {
+        filter.releaseDateLowerBound = sender.date
+        dateUpperBound.minimumDate = sender.date
+    }
+    
+    @IBAction func upperDateChange(_ sender: UIDatePicker) {
+        filter.releaseDateUpperBound = sender.date
+        dateLowerBound.maximumDate = sender.date
+    }
+ 
+    
+    
+    @IBOutlet weak var noDescSwitch: UISwitch!
+    @IBOutlet weak var noMediaSwitch: UISwitch!
+    
+    @IBAction func noDescSwitch(_ sender: UISwitch) {
+        filter.excludeWithoutDescription = sender.isOn
+    }
+    @IBAction func noMediaSwitch(_ sender: UISwitch) {
+        filter.excludeWithoutCover = sender.isOn
+    }
+    
     
     private func show(section: UIView?, subview: UIView, animated: Bool){
         
@@ -112,11 +156,18 @@ class FilterViewController: UIViewController {
         setupNavigationBar()
         setupRating()
         updateGameModesUI()
+        updateReleaseDateUI(animated: false)
+        updateExcludeUI(animated: false)
     }
     
     private func updateGameModesUI(){
         singleplayerSwitch.isOn = filter.singleplayer
         multiplayerSwitch.isOn = filter.multiplayer
+    }
+    
+    private func updateExcludeUI(animated: Bool){
+        noDescSwitch.setOn(filter.excludeWithoutDescription, animated: animated)
+        noMediaSwitch.setOn(filter.excludeWithoutCover, animated: animated)
     }
     
     private func setupRating(){
@@ -146,6 +197,55 @@ class FilterViewController: UIViewController {
         platformControl.setup(name: "Platform")
         
     }
+    
+    private func updateReleaseDateUI(animated: Bool){
+        
+        let minDate = Date(timeIntervalSince1970: 0)
+        let maxDate = Date(timeIntervalSince1970: 2147400000)
+        
+        dateLowerBound.minimumDate = minDate
+        dateUpperBound.maximumDate = maxDate
+
+        if let lowerBound = filter.releaseDateLowerBound{
+            lowerDateBoundSwitch.setOn(true, animated: animated)
+            dateLowerBound.date = lowerBound
+            dateUpperBound.minimumDate = lowerBound
+            
+            dateLowerBound.isHidden = false
+            UIView.animate(withDuration: 0.3){
+                self.dateLowerBound.alpha = 1
+            }
+            
+        } else {
+            lowerDateBoundSwitch.setOn(false, animated: animated)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.dateLowerBound.alpha = 0
+            }) {
+                _ in
+                self.dateLowerBound.isHidden = true
+            }
+        }
+        
+        if let upperBound = filter.releaseDateUpperBound{
+            upperDateBoundSwitch.setOn(true, animated: animated)
+            dateUpperBound.date = upperBound
+            dateLowerBound.maximumDate = upperBound
+            dateUpperBound.isHidden = false
+            UIView.animate(withDuration: 0.3){
+                self.dateUpperBound.alpha = 1
+            }
+            
+        } else {
+            upperDateBoundSwitch.setOn(false, animated: animated)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.dateUpperBound.alpha = 0
+            }) {
+                _ in
+                self.dateUpperBound.isHidden = true
+            }
+        }
+    }
+    
 
     private func setupFlows(){
         genreFlow.superview?.isHidden = true
@@ -226,7 +326,8 @@ class FilterViewController: UIViewController {
             updateRatingUI(animated: true)
         }
         updateGameModesUI()
-        
+        updateReleaseDateUI(animated: true)
+        updateExcludeUI(animated: true)
     }
     
     private func clear(gameAttrs: [GameAttributeView]){
@@ -273,7 +374,3 @@ extension FilterViewController: DoubleSliderDelegate{
     }
     
 }
-
-
-
-

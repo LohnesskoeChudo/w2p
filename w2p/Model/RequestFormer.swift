@@ -38,8 +38,8 @@ class RequestFormer{
         if let aggrRatingLowerBound = filter.ratingLowerBound{
             filterComponents.append("aggregated_rating >= \(aggrRatingLowerBound)")
         }
-        
-        if filter.onlyNotReleasedYet {
+        //MARK: - fix
+        if true {
             filterComponents.append("first_release_date >= \(Date().timeIntervalSince1970)")
         } else {
             if let releaseUpperBound = filter.releaseDateUpperBound{

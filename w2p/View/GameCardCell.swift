@@ -15,29 +15,29 @@ class GameCardCell: UICollectionViewCell{
     var id: Int = 0
     
     override func awakeFromNib() {
-        appearanceSetup()
+        setupAppearance()
         setupActionsForEvents()
         contentView.isExclusiveTouch = true
+        contentView.fixIn(view: self)
+
     }
     
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var coverImageView: UIImageView!
 
-    func appearanceSetup(){
-        nameLabel.font = UIFont.boldSystemFont(ofSize: 20)
+    @IBOutlet weak var customContent: CellContentView!
+    
+        
+    override func prepareForReuse() {
+        customContent.imageView.superview!.isHidden = false
+        customContent.imageView.image = nil
+    }
+    
+    private func setupAppearance(){
         self.clipsToBounds = false
         self.contentView.layer.cornerRadius = 16
-        
         self.layer.shadowColor = UIColor.darkGray.cgColor
         self.layer.shadowRadius = 3
         self.layer.shadowOffset = CGSize(width: 2, height: 2)
         self.layer.shadowOpacity = 1
-    }
-
-    
-    override func prepareForReuse() {
-        coverImageView.superview!.isHidden = false
-        coverImageView.image = nil
     }
     
     private func setupActionsForEvents(){

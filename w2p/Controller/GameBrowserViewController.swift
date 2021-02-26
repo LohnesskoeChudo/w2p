@@ -6,9 +6,9 @@
 //
 
 import UIKit
-class GameBrowserViewController: UIViewController {
-    
-    var searchedGames = [Game]()
+class SearchViewController: UIViewController, GameBrowser {
+
+    var games = [Game]()
     let searchFilter = SearchFilter()
     let jsonLoader = JsonLoader()
     let mediaDispatcher = GameMediaDispatcher()
@@ -20,20 +20,20 @@ class GameBrowserViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchFieldBackground: UIView!
-    
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
+    
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         let request = RequestFormer.shared.formRequestForSearching(filter: searchFilter, limit: 500)
         let completion = {
             (games: [Game]?, error: NetworkError?) in
             if let games = games {
-                let itemsCount = self.searchedGames.count
+                let itemsCount = self.games.count
                 let newItemsCount = games.count
                 let indexPaths = (itemsCount..<itemsCount+newItemsCount).map{IndexPath(item: $0, section: 0)}
                 DispatchQueue.main.async {
-                    self.searchedGames += games
+                    self.games += games
                     UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction]){
                     self.collectionView.insertItems(at: indexPaths)
                     }
@@ -80,10 +80,13 @@ class GameBrowserViewController: UIViewController {
     }
     
     func setupCollectionView(){
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        
+        let browserDelegate = GameBrowserDelegate(browser: self)
+        
+        collectionView.delegate = browserDelegate
+        collectionView.dataSource = browserDelegate
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
-            waterfallLayout.delegate = self
+            waterfallLayout.delegate = browserDelegate
         }
     }
     
@@ -99,87 +102,12 @@ class GameBrowserViewController: UIViewController {
     
 
 }
-// MARK: - collectionView delegate
-extension GameBrowserViewController: UICollectionViewDelegate, WaterfallCollectionViewLayoutDelegate{
-
-    func heightForPhoto(at indexPath: IndexPath) -> CGFloat {
-        let gameItem = searchedGames[indexPath.item]
-        
-        
-        let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
-        
-        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
-
-        return height + additionHeight
-    }
-    var numberOfColumns: Int { traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
-    
-    var spacing: CGFloat {
-        10
-    }
-}
 
 // MARK: - searchField delegate
-extension GameBrowserViewController: UITextFieldDelegate{
+extension SearchViewController: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }
 }
-
-// MARK: - data source
-extension GameBrowserViewController: UICollectionViewDataSource{
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.searchedGames.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameCardCell", for: indexPath) as! GameCardCell
-        
-        let game = searchedGames[indexPath.item]
-        configureCell(cardCell, game: game)
-        setCoverToCardCell(cardCell, game: game)
-        cardCell.reusing = true
-        return cardCell
-    }
-    
-    func configureCell(_ cell: GameCardCell, game: Game){
-        cell.id = game.id ?? -1
-        cell.nameLabel.text = game.name
-        cell.coverImageView.backgroundColor = .blue
-        cell.action = { [weak self] in
-            if let vc = self{
-                vc.performSegue(withIdentifier: "detailed", sender: game)
-            }
-        }
-    }
-    
-    func setCoverToCardCell(_ cell: GameCardCell, game: Game){
-        let id = game.id ?? -1
-        DispatchQueue.global().async {
-            self.mediaDispatcher.fetchCoverFor(game: game, cache: true){
-                data, error in
-                if let data = data {
-                    if let image = UIImage(data: data){
-                        DispatchQueue.main.async {
-                            let columnWidth = self.columnWidth
-                            DispatchQueue.global().async {
-                                let resizedImage = self.imageResizer.resizeImageToFit(width: columnWidth, image: image)
-                                DispatchQueue.main.async{
-                                    if cell.id == id{
-                                        cell.coverImageView.image = resizedImage
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-

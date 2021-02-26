@@ -27,11 +27,10 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.right.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="3Pf-OP-MQo">
-                    <rect key="frame" x="499" y="73.5" width="30" height="29"/>
+                    <rect key="frame" x="481" y="64.5" width="48" height="47"/>
                     <color key="tintColor" systemColor="labelColor"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="30" id="Mgq-Hi-I6M"/>
-                        <constraint firstAttribute="height" constant="30" id="Toc-yg-eoL"/>
+                        <constraint firstAttribute="width" secondItem="3Pf-OP-MQo" secondAttribute="height" id="TD2-fv-NEl"/>
                     </constraints>
                 </imageView>
             </subviews>
@@ -43,6 +42,7 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="4K8-xa-oud" secondAttribute="bottom" id="RAm-t0-gun"/>
                 <constraint firstItem="3Pf-OP-MQo" firstAttribute="centerY" secondItem="4K8-xa-oud" secondAttribute="centerY" id="Uf6-Bw-a9y"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="3Pf-OP-MQo" secondAttribute="trailing" constant="20" id="XDf-bU-Ana"/>
+                <constraint firstItem="3Pf-OP-MQo" firstAttribute="height" secondItem="4K8-xa-oud" secondAttribute="height" id="bAV-9b-VzU"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="238.40579710144928" y="338.83928571428572"/>

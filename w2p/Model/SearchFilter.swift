@@ -20,9 +20,11 @@ class SearchFilter{
     var ratingUpperBound: Int?
     var ratingLowerBound: Int?
 
-    var onlyNotReleasedYet: Bool = false
     var releaseDateUpperBound: Date?
     var releaseDateLowerBound: Date?
+    
+    var excludeWithoutDescription: Bool = true
+    var excludeWithoutCover: Bool = true
 
     static var allGenres: [Genre] = {
         loadAllGameAttributes(resourceName: "genres") ?? []
@@ -59,5 +61,10 @@ class SearchFilter{
         multiplayer = false
         ratingUpperBound = nil
         ratingLowerBound = nil
+        releaseDateLowerBound = nil
+        releaseDateUpperBound = nil
+        
+        excludeWithoutCover = true
+        excludeWithoutDescription = true
     }
 }
