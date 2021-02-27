@@ -9,21 +9,18 @@ class RequestFormer{
     //var api = "http://192.168.1.64:8002/"
     
     func formRequestForSearching(filter: SearchFilter, limit: Int?) -> URLRequest{
-        var request = URLRequest(url: URL(string: api)!)
-        request.httpMethod = "POST"
-        
         var requestBody = RequestFields.basicFields
 
         var filterComponents = [String]()
 
         if !filter.genres.isEmpty{
-            filterComponents.append("genres = \(filter.genres.toIdArrayString())")
+            filterComponents.append("genres = \(filter.genres.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
         }
         if !filter.themes.isEmpty{
-            filterComponents.append("themes = \(filter.themes.toIdArrayString())")
+            filterComponents.append("themes = \(filter.themes.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
         }
         if !filter.platforms.isEmpty{
-            filterComponents.append("platforms = \(filter.platforms.toIdArrayString())")
+            filterComponents.append("platforms = \(filter.platforms.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
         }
         /*
         if !filter.gameModes.isEmpty{
@@ -38,19 +35,15 @@ class RequestFormer{
         if let aggrRatingLowerBound = filter.ratingLowerBound{
             filterComponents.append("aggregated_rating >= \(aggrRatingLowerBound)")
         }
-        //MARK: - fix
-        if true {
-            filterComponents.append("first_release_date >= \(Date().timeIntervalSince1970)")
-        } else {
-            if let releaseUpperBound = filter.releaseDateUpperBound{
-                filterComponents.append("first_release_date <= \(releaseUpperBound.timeIntervalSince1970)")
-            }
             
-            if let releaseLowerBound = filter.releaseDateLowerBound{
-                filterComponents.append("first_release_date >= \(releaseLowerBound.timeIntervalSince1970)")
-            }
+        if let releaseUpperBound = filter.releaseDateUpperBound{
+            filterComponents.append("first_release_date <= \(Int(releaseUpperBound.timeIntervalSince1970))")
         }
-        
+
+        if let releaseLowerBound = filter.releaseDateLowerBound{
+            filterComponents.append("first_release_date >= \(Int(releaseLowerBound.timeIntervalSince1970))")
+        }
+
         if !filterComponents.isEmpty {
             requestBody += "where \(filterComponents.joined(separator: "&"));"
         }
@@ -63,11 +56,8 @@ class RequestFormer{
         
         print(requestBody)
         
-        request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
-        request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"
+        var request = setupRequest(apiUrl: URL(string: api)!)
         request.httpBody = requestBody.data(using: .utf8)
-        
-        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return request
     }
     
@@ -85,4 +75,22 @@ class RequestFormer{
         return URLRequest(url: url)
     }
     
+    func formRequestForSpecificGames(_ gamesIds: [Int]) -> URLRequest {
+        var requestBody = RequestFields.basicFields
+        requestBody += "where id = \(gamesIds.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
+        requestBody += "limit 500;"
+        var request = setupRequest(apiUrl: URL(string: api)!)
+        request.httpBody = requestBody.data(using: .utf8)
+        print(requestBody)
+        return request
+    }
+    
+    private func setupRequest(apiUrl: URL) -> URLRequest {
+        var request = URLRequest(url: apiUrl)
+                request.httpMethod = "POST"
+        request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
+        request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        return request
+    }
 }

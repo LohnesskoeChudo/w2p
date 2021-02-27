@@ -14,7 +14,7 @@ class DoubleSlider: UIControl{
     var lowerValue: CGFloat
     var maxValue: CGFloat
     var minValue: CGFloat
-    var delegate: DoubleSliderDelegate?
+    weak var delegate: DoubleSliderDelegate?
     
     private let track = CALayer()
     private let upperThumb = CALayer()
@@ -130,7 +130,7 @@ class DoubleSlider: UIControl{
     }
 }
 
-protocol DoubleSliderDelegate {
+protocol DoubleSliderDelegate: AnyObject{
     
     func sliderValuesChanged(newLowerValue: CGFloat, newUpperValue: CGFloat)
     

@@ -8,6 +8,7 @@ class JsonLoader{
     init() {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .secondsSince1970
         self.decoder = decoder
         self.dataLoader = DataLoader()
     }

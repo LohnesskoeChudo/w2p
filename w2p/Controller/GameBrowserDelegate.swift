@@ -42,8 +42,8 @@ class GameBrowserDelegate: NSObject, UICollectionViewDataSource, UICollectionVie
     func configureCell(_ cell: GameCardCell, game: Game){
         cell.id = game.id ?? -1
         cell.customContent.label.text = game.name
-        cell.action = { [weak self] in
-            if let vc = self?.browser as? UIViewController{
+        cell.action = { [weak browser] in
+            if let vc = browser as? UIViewController{
                 vc.performSegue(withIdentifier: "detailed", sender: game)
             }
         }

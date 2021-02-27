@@ -23,12 +23,36 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var genreThemeStack: UIStackView!
     @IBOutlet weak var gameModeStack: UIStackView!
     @IBOutlet weak var platformStack: UIStackView!
-    
     @IBOutlet weak var summaryLabel: UILabel!
-    
     @IBOutlet weak var storylineLabel: UILabel!
-    
     @IBOutlet weak var attributesContainer: UIView!
+    @IBAction func similarGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: game.similarGames)
+    }
+    
+    @IBAction func franchiseGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: game.franchise?.games)
+    }
+    
+    
+    @IBAction func collectionGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: game.collection?.games)
+    }
+    
+    @IBOutlet weak var similarGamesButton: CommonButton!
+    @IBOutlet weak var franchiseGamesButton: CommonButton!
+    @IBOutlet weak var collectionGamesButton: CommonButton!
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        switch segue.identifier {
+        case "browser":
+            guard let browserVC = segue.destination as? GameBrowserViewController, let ids = sender as? [Int]? else {return}
+            browserVC.gamesIdsToLoad = ids
+        default:
+            return
+        }
+    }
     
     override func viewDidLoad() {
         setupNameLabel()
@@ -36,6 +60,10 @@ class DetailedViewController: UIViewController{
         setupCover()
         setupSummaryLabel()
         setupStorylineLabel()
+        setupNavigationButtons()
+        print(game.firstReleaseDate)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
         if let gamemodes = game.gameModes{
             for k in gamemodes{
                 print(k.name)
@@ -45,6 +73,24 @@ class DetailedViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         layoutCover()
+    }
+    
+    func setupNavigationButtons(){
+        if game.similarGames != nil{
+            similarGamesButton.textLabel.text = "Similar games"
+        } else {
+            similarGamesButton.isHidden = true
+        }
+        if game.franchise?.games != nil{
+            franchiseGamesButton.textLabel.text = "Franchise games"
+        } else {
+            franchiseGamesButton.isHidden = true
+        }
+        if game.collection?.games != nil{
+            collectionGamesButton.textLabel.text = "Collection games"
+        } else {
+            collectionGamesButton.isHidden = true
+        }
     }
     
     func setupNameLabel(){

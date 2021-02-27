@@ -35,8 +35,8 @@ class GameCardCell: UICollectionViewCell{
         self.clipsToBounds = false
         self.contentView.layer.cornerRadius = 16
         self.layer.shadowColor = UIColor.darkGray.cgColor
-        self.layer.shadowRadius = 3
-        self.layer.shadowOffset = CGSize(width: 2, height: 2)
+        self.layer.shadowRadius = 2.5
+        self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
         self.layer.shadowOpacity = 1
     }
     
@@ -50,6 +50,7 @@ class GameCardCell: UICollectionViewCell{
         cv.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
     }
     
+
     var touchDownAnimationFinished = true
     
     @objc func touchDown(){

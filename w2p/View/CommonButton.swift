@@ -9,7 +9,7 @@ import UIKit
 
 class CommonButton: UIControl{
     
-    @IBOutlet var contentView: UIView!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     

@@ -532,5 +532,53 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7DFF8B1B-D74A-4DE1-B0E0-F0A4C271C798"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "w2p/Model/RequestFormer.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "5"
+            endingLineNumber = "5"
+            landmarkName = "RequestFormer"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "7DFF8B1B-D74A-4DE1-B0E0-F0A4C271C798 - ccc9ee18916f0a84"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "globalinit_33_C1BBC8B76A77CE3A38DEAE325480A911_func0"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Model/RequestFormer.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "5"
+                  endingLineNumber = "5"
+                  offsetFromSymbolStart = "16">
+               </Location>
+               <Location
+                  uuid = "7DFF8B1B-D74A-4DE1-B0E0-F0A4C271C798 - 1dfd1ea0cf2d7a14"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.RequestFormer.shared.unsafeMutableAddressor : w2p.RequestFormer"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Model/RequestFormer.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "5"
+                  endingLineNumber = "5"
+                  offsetFromSymbolStart = "8">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
