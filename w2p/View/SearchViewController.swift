@@ -60,7 +60,9 @@ class SearchViewController: UIViewController, GameBrowser {
         super.viewDidLayoutSubviews()
         setupSearchField()
         setupButtons()
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        if !navigationController!.navigationBar.isHidden{
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

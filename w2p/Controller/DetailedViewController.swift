@@ -27,16 +27,15 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var storylineLabel: UILabel!
     @IBOutlet weak var attributesContainer: UIView!
     @IBAction func similarGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: game.similarGames)
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
     }
     
     @IBAction func franchiseGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: game.franchise?.games)
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.franchiseGames)
     }
     
-    
     @IBAction func collectionGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: game.collection?.games)
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.collectionGames)
     }
     
     @IBOutlet weak var similarGamesButton: CommonButton!
@@ -47,8 +46,10 @@ class DetailedViewController: UIViewController{
         
         switch segue.identifier {
         case "browser":
-            guard let browserVC = segue.destination as? GameBrowserViewController, let ids = sender as? [Int]? else {return}
-            browserVC.gamesIdsToLoad = ids
+            guard let browserVC = segue.destination as? GameBrowserViewController, let gameCategory = sender as? BrowserGameCategory else {return}
+
+            browserVC.externalGame = game
+            browserVC.category = gameCategory
         default:
             return
         }
@@ -207,3 +208,10 @@ class DetailedViewController: UIViewController{
         }
     }
 }
+
+enum BrowserGameCategory {
+    case similarGames, franchiseGames, collectionGames
+}
+
+
+

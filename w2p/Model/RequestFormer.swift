@@ -85,6 +85,21 @@ class RequestFormer{
         return request
     }
     
+    //Force
+    func requestForSimilarGames(for game: Game) -> URLRequest{
+        var requestBody = RequestFields.basicFields
+        requestBody += "where (genres = [\(game.genres!.first!.id), \(game.genres![1].id)] & "
+        
+        requestBody += "themes = \(game.themes!.toIdArrayString(firstBracket: "(", secondBracket: ")"))) |"
+        requestBody += "id = \(game.similarGames!.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
+        
+        requestBody += "limit 500;"
+        var request = setupRequest(apiUrl: URL(string: api)!)
+        print(requestBody)
+        request.httpBody = requestBody.data(using: .utf8)
+        return request
+    }
+    
     private func setupRequest(apiUrl: URL) -> URLRequest {
         var request = URLRequest(url: apiUrl)
                 request.httpMethod = "POST"

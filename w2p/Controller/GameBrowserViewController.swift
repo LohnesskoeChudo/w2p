@@ -8,7 +8,10 @@
 import UIKit
 class GameBrowserViewController : UIViewController, GameBrowser{
     
-    var gamesIdsToLoad: [Int]?
+    var externalGame: Game!
+    var category: BrowserGameCategory!
+    
+    
     var games = [Game]()
     var mediaDispatcher = GameMediaDispatcher()
     var jsonLoader = JsonLoader()
@@ -29,9 +32,18 @@ class GameBrowserViewController : UIViewController, GameBrowser{
     }
     
     private func loadGames(){
-        guard let gamesIds = gamesIdsToLoad else {return}
-        print("sent")
-        let request = RequestFormer.shared.formRequestForSpecificGames(gamesIds)
+        
+
+        let request: URLRequest
+        
+        if category == .similarGames{
+            request = RequestFormer.shared.requestForSimilarGames(for: externalGame)
+        } else if category == .franchiseGames{
+            request = RequestFormer.shared.formRequestForSpecificGames(externalGame.franchise?.games ?? [])
+        } else {
+            request = RequestFormer.shared.formRequestForSpecificGames(externalGame.collection?.games ?? [])
+        }
+
         let completion = {
             (games: [Game]?, error: NetworkError?) in
             if let games = games {
