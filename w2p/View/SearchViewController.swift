@@ -13,6 +13,7 @@ class SearchViewController: UIViewController, GameBrowser {
     let jsonLoader = JsonLoader()
     let mediaDispatcher = GameMediaDispatcher()
     let imageResizer = ImageResizer()
+    var panGestureRecognizer: UIPanGestureRecognizer!
     var browserDelegate: GameBrowserDelegate!
     var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
@@ -57,7 +58,6 @@ class SearchViewController: UIViewController, GameBrowser {
         super.viewDidLoad()
         setupCollectionView()
         setupGestureRecognizers()
-        
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
@@ -114,10 +114,9 @@ class SearchViewController: UIViewController, GameBrowser {
     
     
     private func setupGestureRecognizers(){
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
-        panRecognizer.delegate = self
-        collectionView.addGestureRecognizer(panRecognizer)
-
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
+        panGestureRecognizer.delegate = self
+        collectionView.addGestureRecognizer(panGestureRecognizer)
     }
     
     @objc func pan(sender: UIPanGestureRecognizer){

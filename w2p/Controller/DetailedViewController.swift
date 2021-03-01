@@ -21,6 +21,9 @@ class DetailedViewController: UIViewController{
     
     @IBOutlet weak var nameLabel: UILabel!
 
+    @IBAction func backButtonPressed(_ sender: CustomButton) {
+        navigationController?.popViewController(animated: true)
+    }
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var storylineLabel: UILabel!
     @IBOutlet weak var attributesContainer: UIView!

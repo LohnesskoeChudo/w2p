@@ -21,6 +21,9 @@ class GameBrowserViewController : UIViewController, GameBrowser{
     
     var browserDelegate: GameBrowserDelegate!
     
+    @IBAction func backButtonPressed(_ sender: CustomButton) {
+        navigationController?.popViewController(animated: true)
+    }
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var upperBar: UIView!
     
