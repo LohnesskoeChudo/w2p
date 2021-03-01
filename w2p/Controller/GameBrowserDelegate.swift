@@ -14,9 +14,7 @@ protocol GameBrowser {
     var collectionView: UICollectionView! {get set}
 }
 
-
-
-class GameBrowserDelegate: NSObject, UICollectionViewDataSource, UICollectionViewDelegate, WaterfallCollectionViewLayoutDelegate {
+class GameBrowserDelegate: NSObject, UICollectionViewDataSource{
     
     init(browser: GameBrowser & NSObject) {
         self.browser = browser
@@ -31,7 +29,6 @@ class GameBrowserDelegate: NSObject, UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cardCell = collectionView.dequeueReusableCell(withReuseIdentifier: "GameCardCell", for: indexPath) as! GameCardCell
-        
         let game = browser.games[indexPath.item]
         configureCell(cardCell, game: game)
         setCoverToCardCell(cardCell, game: game)
@@ -71,23 +68,5 @@ class GameBrowserDelegate: NSObject, UICollectionViewDataSource, UICollectionVie
                 }
             }
         }
-    }
-    
-    func heightForPhoto(at indexPath: IndexPath) -> CGFloat {
-        let gameItem = browser.games[indexPath.item]
-        
-        
-        let height = ((browser.collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
-        
-        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
-
-        return height + additionHeight
-    }
-    var numberOfColumns: Int {
-        guard let vc = self.browser as? UIViewController else {return 0}
-        return vc.traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
-    
-    var spacing: CGFloat {
-        10
     }
 }

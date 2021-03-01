@@ -28,6 +28,7 @@
 		5D530F3A25D8595200DF5621 /* WaterfallCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */; };
 		5DA6099325E50DA400F7B814 /* LabelFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA6099225E50DA400F7B814 /* LabelFlowView.swift */; };
 		5DB1EF2225E42EC400E39282 /* RequestFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB1EF2125E42EC400E39282 /* RequestFields.swift */; };
+		5DB4472F25ED0BE500C1663B /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4472E25ED0BE500C1663B /* CustomButton.swift */; };
 		5DBC88C125E4E6A30048985E /* Collection+Identifiable+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC88C025E4E6A30048985E /* Collection+Identifiable+Int.swift */; };
 		5DBDC79925E2BAA6003AA46F /* GameAttributeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */; };
 		5DCCCBB125E908EB007690B9 /* GameBrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCCCBB025E908EB007690B9 /* GameBrowserDelegate.swift */; };
@@ -89,6 +90,7 @@
 		5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallCollectionViewLayout.swift; sourceTree = "<group>"; };
 		5DA6099225E50DA400F7B814 /* LabelFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFlowView.swift; sourceTree = "<group>"; };
 		5DB1EF2125E42EC400E39282 /* RequestFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFields.swift; sourceTree = "<group>"; };
+		5DB4472E25ED0BE500C1663B /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		5DBC88C025E4E6A30048985E /* Collection+Identifiable+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Identifiable+Int.swift"; sourceTree = "<group>"; };
 		5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAttributeView.swift; sourceTree = "<group>"; };
 		5DCCCBB025E908EB007690B9 /* GameBrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBrowserDelegate.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				5DE47E0F25E63AA900439FB7 /* CommonButton.xib */,
 				5D530F0325D7E44300DF5621 /* LaunchScreen.storyboard */,
 				5DE47E1225E63B6F00439FB7 /* CommonButton.swift */,
+				5DB4472E25ED0BE500C1663B /* CustomButton.swift */,
 				5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */,
 				5DE9937025E56A08004AB0B1 /* CategoryShowButton.swift */,
 				5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */,
@@ -385,6 +388,7 @@
 				5DF85F2225E1A61900359227 /* CDCover.swift in Sources */,
 				5DEB7B4225EBB19B0087FF67 /* FavoriteGameCardCell.swift in Sources */,
 				5DCCCBB125E908EB007690B9 /* GameBrowserDelegate.swift in Sources */,
+				5DB4472F25ED0BE500C1663B /* CustomButton.swift in Sources */,
 				5DE071CF25E91FB300526BE8 /* GameBrowserViewController.swift in Sources */,
 				5D530F2E25D8148A00DF5621 /* SettingsViewController.swift in Sources */,
 				5D530F3A25D8595200DF5621 /* WaterfallCollectionViewLayout.swift in Sources */,

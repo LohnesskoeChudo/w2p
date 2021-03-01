@@ -19,12 +19,15 @@ class GameBrowserViewController : UIViewController, GameBrowser{
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    var browserDelegate: GameBrowserDelegate!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var upperBar: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        setupDelegates()
+        setupGestureRecognizers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -61,12 +64,12 @@ class GameBrowserViewController : UIViewController, GameBrowser{
         jsonLoader.load(request: request, completion: completion)
     }
     
-    func setup(){
-        let browserDelegate = GameBrowserDelegate(browser: self)
+    func setupDelegates(){
+        browserDelegate = GameBrowserDelegate(browser: self)
         collectionView.dataSource = browserDelegate
-        collectionView.delegate = browserDelegate
+        collectionView.delegate = self
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
-            waterfallLayout.delegate = browserDelegate
+            waterfallLayout.delegate = self
         }
     }
     
@@ -79,5 +82,81 @@ class GameBrowserViewController : UIViewController, GameBrowser{
         default:
             return
         }
+    }
+    
+    private func setupGestureRecognizers(){
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
+        panRecognizer.delegate = self
+        collectionView.addGestureRecognizer(panRecognizer)
+
+    }
+    
+    @objc func pan(sender: UIPanGestureRecognizer){
+        switch sender.state {
+        case .ended:
+            let yVelocity = sender.velocity(in: view).y
+            print(yVelocity)
+            if yVelocity > 1000 {
+                if self.upperBar.isHidden {
+                    self.upperBar.isHidden = false
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.upperBar.alpha = 0.9
+                    })
+                }
+            } else if yVelocity < -500 {
+                if !self.upperBar.isHidden{
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.upperBar.alpha = 0
+                    }, completion: {
+                        _ in
+                        self.upperBar.isHidden = true
+                    })
+                }
+            }
+        default:
+            return
+        }
+    }
+    
+}
+
+// MARK: - Delegates
+extension GameBrowserViewController: WaterfallCollectionViewLayoutDelegate{
+    
+    func heightForCell(at indexPath: IndexPath) -> CGFloat {
+        let gameItem = games[indexPath.item]
+        let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
+        
+        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
+        return height + additionHeight
+    }
+    
+    var numberOfColumns: Int {
+        return traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
+    
+    var spacing: CGFloat {
+        10
+    }
+    
+    var upperSpacing: CGFloat {
+        upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+    }
+}
+
+
+extension GameBrowserViewController: UICollectionViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0{
+            upperBar.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.upperBar.alpha = 0.9
+            })
+        }
+    }
+}
+
+extension GameBrowserViewController: UIGestureRecognizerDelegate{
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
     }
 }

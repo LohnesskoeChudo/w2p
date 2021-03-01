@@ -13,12 +13,14 @@ class SearchViewController: UIViewController, GameBrowser {
     let jsonLoader = JsonLoader()
     let mediaDispatcher = GameMediaDispatcher()
     let imageResizer = ImageResizer()
+    var browserDelegate: GameBrowserDelegate!
     var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
 
     // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchBar: UIView!
     @IBOutlet weak var searchFieldBackground: UIView!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
@@ -54,20 +56,18 @@ class SearchViewController: UIViewController, GameBrowser {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupGestureRecognizers()
+        
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidLayoutSubviews()
-        setupSearchField()
+        setupSearchBar()
         setupButtons()
-        if !navigationController!.navigationBar.isHidden{
-            navigationController?.setNavigationBarHidden(true, animated: true)
-        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -87,17 +87,22 @@ class SearchViewController: UIViewController, GameBrowser {
     }
     
     func setupCollectionView(){
-        
         let browserDelegate = GameBrowserDelegate(browser: self)
-        
-        collectionView.delegate = browserDelegate
+        self.browserDelegate = browserDelegate
+        collectionView.delegate = self
         collectionView.dataSource = browserDelegate
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
-            waterfallLayout.delegate = browserDelegate
+            waterfallLayout.delegate = self
         }
     }
     
-    func setupSearchField(){
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
+    }
+    
+    func setupSearchBar(){
+        searchBar.layer.cornerRadius = searchBar.frame.height / 2
+        searchBar.alpha = 0.9
         searchField.delegate = self
         searchFieldBackground.layer.cornerRadius = searchFieldBackground.frame.height / 2
         searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
@@ -107,10 +112,46 @@ class SearchViewController: UIViewController, GameBrowser {
         searchButton.adjustsImageWhenHighlighted = true
     }
     
+    
+    private func setupGestureRecognizers(){
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
+        panRecognizer.delegate = self
+        collectionView.addGestureRecognizer(panRecognizer)
+
+    }
+    
+    @objc func pan(sender: UIPanGestureRecognizer){
+        switch sender.state {
+        case .ended:
+            let yVelocity = sender.velocity(in: view).y
+            print(yVelocity)
+            if yVelocity > 1000 {
+                if self.searchBar.isHidden {
+                    self.searchBar.isHidden = false
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.searchBar.alpha = 0.9
+                    })
+                }
+            } else if yVelocity < -500 {
+                if !self.searchBar.isHidden{
+                    UIView.animate(withDuration: 0.3, animations: {
+                        self.searchBar.alpha = 0
+                    }, completion: {
+                        _ in
+                        self.searchBar.isHidden = true
+                    })
+                }
+            }
+        default:
+            return
+        }
+    }
+    
 
 }
 
-// MARK: - searchField delegate
+// MARK: - Delegates
+
 extension SearchViewController: UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -118,3 +159,50 @@ extension SearchViewController: UITextFieldDelegate{
         return true
     }
 }
+
+
+extension SearchViewController: UIGestureRecognizerDelegate{
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    
+}
+
+
+extension SearchViewController: WaterfallCollectionViewLayoutDelegate{
+    
+    func heightForCell(at indexPath: IndexPath) -> CGFloat {
+        let gameItem = games[indexPath.item]
+        let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
+        
+        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
+        return height + additionHeight
+    }
+    
+    var numberOfColumns: Int {
+        return traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
+    
+    var spacing: CGFloat {
+        10
+    }
+    
+    var upperSpacing: CGFloat {
+        searchBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 10
+    }
+}
+
+
+extension SearchViewController: UICollectionViewDelegate{
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y <= 0{
+            self.searchBar.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.searchBar.alpha = 0.9
+            })
+        }
+    }
+}
+

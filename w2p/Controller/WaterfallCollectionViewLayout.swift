@@ -40,7 +40,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         for columnIndex in 0..<columns{
             xOffset.append((CGFloat(columnIndex) * columnWidth) + delegate.spacing * CGFloat(columnIndex + 1))
         }
-        yOffset = .init(repeating: 0, count: columns)
+        yOffset = .init(repeating: delegate.upperSpacing, count: columns)
         for item in 0..<collectionView.numberOfItems(inSection: 0){
             let indexPath = IndexPath(item: item, section: 0)
             layoutItemAt(indexPath: indexPath)
@@ -49,7 +49,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
     private func layoutItemAt(indexPath: IndexPath){
         guard let delegate = delegate else {return}
-        let cellHeight = delegate.heightForPhoto(at: indexPath)
+        let cellHeight = delegate.heightForCell(at: indexPath)
         var minHeightColumn: Int = 0
         var minHeight: CGFloat = .infinity
         for column in (0..<columns).reversed(){
@@ -79,6 +79,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         initialLayout()
     }
     
+
     // TODO: Binary search
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
@@ -127,13 +128,17 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         if let collectionView = collectionView{
             if collectionView.bounds.size != newBounds.size{
-                cache = []
-                xOffset = []
-                yOffset = []
                 return true
             }
         }
         return false
+    }
+    
+    override func invalidateLayout() {
+        cache = []
+        xOffset = []
+        yOffset = []
+        super.invalidateLayout()
     }
     
 
@@ -156,9 +161,12 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
 
 protocol WaterfallCollectionViewLayoutDelegate: AnyObject {
     
-    func heightForPhoto(at indexPath: IndexPath) -> CGFloat
+    func heightForCell(at indexPath: IndexPath) -> CGFloat
     
     var numberOfColumns: Int {get}
     
     var spacing: CGFloat {get}
+    
+    var upperSpacing: CGFloat {get}
+    
 }

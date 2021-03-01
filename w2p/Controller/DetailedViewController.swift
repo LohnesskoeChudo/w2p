@@ -13,19 +13,20 @@ class DetailedViewController: UIViewController{
     var mediaDispatcher = GameMediaDispatcher()
     var imageBlurrer = ImageBlurrer()
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var coverView: UIImageView!
     @IBOutlet weak var blurredBackground: UIImageView!
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var nameLabel: UILabel!
-    
-    @IBOutlet weak var genreThemeStack: UIStackView!
-    @IBOutlet weak var gameModeStack: UIStackView!
-    @IBOutlet weak var platformStack: UIStackView!
+
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var storylineLabel: UILabel!
     @IBOutlet weak var attributesContainer: UIView!
+    
+    @IBOutlet weak var attributesFlowView: LabelFlowView!
+    
     @IBAction func similarGamesTapped(_ sender: CommonButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
     }
@@ -62,9 +63,10 @@ class DetailedViewController: UIViewController{
         setupSummaryLabel()
         setupStorylineLabel()
         setupNavigationButtons()
-        print(game.firstReleaseDate)
+        
+        setupGestureRecognizers()
         navigationController?.setNavigationBarHidden(true, animated: false)
-
+ 
         if let gamemodes = game.gameModes{
             for k in gamemodes{
                 print(k.name)
@@ -72,6 +74,56 @@ class DetailedViewController: UIViewController{
         }
     }
     
+    private func setupGestureRecognizers(){
+        
+        
+        /*
+        let upSwipeGR = UISwipeGestureRecognizer(target: self, action: #selector(upSwipe))
+        upSwipeGR.direction = .up
+        upSwipeGR.delegate = self
+        scrollView.addGestureRecognizer(upSwipeGR)
+        let downSwipeGR = UISwipeGestureRecognizer(target: self, action: #selector(downSwipe))
+        downSwipeGR.direction = .down
+        downSwipeGR.delegate = self
+        scrollView.addGestureRecognizer(downSwipeGR)
+        */
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
+        panRecognizer.delegate = self
+        scrollView.addGestureRecognizer(panRecognizer)
+
+    }
+    
+    @objc func pan(sender: UIPanGestureRecognizer){
+        switch sender.state {
+        case .ended:
+            print(sender.velocity(in: view))
+
+            
+        default:
+            return
+        }
+        
+    }
+    
+    /*
+    @objc func downSwipe(sender: UISwipeGestureRecognizer){
+        UIView.animate(withDuration: 0.5, animations: {
+            self.highlabel.transform = CGAffineTransform.identity
+        })
+        
+    }
+    
+    @objc func upSwipe(sender: UISwipeGestureRecognizer){
+        UIView.animate(withDuration: 0.5, animations: {
+            self.highlabel.transform = CGAffineTransform(translationX: 0, y: -150)
+        })
+    }
+    */
+
+
+
+
     override func viewWillAppear(_ animated: Bool) {
         layoutCover()
     }
@@ -120,58 +172,30 @@ class DetailedViewController: UIViewController{
     }
     
     func setupGameAttributesViews(){
-        
-        var genresThemesViews = [GameAttributeView]()
-        if let genres = game.genres{
-            genresThemesViews += genres.map{
-                genre in
-                let gav = GameAttributeView()
-                gav.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
-                return gav
-            }
+        var gameAttrs: [GameAttributeView] = []
+        for genre in game.genres ?? [] {
+            let genreAttr = GameAttributeView()
+            genreAttr.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
+            gameAttrs.append(genreAttr)
         }
-        if let themes = game.themes{
-            genresThemesViews += themes.map{
-                theme in
-                let gav = GameAttributeView()
-                gav.setup(text: theme.name, color: UIColor.green.withAlphaComponent(0.2))
-                return gav
-            }
+        for theme in game.themes ?? [] {
+            let themeAttr = GameAttributeView()
+            themeAttr.setup(text: theme.name, color: UIColor.green.withAlphaComponent(0.2))
+            gameAttrs.append(themeAttr)
         }
-        if !genresThemesViews.isEmpty{
-            for (index, gav) in genresThemesViews.enumerated(){
-                genreThemeStack.insertArrangedSubview(gav, at: index + 1)
-            }
-        } else {
-            genreThemeStack.superview?.isHidden = true
+        for mode in game.gameModes ?? []{
+            let modeAttr = GameAttributeView()
+            modeAttr.setup(text: mode.name, color: UIColor.blue.withAlphaComponent(0.2))
+            gameAttrs.append(modeAttr)
         }
-        
-        
-        if let gameModes = game.gameModes, !gameModes.isEmpty{
-            gameModeStack.superview!.isHidden = false
-            for (index, gameMode) in gameModes.enumerated(){
-                let gameModeView = GameAttributeView()
-                gameModeView.setup(text: gameMode.name, color: UIColor.blue.withAlphaComponent(0.2))
-                gameModeStack.insertArrangedSubview(gameModeView, at: index + 1)
-            }
-        } else {
-            gameModeStack.superview?.isHidden = true
+        for platform in game.platforms ?? [] {
+            let platformAttr = GameAttributeView()
+            platformAttr.setup(text: platform.name, color: UIColor.purple.withAlphaComponent(0.2))
+            gameAttrs.append(platformAttr)
         }
-        
-        if let platforms = game.platforms, !platforms.isEmpty{
-            platformStack.superview!.isHidden = false
-            for (index,platform) in platforms.enumerated(){
-                let platformView = GameAttributeView()
-                platformView.setup(text: platform.name, color: UIColor.purple.withAlphaComponent(0.2))
-                platformStack.insertArrangedSubview(platformView, at: index + 1)
-            }
-        } else {
-            platformStack.superview?.isHidden = true
-        }
-        
-        
-        if platformStack.superview!.isHidden && genreThemeStack.superview!.isHidden && gameModeStack.superview!.isHidden {
-            attributesContainer.isHidden = true
+        for attrView in gameAttrs{
+            attrView.translatesAutoresizingMaskIntoConstraints = false
+            attributesFlowView.addSubview(attrView)
         }
     }
    
@@ -214,4 +238,10 @@ enum BrowserGameCategory {
 }
 
 
-
+extension DetailedViewController: UIGestureRecognizerDelegate{
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        true
+    }
+    
+}
