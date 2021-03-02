@@ -3,12 +3,11 @@ class RequestFormer{
     var api = "https://api.igdb.com/v4/games/"
     
     static var shared = RequestFormer()
-    
     private init() { }
    
     //var api = "http://192.168.1.64:8002/"
     
-    func formRequestForSearching(filter: SearchFilter, limit: Int?) -> URLRequest{
+    func formRequestForSearching(filter: SearchFilter, offset: Int, limit: Int?) -> URLRequest{
         var requestBody = RequestFields.basicFields
 
         var filterComponents = [String]()
@@ -53,6 +52,8 @@ class RequestFormer{
         if let limit = limit, (1...500).contains(limit) {
             requestBody += "limit \(limit);"
         }
+        
+        requestBody += "offset \(offset);"
         
         print(requestBody)
         

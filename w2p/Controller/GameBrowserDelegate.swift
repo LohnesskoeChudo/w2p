@@ -58,8 +58,12 @@ class GameBrowserDelegate: NSObject, UICollectionViewDataSource{
                             DispatchQueue.global().async {
                                 let resizedImage = ImageResizer.resizeImageToFit(width: columnWidth, image: image)
                                 DispatchQueue.main.async{
+                                    print(cell.id, id)
                                     if cell.id == id{
-                                        cell.customContent.imageView.image = resizedImage
+                                        UIView.transition(with: cell.customContent.imageView, duration: 0.3, options: [.transitionCrossDissolve]){
+                                            
+                                            cell.customContent.imageView.image = resizedImage
+                                        }
                                     }
                                 }
                             }

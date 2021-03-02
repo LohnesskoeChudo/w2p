@@ -79,8 +79,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         initialLayout()
     }
     
-
-    // TODO: Binary search
+    //MARK: - using binary search to find elements
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
         if cache.count <= 0 {return nil}
@@ -99,9 +98,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
             }
             return false
         })
-        
         var index: Int = indexOfPredecessorOfFirstVisibleItem ?? 0
-        
         if indexOfPredecessorOfFirstVisibleItem != nil {
             index = max(0, indexOfPredecessorOfFirstVisibleItem! - 6)
         } else {
@@ -124,28 +121,24 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.item]
     }
-    
+   //////////
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         if let collectionView = collectionView{
             if collectionView.bounds.size != newBounds.size{
+                cache = []
+                xOffset = []
+                yOffset = []
                 return true
             }
         }
         return false
     }
     
-    override func invalidateLayout() {
-        cache = []
-        xOffset = []
-        yOffset = []
-        super.invalidateLayout()
-    }
-    
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         let maxItem = cache.count - 1
         for item in updateItems{
-            guard let indexPath = item.indexPathAfterUpdate, indexPath.item > maxItem, item.indexPathBeforeUpdate == nil else {return}
+            guard let indexPath = item.indexPathAfterUpdate, indexPath.item > maxItem, item.indexPathBeforeUpdate == nil else {continue}
             layoutItemAt(indexPath: indexPath)
         }
     }

@@ -45,7 +45,6 @@ class CacheManager{
         }
     }
     
-    
     func loadCover(for game: Game, completion: @escaping (Data?) -> Void){
         guard let gameId = game.id else {return}
         privateMoc.perform {
