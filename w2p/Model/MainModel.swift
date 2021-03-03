@@ -188,4 +188,5 @@ enum GameImageSizeKey: String{
 
 protocol MediaDownloadable {
     var url: String {get}
+    var id: Int {get}
 }

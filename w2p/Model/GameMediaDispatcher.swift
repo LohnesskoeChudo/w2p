@@ -54,7 +54,7 @@ class GameMediaDispatcher{
             if let data = data {
                 completion(data, nil)
             } else {
-                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: .S1920X1080) else {
+                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: .S889X500) else {
                     completion(nil, .canNotFormRequest)
                     return
                 }

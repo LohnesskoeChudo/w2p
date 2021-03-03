@@ -14,40 +14,51 @@ class DetailedViewController: UIViewController{
     var imageBlurrer = ImageBlurrer()
     var staticMediaContent = [MediaDownloadable]()
     var videoMediaContent = [Video]()
+    var isMediaSectionAvailable: Bool {
+        if let videos = game.videos, !videos.isEmpty {
+            return true
+        }
+        if let screenshots = game.screenshots, !screenshots.isEmpty {
+            return true
+        }
+        if let artworks = game.artworks, !artworks.isEmpty {
+            return true
+        }
+        return false
+    }
     
+    @IBOutlet weak var mediaCounterBackground: UIView!
+    @IBOutlet weak var mediaCounterLabel: UILabel!
+    @IBOutlet weak var blurredMediaBackground: UIImageView!
     @IBOutlet weak var mediaCollectionView: UICollectionView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var coverView: UIImageView!
     @IBOutlet weak var blurredBackground: UIImageView!
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
-    
+    @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
+    @IBOutlet weak var mediaContainer: UIView!
     @IBOutlet weak var nameLabel: UILabel!
-
-    @IBAction func backButtonPressed(_ sender: CustomButton) {
-        navigationController?.popViewController(animated: true)
-    }
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var storylineLabel: UILabel!
     @IBOutlet weak var attributesContainer: UIView!
-    
     @IBOutlet weak var attributesFlowView: LabelFlowView!
-    
-    @IBAction func similarGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
-    }
-    
-    @IBAction func franchiseGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.franchiseGames)
-    }
-    
-    @IBAction func collectionGamesTapped(_ sender: CommonButton) {
-        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.collectionGames)
-    }
-    
     @IBOutlet weak var similarGamesButton: CommonButton!
     @IBOutlet weak var franchiseGamesButton: CommonButton!
     @IBOutlet weak var collectionGamesButton: CommonButton!
+    @IBAction func similarGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
+    }
+    @IBAction func franchiseGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.franchiseGames)
+    }
+    @IBAction func collectionGamesTapped(_ sender: CommonButton) {
+        performSegue(withIdentifier: "browser", sender: BrowserGameCategory.collectionGames)
+    }
+    @IBAction func backButtonPressed(_ sender: CustomButton) {
+        navigationController?.popViewController(animated: true)
+    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -78,24 +89,54 @@ class DetailedViewController: UIViewController{
         }
     }
     
-
     override func viewWillAppear(_ animated: Bool) {
-        layoutCover()
+        layoutCover(size: view.frame.size)
+        layoutMedia(newWidth: view.frame.width)
     }
     
-    @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        layoutCover(size: size)
+        layoutMedia(newWidth: size.width)
+        if isMediaSectionAvailable {
+            mediaCollectionView.contentOffset.x = 0
+        }
+    }
+    
+    
+    
+
     private func setupMedia(){
         mediaCollectionView.delegate = self
         mediaCollectionView.dataSource = self
-        screenshotCollectionViewHeight.constant = view.bounds.height / 2
         
+        
+
         if let screenshots = game.screenshots {
             staticMediaContent += screenshots
         }
         if let artworks = game.artworks {
             staticMediaContent += artworks
         }
+        if staticMediaContent.count + videoMediaContent.count == 0 {
+            mediaContainer.isHidden = true
+        } else {
+            setupMediaCounter()
+        }
 
+    }
+    
+    private func setupMediaCounter(){
+        mediaCounterBackground.layer.backgroundColor = UIColor.black.withAlphaComponent(0.5).cgColor
+        let height = mediaCounterBackground.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        mediaCounterBackground.layer.cornerRadius = height / 2
+        updateMediaCounter()
+        
+    }
+    
+    private func layoutMedia(newWidth: CGFloat) {
+        screenshotCollectionViewHeight.constant = newWidth * 500 / 889
+        mediaCollectionView.collectionViewLayout.invalidateLayout()
     }
     
     private func setupNavigationButtons(){
@@ -170,36 +211,51 @@ class DetailedViewController: UIViewController{
     }
    
     private func setupCover(){
-        
+        let viewWidth = view.bounds.width
         DispatchQueue.global(qos: .userInitiated).async{
             self.mediaDispatcher.fetchCoverFor(game: self.game, cache: true){
                 data, error in
                 if let data = data, let image = UIImage(data: data){
                     let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
+                    let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth, image: blurred)
+                        
                     DispatchQueue.main.async {
                         self.coverView.image = image
-                        self.blurredBackground.image = blurred
+                        self.blurredBackground.image = resizedBlurred
+                        if self.isMediaSectionAvailable {
+                            self.blurredMediaBackground.image = resizedBlurred
+                        }
                     }
                 }
             }
         }
     }
     
-    private func layoutCover(){
+    private func layoutCover(size: CGSize){
         
         let heightPercentage: CGFloat = 0.58
 
         guard let aspect = game.cover?.aspect else {return}
-        if CGFloat(aspect) > (view.frame.height * heightPercentage) / view.frame.width {
+        if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
             print("<")
-            coverHeightConstraint.constant = view.frame.height * heightPercentage
-            coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (view.frame.height * heightPercentage)
+            coverHeightConstraint.constant = size.height * heightPercentage
+            coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (size.height * heightPercentage)
             
         } else {
             print(">")
-            coverWidthConstraint.constant = view.frame.width
-            coverHeightConstraint.constant = view.frame.width * CGFloat(aspect)
+            coverWidthConstraint.constant = size.width
+            coverHeightConstraint.constant = size.width * CGFloat(aspect)
         }
+    }
+    
+    private func updateMediaCounter(){
+        let xOffset = mediaCollectionView.contentOffset.x
+        let width = mediaCollectionView.frame.width
+        
+        let pageNumber = Int(xOffset / width) + 1
+        mediaCounterLabel.text = "\(pageNumber) / \(staticMediaContent.count + videoMediaContent.count)"
+        
+        
     }
 }
 
@@ -207,9 +263,15 @@ class DetailedViewController: UIViewController{
 extension DetailedViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        CGSize(width: view.bounds.width, height: view.bounds.height * 0.5)
+        CGSize(width: view.bounds.width, height: view.bounds.height * 500 / 889 )
         
     }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        updateMediaCounter()
+
+    }
+
 }
 
 extension DetailedViewController: UICollectionViewDataSource{
@@ -231,6 +293,7 @@ extension DetailedViewController: UICollectionViewDataSource{
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
             setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
+            staticMediaCell.id = staticMedia.id
             return staticMediaCell
             
             
@@ -242,13 +305,22 @@ extension DetailedViewController: UICollectionViewDataSource{
     
     func setStaticContent(staticMedia: MediaDownloadable, cell: StaticMediaCell){
         
+        let id = cell.id
+        let width = mediaCollectionView.frame.width
         mediaDispatcher.fetchStaticMedia(with: staticMedia, gameId: game.id ?? -1) {
             (data: Data?, error: FetchingError?) in
             if let data = data{
                 DispatchQueue.global(qos: .userInteractive).async{
-                    let image = UIImage(data: data)
+                    guard let image = UIImage(data: data) else {return}
+                    
+                    let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
+                    
                     DispatchQueue.main.async {
-                        cell.screenshotView.image = image
+                        if id = cell.id {
+                            UIView.transition(with: cell.staticMediaView, duration: 0.3, options: .transitionCrossDissolve) {
+                                cell.staticMediaView.image = resizedImage
+                            }
+                        }
                     }
                 }
             }
@@ -259,8 +331,3 @@ extension DetailedViewController: UICollectionViewDataSource{
 enum BrowserGameCategory {
     case similarGames, franchiseGames, collectionGames
 }
-
-
-
-
-

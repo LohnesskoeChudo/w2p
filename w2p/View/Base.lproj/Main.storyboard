@@ -846,9 +846,12 @@
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="YSx-1v-oD8">
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="PxK-ea-dC3">
                                                                 <rect key="frame" x="0.0" y="180" width="414" height="300"/>
-                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                            </imageView>
+                                                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="YSx-1v-oD8">
+                                                                <rect key="frame" x="0.0" y="180" width="414" height="300"/>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="300" id="sas-kn-aLK"/>
                                                                 </constraints>
@@ -879,21 +882,45 @@
                                                                         </collectionViewCellContentView>
                                                                         <size key="customSize" width="223" height="301"/>
                                                                         <connections>
-                                                                            <outlet property="screenshotView" destination="mFC-EU-Ff4" id="Q4E-72-pYS"/>
+                                                                            <outlet property="staticMediaView" destination="mFC-EU-Ff4" id="Q4E-72-pYS"/>
                                                                         </connections>
                                                                     </collectionViewCell>
                                                                 </cells>
                                                             </collectionView>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MUo-Dm-8nY">
+                                                                <rect key="frame" x="184.5" y="445.5" width="45" height="24.5"/>
+                                                                <subviews>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XWe-cd-y9P">
+                                                                        <rect key="frame" x="7" y="5" width="31" height="14.5"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <nil key="highlightedColor"/>
+                                                                    </label>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="XWe-cd-y9P" firstAttribute="leading" secondItem="MUo-Dm-8nY" secondAttribute="leading" constant="7" id="1Uf-3Q-sO4"/>
+                                                                    <constraint firstItem="XWe-cd-y9P" firstAttribute="top" secondItem="MUo-Dm-8nY" secondAttribute="top" constant="5" id="Y7O-vk-gjC"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="XWe-cd-y9P" secondAttribute="trailing" constant="7" id="pos-6C-Wcv"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="XWe-cd-y9P" secondAttribute="bottom" constant="5" id="yck-Kv-5pq"/>
+                                                                </constraints>
+                                                            </view>
                                                         </subviews>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <constraints>
                                                             <constraint firstItem="2Ok-EZ-jfd" firstAttribute="top" secondItem="t4O-gE-Tce" secondAttribute="top" constant="20" symbolic="YES" id="7jM-FF-L4g"/>
+                                                            <constraint firstItem="MUo-Dm-8nY" firstAttribute="bottom" secondItem="YSx-1v-oD8" secondAttribute="bottom" constant="-10" id="G47-yo-SJ4"/>
                                                             <constraint firstItem="2Ok-EZ-jfd" firstAttribute="leading" secondItem="t4O-gE-Tce" secondAttribute="leading" constant="20" symbolic="YES" id="PWE-CH-HEP"/>
                                                             <constraint firstAttribute="trailing" secondItem="YSx-1v-oD8" secondAttribute="trailing" id="SCd-S2-vef"/>
                                                             <constraint firstAttribute="bottom" secondItem="YSx-1v-oD8" secondAttribute="bottom" constant="20" id="Tv3-Kh-Dhi"/>
+                                                            <constraint firstItem="MUo-Dm-8nY" firstAttribute="centerX" secondItem="YSx-1v-oD8" secondAttribute="centerX" id="Yel-WR-9VY"/>
+                                                            <constraint firstItem="PxK-ea-dC3" firstAttribute="width" secondItem="YSx-1v-oD8" secondAttribute="width" id="Yzw-ng-P4u"/>
                                                             <constraint firstItem="YSx-1v-oD8" firstAttribute="leading" secondItem="t4O-gE-Tce" secondAttribute="leading" id="a6W-pY-t4I"/>
+                                                            <constraint firstItem="PxK-ea-dC3" firstAttribute="height" secondItem="YSx-1v-oD8" secondAttribute="height" id="brp-HL-qTF"/>
                                                             <constraint firstAttribute="trailing" secondItem="2Ok-EZ-jfd" secondAttribute="trailing" constant="20" symbolic="YES" id="hRa-dt-8j6"/>
                                                             <constraint firstItem="YSx-1v-oD8" firstAttribute="top" secondItem="2Ok-EZ-jfd" secondAttribute="bottom" constant="10" id="oix-Sy-GQV"/>
+                                                            <constraint firstItem="PxK-ea-dC3" firstAttribute="centerY" secondItem="YSx-1v-oD8" secondAttribute="centerY" id="qbw-cT-b1W"/>
+                                                            <constraint firstItem="PxK-ea-dC3" firstAttribute="centerX" secondItem="YSx-1v-oD8" secondAttribute="centerX" id="tYC-Nc-gxt"/>
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p9R-5U-syl" userLabel="firstRelease">
@@ -1123,12 +1150,16 @@
                         <outlet property="attributesContainer" destination="XJJ-dt-t6y" id="N39-5y-mVo"/>
                         <outlet property="attributesFlowView" destination="qWB-oS-IJo" id="8qZ-h1-JmN"/>
                         <outlet property="blurredBackground" destination="bEe-7w-SIZ" id="l3Q-Yz-QzE"/>
+                        <outlet property="blurredMediaBackground" destination="PxK-ea-dC3" id="wi6-hB-j2X"/>
                         <outlet property="collectionGamesButton" destination="cai-HL-YMf" id="VEP-vT-ust"/>
                         <outlet property="coverHeightConstraint" destination="AyR-4q-rg4" id="zoU-jU-a1K"/>
                         <outlet property="coverView" destination="1LI-xH-4sd" id="ORB-g8-0f6"/>
                         <outlet property="coverWidthConstraint" destination="Yyl-pu-D1d" id="MtG-rY-Znd"/>
                         <outlet property="franchiseGamesButton" destination="Pjd-DR-Ta8" id="mZM-M5-4kl"/>
                         <outlet property="mediaCollectionView" destination="YSx-1v-oD8" id="OZq-PF-KNF"/>
+                        <outlet property="mediaContainer" destination="t4O-gE-Tce" id="MXE-KF-Esf"/>
+                        <outlet property="mediaCounterBackground" destination="MUo-Dm-8nY" id="bKh-Us-y3w"/>
+                        <outlet property="mediaCounterLabel" destination="XWe-cd-y9P" id="TcC-1C-QvE"/>
                         <outlet property="nameLabel" destination="Opu-TM-4Vo" id="B5c-uT-59m"/>
                         <outlet property="screenshotCollectionViewHeight" destination="sas-kn-aLK" id="KC8-nP-vrF"/>
                         <outlet property="scrollView" destination="d08-pt-uZq" id="J7w-Fy-OX9"/>

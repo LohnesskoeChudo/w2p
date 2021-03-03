@@ -9,9 +9,15 @@ import UIKit
 
 class StaticMediaCell: UICollectionViewCell {
     
-    @IBOutlet weak var screenshotView: UIImageView!
+    var id: Int?
+    
+    @IBOutlet weak var staticMediaView: UIImageView!
     
     
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        id = nil
+        staticMediaView.image = nil
+    }
 
 }

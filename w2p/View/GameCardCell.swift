@@ -27,6 +27,7 @@ class GameCardCell: UICollectionViewCell{
     
         
     override func prepareForReuse() {
+        super.prepareForReuse()
         customContent.imageView.superview!.isHidden = false
         customContent.imageView.image = nil
     }
