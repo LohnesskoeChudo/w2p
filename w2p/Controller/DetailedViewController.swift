@@ -12,7 +12,10 @@ class DetailedViewController: UIViewController{
     var game: Game!
     var mediaDispatcher = GameMediaDispatcher()
     var imageBlurrer = ImageBlurrer()
+    var staticMediaContent = [MediaDownloadable]()
+    var videoMediaContent = [Video]()
     
+    @IBOutlet weak var mediaCollectionView: UICollectionView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var coverView: UIImageView!
     @IBOutlet weak var blurredBackground: UIImageView!
@@ -66,10 +69,8 @@ class DetailedViewController: UIViewController{
         setupSummaryLabel()
         setupStorylineLabel()
         setupNavigationButtons()
-        
-        setupGestureRecognizers()
-        navigationController?.setNavigationBarHidden(true, animated: false)
- 
+        setupMedia()
+            
         if let gamemodes = game.gameModes{
             for k in gamemodes{
                 print(k.name)
@@ -77,61 +78,27 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setupGestureRecognizers(){
-        
-        
-        /*
-        let upSwipeGR = UISwipeGestureRecognizer(target: self, action: #selector(upSwipe))
-        upSwipeGR.direction = .up
-        upSwipeGR.delegate = self
-        scrollView.addGestureRecognizer(upSwipeGR)
-        let downSwipeGR = UISwipeGestureRecognizer(target: self, action: #selector(downSwipe))
-        downSwipeGR.direction = .down
-        downSwipeGR.delegate = self
-        scrollView.addGestureRecognizer(downSwipeGR)
-        */
-        
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
-        panRecognizer.delegate = self
-        scrollView.addGestureRecognizer(panRecognizer)
-
-    }
-    
-    @objc func pan(sender: UIPanGestureRecognizer){
-        switch sender.state {
-        case .ended:
-            print(sender.velocity(in: view))
-
-            
-        default:
-            return
-        }
-        
-    }
-    
-    /*
-    @objc func downSwipe(sender: UISwipeGestureRecognizer){
-        UIView.animate(withDuration: 0.5, animations: {
-            self.highlabel.transform = CGAffineTransform.identity
-        })
-        
-    }
-    
-    @objc func upSwipe(sender: UISwipeGestureRecognizer){
-        UIView.animate(withDuration: 0.5, animations: {
-            self.highlabel.transform = CGAffineTransform(translationX: 0, y: -150)
-        })
-    }
-    */
-
-
-
 
     override func viewWillAppear(_ animated: Bool) {
         layoutCover()
     }
     
-    func setupNavigationButtons(){
+    @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
+    private func setupMedia(){
+        mediaCollectionView.delegate = self
+        mediaCollectionView.dataSource = self
+        screenshotCollectionViewHeight.constant = view.bounds.height / 2
+        
+        if let screenshots = game.screenshots {
+            staticMediaContent += screenshots
+        }
+        if let artworks = game.artworks {
+            staticMediaContent += artworks
+        }
+
+    }
+    
+    private func setupNavigationButtons(){
         if game.similarGames != nil{
             similarGamesButton.textLabel.text = "Similar games"
         } else {
@@ -149,7 +116,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    func setupNameLabel(){
+    private func setupNameLabel(){
         if let gameName = game.name{
             nameLabel.text = gameName
             nameLabel.font = UIFont.boldSystemFont(ofSize: 25)
@@ -158,7 +125,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    func setupSummaryLabel(){
+    private func setupSummaryLabel(){
         if let summary = game.summary{
             summaryLabel.text = summary
         } else {
@@ -166,7 +133,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    func setupStorylineLabel(){
+    private func setupStorylineLabel(){
         if let storyline = game.storyline{
             storylineLabel.text = storyline
         } else {
@@ -174,7 +141,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    func setupGameAttributesViews(){
+    private func setupGameAttributesViews(){
         var gameAttrs: [GameAttributeView] = []
         for genre in game.genres ?? [] {
             let genreAttr = GameAttributeView()
@@ -236,15 +203,64 @@ class DetailedViewController: UIViewController{
     }
 }
 
+
+extension DetailedViewController: UICollectionViewDelegateFlowLayout{
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        CGSize(width: view.bounds.width, height: view.bounds.height * 0.5)
+        
+    }
+}
+
+extension DetailedViewController: UICollectionViewDataSource{
+    
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        staticMediaContent.count + videoMediaContent.count
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
+      //  if indexPath.item >= videoMediaContent.count{
+            
+            
+            let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCell
+            
+            let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
+            setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
+            return staticMediaCell
+            
+            
+       // } else {
+            
+        //}
+        
+    }
+    
+    func setStaticContent(staticMedia: MediaDownloadable, cell: StaticMediaCell){
+        
+        mediaDispatcher.fetchStaticMedia(with: staticMedia, gameId: game.id ?? -1) {
+            (data: Data?, error: FetchingError?) in
+            if let data = data{
+                DispatchQueue.global(qos: .userInteractive).async{
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        cell.screenshotView.image = image
+                    }
+                }
+            }
+        }
+    }
+}
+
 enum BrowserGameCategory {
     case similarGames, franchiseGames, collectionGames
 }
 
 
-extension DetailedViewController: UIGestureRecognizerDelegate{
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        true
-    }
-    
-}
+
+
+

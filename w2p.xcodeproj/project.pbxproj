@@ -54,6 +54,7 @@
 		5DE9937725E581F7004AB0B1 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE9937625E581F7004AB0B1 /* View+.swift */; };
 		5DEB7B4225EBB19B0087FF67 /* FavoriteGameCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */; };
 		5DF307BF25E027B10052433C /* ImageBlurrer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF307BE25E027B10052433C /* ImageBlurrer.swift */; };
+		5DF70BD725EF710900B99E31 /* StaticMediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF70BD625EF710900B99E31 /* StaticMediaCell.swift */; };
 		5DF85F1F25E1A31700359227 /* CDGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F1E25E1A31700359227 /* CDGame.swift */; };
 		5DF85F2225E1A61900359227 /* CDCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F2125E1A61900359227 /* CDCover.swift */; };
 		5DF85F2525E1A62000359227 /* CDGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F2425E1A62000359227 /* CDGenre.swift */; };
@@ -118,6 +119,7 @@
 		5DE9937625E581F7004AB0B1 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGameCardCell.swift; sourceTree = "<group>"; };
 		5DF307BE25E027B10052433C /* ImageBlurrer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBlurrer.swift; sourceTree = "<group>"; };
+		5DF70BD625EF710900B99E31 /* StaticMediaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMediaCell.swift; sourceTree = "<group>"; };
 		5DF85F1E25E1A31700359227 /* CDGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGame.swift; sourceTree = "<group>"; };
 		5DF85F2125E1A61900359227 /* CDCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCover.swift; sourceTree = "<group>"; };
 		5DF85F2425E1A62000359227 /* CDGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGenre.swift; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 		5DCCCBBC25E9143C007690B9 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				5DF70BD625EF710900B99E31 /* StaticMediaCell.swift */,
 				5DCCCBB625E90BA4007690B9 /* CellContentView.xib */,
 				5DCCCBB925E90D4C007690B9 /* CellContentView.swift */,
 				5D530F3225D828A000DF5621 /* GameCardCell.swift */,
@@ -362,6 +365,7 @@
 				5DF85F2525E1A62000359227 /* CDGenre.swift in Sources */,
 				5DF85F1F25E1A31700359227 /* CDGame.swift in Sources */,
 				5D530F3625D82ECE00DF5621 /* DetailedViewController.swift in Sources */,
+				5DF70BD725EF710900B99E31 /* StaticMediaCell.swift in Sources */,
 				5DF85F2B25E1A64000359227 /* CDPlatform.swift in Sources */,
 				5D530EFD25D7E44300DF5621 /* SearchViewController.swift in Sources */,
 				5DF85F3D25E1A67100359227 /* CDAgeRating.swift in Sources */,

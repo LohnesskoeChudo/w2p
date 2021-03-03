@@ -54,7 +54,7 @@ struct Theme: Codable, Hashable, Identifiable{
     var name: String
 }
 
-struct Artwork: Codable{
+struct Artwork: Codable, MediaDownloadable{
     var id: Int
     var url: String
     var height: Int
@@ -62,7 +62,7 @@ struct Artwork: Codable{
     var animated: Bool?
 }
 
-struct Screenshot: Codable{
+struct Screenshot: Codable, MediaDownloadable{
     var id: Int
     var url: String
     var height: Int
@@ -97,7 +97,7 @@ struct AgeRating: Codable{
     var ratingCoverUrl: String?
 }
 
-struct Cover: Codable{
+struct Cover: Codable, MediaDownloadable{
     var id: Int
     var animated: Bool?
     var height: Int
@@ -184,4 +184,8 @@ enum GameImageSizeKey: String{
          S35X35 = "micro",
          S1280X720 = "720p",
          S1920X1080 = "1080p"
+}
+
+protocol MediaDownloadable {
+    var url: String {get}
 }

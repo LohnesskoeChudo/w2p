@@ -62,18 +62,37 @@ class RequestFormer{
         return request
     }
     
-    func formSizedImageRequest(basicImageUrl: String, sizeKey: GameImageSizeKey) -> URLRequest?{
-        
-        let components = basicImageUrl.split(separator: "/")
-        guard let imageIdComponent = components.last else { return nil}
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "http"
-        urlComponents.host = "images.igdb.com"
-        let sizeComponent = "t_" + sizeKey.rawValue + "_2x"
-        let path = "/igdb/image/upload/" + sizeComponent + "/" + imageIdComponent
+    func formRequestForCover(for game: Game, sizeKey: GameImageSizeKey) -> URLRequest?{
+        guard let cover = game.cover else {return nil}
+        guard let imageIdComponent = getImageIdComponent(for: cover) else {return nil}
+        var urlComponents = configuredComponentsForRequest()
+        let path = pathForImageRequest(sizeKey: .S264X374, idComponent: imageIdComponent)
         urlComponents.path = path
         guard let url = urlComponents.url else {return nil}
         return URLRequest(url: url)
+    }
+    
+    private func getImageIdComponent(for media: MediaDownloadable) -> String?{
+        let basicImageUrl = media.url
+        let components = basicImageUrl.split(separator: "/")
+        if let idComponent = components.last{
+            return String(idComponent)
+        } else {
+            return nil
+        }
+    }
+    
+    private func configuredComponentsForRequest() -> URLComponents{
+            var urlComponents = URLComponents()
+            urlComponents.scheme = "http"
+            urlComponents.host = "images.igdb.com"
+        return urlComponents
+    }
+    
+    private func pathForImageRequest(sizeKey: GameImageSizeKey, idComponent: String) -> String {
+        let sizeComponent = "t_" + sizeKey.rawValue + "_2x"
+        let path = "/igdb/image/upload/" + sizeComponent + "/" + idComponent
+        return path
     }
     
     func formRequestForSpecificGames(_ gamesIds: [Int]) -> URLRequest {
@@ -111,5 +130,12 @@ class RequestFormer{
     }
     
     
-    
+    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest?{
+        guard let imageIdComponent = getImageIdComponent(for: media) else {return nil}
+        var urlComponents = configuredComponentsForRequest()
+        let path = pathForImageRequest(sizeKey: sizeKey, idComponent: imageIdComponent)
+        urlComponents.path = path
+        guard let url = urlComponents.url else {return nil}
+        return URLRequest(url: url)
+    }
 }

@@ -44,6 +44,8 @@ class CacheManager{
             try! self.privateMoc.save()
         }
     }
+
+
     
     func loadCover(for game: Game, completion: @escaping (Data?) -> Void){
         guard let gameId = game.id else {return}
@@ -64,4 +66,72 @@ class CacheManager{
             }
         }
     }
+    
+    func loadStaticMedia(with media: MediaDownloadable, completion: @escaping (Data?) -> Void){
+        
+        var id: Int
+        var fetchRequest: NSFetchRequest<NSFetchRequestResult>
+        
+        if let screenshot = media as? Screenshot {
+            id = screenshot.id
+            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDScreenshot")
+        } else if let artwork = media as? Artwork {
+            id = artwork.id
+            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDArtwork")
+        } else {
+            return
+        }
+        
+        let propertiesToFetch: [NSString] = ["image"]
+        fetchRequest.propertiesToFetch = propertiesToFetch
+        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(format: "id == %d", id)
+        if let media = try? self.privateMoc.fetch(fetchRequest){
+            if let mediaItem = media.first as? CDScreenshot{
+                completion(mediaItem.image)
+            } else if let mediaItem = media.first as? CDArtwork {
+                completion(mediaItem.image)
+            } else {
+                completion(nil)
+            }
+        } else {
+            completion(nil)
+        }
+    }
+    
+    func saveStaticMedia(data: Data, media: MediaDownloadable, gameId: Int) {
+        if let screenshot = media as? Screenshot {
+            saveScreenshot(data: data, with: screenshot, gameId: gameId)
+        } else if let artwork = media as? Artwork {
+            saveArtwork(data: data, with: artwork, gameId: gameId)
+        }
+    }
+    
+    private func saveScreenshot(data: Data, with screenshot: Screenshot, gameId: Int) {
+        privateMoc.perform {
+            let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
+            let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
+            cdGame.id = Int64(gameId)
+            let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: self.privateMoc)!
+            let cdScreenshot = CDScreenshot(context: self.privateMoc, entity: screenshotEntity, screenshot: screenshot)
+            cdScreenshot.image = data
+            cdGame.addToScreenshots(cdScreenshot)
+            try! self.privateMoc.save()
+        }
+    }
+    
+    private func saveArtwork(data: Data, with artwork: Artwork, gameId: Int) {
+        privateMoc.perform {
+            let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
+            let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
+            cdGame.id = Int64(gameId)
+            let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: self.privateMoc)!
+            let cdArtwork = CDArtwork(context: self.privateMoc, entity: artworkEntity, artwork: artwork)
+            cdArtwork.image = data
+            cdGame.addToArtworks(cdArtwork)
+            try! self.privateMoc.save()
+        }
+    }
+    
+
 }

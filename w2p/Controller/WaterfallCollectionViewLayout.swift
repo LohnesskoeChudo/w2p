@@ -123,6 +123,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     }
    //////////
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        print("SHOULD INVALIDATE")
         if let collectionView = collectionView{
             if collectionView.bounds.size != newBounds.size{
                 cache = []

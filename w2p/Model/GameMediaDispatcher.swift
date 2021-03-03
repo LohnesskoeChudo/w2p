@@ -18,7 +18,11 @@ class GameMediaDispatcher{
             if let data = data {
                 completion(data, nil)
             } else {
-                self.loadCoverFromInet(game: game){
+                guard let coverRequest = RequestFormer.shared.formRequestForCover(for: game, sizeKey: .S264X374) else {
+                    completion(nil, .canNotFormRequest)
+                    return
+                }
+                self.loadStaticMediaFromInet(request: coverRequest){
                     data, error in
                     if let data = data {
                         if cache{
@@ -33,9 +37,7 @@ class GameMediaDispatcher{
         }
     }
     
-    private func loadCoverFromInet(game: Game, completion: @escaping (Data?, FetchingError?) -> Void){
-        guard let basicUrlString = game.cover?.url else {return}
-        guard let request = RequestFormer.shared.formSizedImageRequest(basicImageUrl: basicUrlString, sizeKey: .S264X374) else {return}
+    private func loadStaticMediaFromInet(request: URLRequest, completion: @escaping (Data?, FetchingError?) -> Void) {
         dataLoader.load(with: request){
             data, error in
             if let data = data {
@@ -45,8 +47,34 @@ class GameMediaDispatcher{
             }
         }
     }
+    
+    func fetchStaticMedia(with media: MediaDownloadable, gameId: Int, cache: Bool = true, completion: @escaping (Data?, FetchingError?) -> Void) {
+        CacheManager.shared.loadStaticMedia(with: media){
+            data in
+            if let data = data {
+                completion(data, nil)
+            } else {
+                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: .S1920X1080) else {
+                    completion(nil, .canNotFormRequest)
+                    return
+                }
+                self.loadStaticMediaFromInet(request: staticMediaRequest){
+                    data, error in
+                    if let data = data {
+                        if cache{
+                            CacheManager.shared.saveStaticMedia(data: data, media: media, gameId: gameId)
+                        }
+                        completion(data, nil)
+                    } else {
+                        completion(nil, error)
+                    }
+                }
+            }
+        }
+    }
 }
 
 enum FetchingError: Error{
     case connectionError
+    case canNotFormRequest
 }
