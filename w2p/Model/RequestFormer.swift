@@ -46,12 +46,7 @@ class RequestFormer{
         if !filterComponents.isEmpty {
             requestBody += "where \(filterComponents.joined(separator: "&"));"
         }
-        if let searchStr = filter.searchString, !searchStr.isEmpty {
-            requestBody += "search \"\(searchStr)\";"
-        }
-        if let limit = limit, (1...500).contains(limit) {
-            requestBody += "limit \(limit);"
-        }
+
         
         requestBody += "offset \(offset);"
         
@@ -137,5 +132,95 @@ class RequestFormer{
         urlComponents.path = path
         guard let url = urlComponents.url else {return nil}
         return URLRequest(url: url)
+    }
+    
+    func formRequestFor(gameRequest: GameRequestItem){
+        
+        
+    }
+    
+}
+
+class GameApiRequestItem {
+    var offset: Int? {
+        didSet{
+            if let offset = offset, offset >= 0{
+                offsetStr = "offset \(offset);"
+            }
+        }
+    }
+    var offsetStr: String?
+    
+    var filter: String?
+    var search: String?
+    var fields: String?
+    
+    var limit: Int? {
+        didSet {
+            if let limit = limit, (1...500).contains(limit) {
+                limitStr = "limit \(limit);"
+            }
+        }
+    }
+    var limitStr: String?
+    
+    
+    init(filter: SearchFilter, limit: Int?) {
+        
+        self.limit = limit
+        self.filter = formSearchingFilterString(with: filter)
+        self.offset = 0
+        if let searchStr = filter.searchString, !searchStr.isEmpty {
+            search = "search \"\(searchStr)\";"
+        }
+    }
+    
+    var limitStr: String?
+
+    static func formRequestItemForSearching(filter: SearchFilter, limit: Int?) -> GameApiRequestItem {
+        
+        let gameRequestItem = GameApiRequestItem()
+            
+        
+
+
+
+    }
+    
+    private func formSearchingFilterString(with filter: SearchFilter) -> String?{
+        
+        var filterComponents = [String]()
+        
+        if !filter.genres.isEmpty{
+            filterComponents.append("genres = \(filter.genres.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
+        }
+        if !filter.themes.isEmpty{
+            filterComponents.append("themes = \(filter.themes.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
+        }
+        if !filter.platforms.isEmpty{
+            filterComponents.append("platforms = \(filter.platforms.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
+        }
+
+        if let aggrRatingUpperBound = filter.ratingUpperBound{
+            filterComponents.append("aggregated_rating <= \(aggrRatingUpperBound)")
+        }
+        
+        if let aggrRatingLowerBound = filter.ratingLowerBound{
+            filterComponents.append("aggregated_rating >= \(aggrRatingLowerBound)")
+        }
+            
+        if let releaseUpperBound = filter.releaseDateUpperBound{
+            filterComponents.append("first_release_date <= \(Int(releaseUpperBound.timeIntervalSince1970))")
+        }
+
+        if let releaseLowerBound = filter.releaseDateLowerBound{
+            filterComponents.append("first_release_date >= \(Int(releaseLowerBound.timeIntervalSince1970))")
+        }
+
+        if !filterComponents.isEmpty {
+             return "where \(filterComponents.joined(separator: "&"));"
+        }
+        
+        return nil
     }
 }

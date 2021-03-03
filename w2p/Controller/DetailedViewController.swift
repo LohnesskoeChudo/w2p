@@ -64,7 +64,7 @@ class DetailedViewController: UIViewController{
         
         switch segue.identifier {
         case "browser":
-            guard let browserVC = segue.destination as? GameBrowserViewController, let gameCategory = sender as? BrowserGameCategory else {return}
+            guard let browserVC = segue.destination as? SimilarGamesController, let gameCategory = sender as? BrowserGameCategory else {return}
 
             browserVC.externalGame = game
             browserVC.category = gameCategory
@@ -316,7 +316,7 @@ extension DetailedViewController: UICollectionViewDataSource{
                     let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
                     
                     DispatchQueue.main.async {
-                        if id = cell.id {
+                        if id == cell.id {
                             UIView.transition(with: cell.staticMediaView, duration: 0.3, options: .transitionCrossDissolve) {
                                 cell.staticMediaView.image = resizedImage
                             }

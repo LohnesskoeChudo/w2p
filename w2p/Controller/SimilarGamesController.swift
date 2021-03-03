@@ -6,42 +6,29 @@
 //
 
 import UIKit
-class GameBrowserViewController : UIViewController, GameBrowser{
+class SimilarGamesController : GameBrowserController{
     
     var externalGame: Game!
     var category: BrowserGameCategory!
-    
-    
-    var games = [Game]()
-    var mediaDispatcher = GameMediaDispatcher()
-    var jsonLoader = JsonLoader()
-    var columnWidth: CGFloat {
-        (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
+    override var upperSpacing: CGFloat {
+        upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
     }
-    
-    var browserDelegate: GameBrowserDelegate!
     
     @IBAction func backButtonPressed(_ sender: CustomButton) {
         navigationController?.popViewController(animated: true)
     }
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var upperBar: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupDelegates()
         setupGestureRecognizers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        loadGames()
-    }
-    
-    private func loadGames(){
-        
-
+        super.viewWillAppear(animated)
+       
         let request: URLRequest
-        
+
         if category == .similarGames{
             request = RequestFormer.shared.requestForSimilarGames(for: externalGame)
         } else if category == .franchiseGames{
@@ -49,32 +36,13 @@ class GameBrowserViewController : UIViewController, GameBrowser{
         } else {
             request = RequestFormer.shared.formRequestForSpecificGames(externalGame.collection?.games ?? [])
         }
-
-        let completion = {
-            (games: [Game]?, error: NetworkError?) in
-            if let games = games {
-                let itemsCount = self.games.count
-                let newItemsCount = games.count
-                let indexPaths = (itemsCount..<itemsCount+newItemsCount).map{IndexPath(item: $0, section: 0)}
-                DispatchQueue.main.async {
-                    self.games += games
-                    UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction]){
-                    self.collectionView.insertItems(at: indexPaths)
-                    }
-                }
-            }
-        }
-        jsonLoader.load(request: request, completion: completion)
+        
+        loadGames(request: request, withAnimation: true)
     }
     
-    func setupDelegates(){
-        browserDelegate = GameBrowserDelegate(browser: self)
-        collectionView.dataSource = browserDelegate
-        collectionView.delegate = self
-        if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
-            waterfallLayout.delegate = self
-        }
-    }
+    
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -121,33 +89,6 @@ class GameBrowserViewController : UIViewController, GameBrowser{
         }
     }
     
-}
-
-// MARK: - Delegates
-extension GameBrowserViewController: WaterfallCollectionViewLayoutDelegate{
-    
-    func heightForCell(at indexPath: IndexPath) -> CGFloat {
-        let gameItem = games[indexPath.item]
-        let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
-        
-        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
-        return height + additionHeight
-    }
-    
-    var numberOfColumns: Int {
-        return traitCollection.horizontalSizeClass == .compact ? 2 : 3 }
-    
-    var spacing: CGFloat {
-        10
-    }
-    
-    var upperSpacing: CGFloat {
-        upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-    }
-}
-
-
-extension GameBrowserViewController: UICollectionViewDelegate{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y <= 0{
             upperBar.isHidden = false
@@ -156,9 +97,12 @@ extension GameBrowserViewController: UICollectionViewDelegate{
             })
         }
     }
+    
 }
 
-extension GameBrowserViewController: UIGestureRecognizerDelegate{
+// MARK: - Delegates
+
+extension SimilarGamesController: UIGestureRecognizerDelegate{
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }
