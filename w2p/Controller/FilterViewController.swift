@@ -54,7 +54,6 @@ class FilterViewController: UIViewController {
             filter.ratingUpperBound = nil
         }
         updateRatingUI(animated: true)
-        print(ratingSliderContainer.isHidden)
     }
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var ratingSliderContainer: UIView!

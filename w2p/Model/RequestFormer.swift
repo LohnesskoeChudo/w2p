@@ -1,61 +1,12 @@
 import Foundation
 class RequestFormer{
-    var api = "https://api.igdb.com/v4/games/"
+    var api = URL(string: "https://api.igdb.com/v4/games/")!
     
     static var shared = RequestFormer()
     private init() { }
    
     //var api = "http://192.168.1.64:8002/"
     
-    func formRequestForSearching(filter: SearchFilter, offset: Int, limit: Int?) -> URLRequest{
-        var requestBody = RequestFields.basicFields
-
-        var filterComponents = [String]()
-
-        if !filter.genres.isEmpty{
-            filterComponents.append("genres = \(filter.genres.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
-        }
-        if !filter.themes.isEmpty{
-            filterComponents.append("themes = \(filter.themes.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
-        }
-        if !filter.platforms.isEmpty{
-            filterComponents.append("platforms = \(filter.platforms.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
-        }
-        /*
-        if !filter.gameModes.isEmpty{
-            filterComponents.append("game_modes = \(filter.gameModes.toIdArrayString())")
-        }
- */
-        
-        if let aggrRatingUpperBound = filter.ratingUpperBound{
-            filterComponents.append("aggregated_rating <= \(aggrRatingUpperBound)")
-        }
-        
-        if let aggrRatingLowerBound = filter.ratingLowerBound{
-            filterComponents.append("aggregated_rating >= \(aggrRatingLowerBound)")
-        }
-            
-        if let releaseUpperBound = filter.releaseDateUpperBound{
-            filterComponents.append("first_release_date <= \(Int(releaseUpperBound.timeIntervalSince1970))")
-        }
-
-        if let releaseLowerBound = filter.releaseDateLowerBound{
-            filterComponents.append("first_release_date >= \(Int(releaseLowerBound.timeIntervalSince1970))")
-        }
-
-        if !filterComponents.isEmpty {
-            requestBody += "where \(filterComponents.joined(separator: "&"));"
-        }
-
-        
-        requestBody += "offset \(offset);"
-        
-        print(requestBody)
-        
-        var request = setupRequest(apiUrl: URL(string: api)!)
-        request.httpBody = requestBody.data(using: .utf8)
-        return request
-    }
     
     func formRequestForCover(for game: Game, sizeKey: GameImageSizeKey) -> URLRequest?{
         guard let cover = game.cover else {return nil}
@@ -66,16 +17,41 @@ class RequestFormer{
         guard let url = urlComponents.url else {return nil}
         return URLRequest(url: url)
     }
-    
-    private func getImageIdComponent(for media: MediaDownloadable) -> String?{
-        let basicImageUrl = media.url
-        let components = basicImageUrl.split(separator: "/")
-        if let idComponent = components.last{
-            return String(idComponent)
-        } else {
-            return nil
-        }
+
+    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest?{
+        guard let imageIdComponent = getImageIdComponent(for: media) else {return nil}
+        var urlComponents = configuredComponentsForRequest()
+        let path = pathForImageRequest(sizeKey: sizeKey, idComponent: imageIdComponent)
+        urlComponents.path = path
+        guard let url = urlComponents.url else {return nil}
+        print(url)
+        return URLRequest(url: url)
     }
+    
+    func formRequest(with gameRequest: GameApiRequestItem) -> URLRequest {
+        var request = setupRequest()
+        var body = ""
+        if let fields = gameRequest.fields {
+            body += fields
+        }
+        if let search = gameRequest.search {
+            body += search
+        }
+        if let filter = gameRequest.filter {
+            body += filter
+        }
+        if let offset = gameRequest.offsetStr {
+            body += offset
+        }
+        if let limit = gameRequest.limitStr {
+            body += limit
+        }
+        request.httpBody = body.data(using: .utf8)
+        return request
+
+    }
+    
+    
     
     private func configuredComponentsForRequest() -> URLComponents{
             var urlComponents = URLComponents()
@@ -90,55 +66,24 @@ class RequestFormer{
         return path
     }
     
-    func formRequestForSpecificGames(_ gamesIds: [Int]) -> URLRequest {
-        var requestBody = RequestFields.basicFields
-        requestBody += "where id = \(gamesIds.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
-        requestBody += "limit 500;"
-        var request = setupRequest(apiUrl: URL(string: api)!)
-        request.httpBody = requestBody.data(using: .utf8)
-        print(requestBody)
-        return request
-    }
-    
-    //Force
-    func requestForSimilarGames(for game: Game) -> URLRequest{
-        var requestBody = RequestFields.basicFields
-        requestBody += "where (genres = [\(game.genres!.first!.id), \(game.genres![1].id)] & "
-        
-        requestBody += "themes = \(game.themes!.toIdArrayString(firstBracket: "(", secondBracket: ")"))) |"
-        requestBody += "id = \(game.similarGames!.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
-        
-        requestBody += "limit 500;"
-        var request = setupRequest(apiUrl: URL(string: api)!)
-        print(requestBody)
-        request.httpBody = requestBody.data(using: .utf8)
-        return request
-    }
-    
-    private func setupRequest(apiUrl: URL) -> URLRequest {
-        var request = URLRequest(url: apiUrl)
+    private func setupRequest() -> URLRequest {
+        var request = URLRequest(url: api)
                 request.httpMethod = "POST"
         request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
         request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return request
     }
-    
-    
-    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest?{
-        guard let imageIdComponent = getImageIdComponent(for: media) else {return nil}
-        var urlComponents = configuredComponentsForRequest()
-        let path = pathForImageRequest(sizeKey: sizeKey, idComponent: imageIdComponent)
-        urlComponents.path = path
-        guard let url = urlComponents.url else {return nil}
-        return URLRequest(url: url)
+
+    private func getImageIdComponent(for media: MediaDownloadable) -> String?{
+        let basicImageUrl = media.url
+        let components = basicImageUrl.split(separator: "/")
+        if let idComponent = components.last{
+            return String(idComponent)
+        } else {
+            return nil
+        }
     }
-    
-    func formRequestFor(gameRequest: GameRequestItem){
-        
-        
-    }
-    
 }
 
 class GameApiRequestItem {
@@ -149,8 +94,35 @@ class GameApiRequestItem {
             }
         }
     }
-    var offsetStr: String?
     
+    static var basicFields =
+    """
+        fields
+        name,
+        category,
+        summary,
+        storyline,
+        aggregated_rating,
+        status,
+        first_release_date,
+        similar_games,
+        cover.animated, cover.height, cover.width, cover.url,
+        genres.name,
+        platforms.name,
+        game_modes.name,
+        websites.url, websites.category,
+        themes.name,
+        artworks.animated, artworks.height, artworks.width, artworks.url,
+        screenshots.animated, screenshots.height, screenshots.width, screenshots.url,
+        videos.name, videos.video_id,
+        franchise.games, franchise.name,
+        collection.games, collection.name,
+        age_ratings.category, age_ratings.rating, age_ratings.rating_cover_url,
+        involved_companies.company.name, game_engines.name;
+
+    """
+    
+    var offsetStr: String?
     var filter: String?
     var search: String?
     var fields: String?
@@ -164,30 +136,75 @@ class GameApiRequestItem {
     }
     var limitStr: String?
     
-    
-    init(filter: SearchFilter, limit: Int?) {
-        
-        self.limit = limit
-        self.filter = formSearchingFilterString(with: filter)
-        self.offset = 0
-        if let searchStr = filter.searchString, !searchStr.isEmpty {
-            search = "search \"\(searchStr)\";"
-        }
-    }
-    
-    var limitStr: String?
-
     static func formRequestItemForSearching(filter: SearchFilter, limit: Int?) -> GameApiRequestItem {
         
         let gameRequestItem = GameApiRequestItem()
             
+        gameRequestItem.limit = limit
+        gameRequestItem.filter = formSearchingFilterString(with: filter)
+        gameRequestItem.offset = 0
+        gameRequestItem.fields = basicFields
+        if let searchStr = filter.searchString, !searchStr.isEmpty {
+            gameRequestItem.search = "search \"\(searchStr)\";"
+        }
         
-
-
+        return gameRequestItem
 
     }
     
-    private func formSearchingFilterString(with filter: SearchFilter) -> String?{
+    static func formRequestItemForSpecificGames(gamesIds: [Int]) -> GameApiRequestItem?{
+        if gamesIds.count == 0 {return nil}
+        let gameRequestItem = GameApiRequestItem()
+        gameRequestItem.offset = 0
+        gameRequestItem.fields = basicFields
+        gameRequestItem.limit = 500
+        gameRequestItem.filter = "where id = \(gamesIds.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
+        return gameRequestItem
+    }
+    
+    static func formRequestItemForSimilarGames(with game: Game) -> GameApiRequestItem? {
+        
+        guard let genresCriteria = genresCriteriaForSimilarGame(with: game) else {return nil}
+        
+        let gameRequestItem = GameApiRequestItem()
+        var filterComponents = [String]()
+        filterComponents.append(genresCriteria)
+        if let themeCriteria = themesCriteriaForSimilarGame(with: game) {
+            filterComponents.append(themeCriteria)
+        }
+        
+        gameRequestItem.filter = "where \(filterComponents.joined(separator: "&"));"
+        gameRequestItem.fields = basicFields
+        gameRequestItem.limit = 500
+        gameRequestItem.offset = 0
+        
+        return gameRequestItem
+        
+    }
+    
+    static private func genresCriteriaForSimilarGame(with game: Game) -> String?{
+        if let genres = game.genres, genres.count != 0{
+            let genreSets = genres.growingOrderedSubarrays()
+            if genreSets.count == 0 {
+                return nil
+            } else {
+                return "genres = \(genreSets[min(3,genreSets.count-1)].toIdArrayString(firstBracket: "[", secondBracket: "]"))"
+            }
+        }
+        return nil
+    }
+    
+    static private func themesCriteriaForSimilarGame(with game: Game) -> String?{
+        if let themes = game.themes, themes.count != 0{
+            return "themes = \(themes.toIdArrayString(firstBracket: "(", secondBracket: ")"))"
+        }
+        return nil
+    }
+    
+    
+    
+    
+    static private func formSearchingFilterString(with filter: SearchFilter) -> String?{
         
         var filterComponents = [String]()
         

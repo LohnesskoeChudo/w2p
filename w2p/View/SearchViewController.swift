@@ -6,7 +6,7 @@
 //
 
 import UIKit
-class SearchViewController: GameBrowserController, GameBrowser {
+class SearchViewController: GameBrowserController{
     
     
     var panGestureRecognizer: UIPanGestureRecognizer!
@@ -25,8 +25,8 @@ class SearchViewController: GameBrowserController, GameBrowser {
         gamesSource.clear()
         collectionView.reloadData()
         currentOffset = 0
-        guard let request = RequestFormer.shared.formRequestForSearching(filter: searchFilter, offset: currentOffset, limit: gamesPerRequest) else {return}
-        loadGames(request: request,withAnimation: true)
+        gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: searchFilter, limit: 500)
+        loadGames(withAnimation: true)
         currentOffset += gamesPerRequest
     }
     

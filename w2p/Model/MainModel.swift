@@ -23,6 +23,9 @@ struct Game: Codable{
     var franchise: Franchise?
     var collection: GameCollection?
     var ageRatings: [AgeRating]?
+    var involvedCompanies: [InvolvedCompany]?
+    var gameEngines: [GameEngine]?
+    
     
 }
 
@@ -109,6 +112,20 @@ struct Cover: Codable, MediaDownloadable{
     }
 }
 
+struct InvolvedCompany: Codable {
+    var company: Company
+}
+
+struct Company: Codable {
+    var id: Int
+    var name: String
+}
+
+struct GameEngine: Codable {
+    var id: Int
+    var name: String
+}
+
 
 
 
@@ -121,6 +138,25 @@ enum GameStatus: Int{
          offline = 5,
          cancelled = 6,
          rumored = 7
+    
+    func toString() -> String {
+        switch self {
+        case .released:
+            return "Released"
+        case .alpha:
+            return "Alpha"
+        case .beta:
+            return "Beta"
+        case .earlyAccess:
+            return "Early access"
+        case .offline:
+            return "Offline"
+        case .cancelled:
+            return "Cancelled"
+        case .rumored:
+            return "rumored"
+        }
+    }
 }
 
 enum GameCategory: Int{
@@ -132,6 +168,27 @@ enum GameCategory: Int{
          mod = 5,
          episode = 6,
          season = 7
+    
+    func toString() -> String{
+        switch self {
+        case .mainGame:
+            return "Main game"
+        case .dlcAddon:
+            return "DLC"
+        case .expansion:
+            return "Expansion"
+        case .bundle:
+            return "Bundle"
+        case .standaloneExpansion:
+            return "Standalone expansion"
+        case .mod:
+            return "Mod"
+        case .episode:
+            return "Episode"
+        case .season:
+            return "Season"
+        }
+    }
 }
 
 enum GameAgeRating: Int{

@@ -611,6 +611,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="f7i-6f-KJc"/>
                     <connections>
+                        <outlet property="collectionView" destination="Iyc-h2-SVE" id="lC3-a2-ECO"/>
                         <outlet property="searchBar" destination="IBx-k1-jUw" id="7BZ-io-h6U"/>
                         <outlet property="searchButton" destination="iHY-YJ-6DT" id="ue5-hv-QjU"/>
                         <outlet property="searchField" destination="teO-kj-mPW" id="3o6-cG-Pp5"/>
@@ -669,10 +670,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bEe-7w-SIZ">
-                                <rect key="frame" x="0.0" y="88" width="414" height="2829"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="2912"/>
                             </imageView>
                             <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d08-pt-uZq">
-                                <rect key="frame" x="0.0" y="88" width="414" height="2829"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="2912"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCt-og-zrO">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="2240.5"/>
@@ -1150,11 +1151,19 @@
                         <outlet property="attributesFlowView" destination="qWB-oS-IJo" id="8qZ-h1-JmN"/>
                         <outlet property="blurredBackground" destination="bEe-7w-SIZ" id="l3Q-Yz-QzE"/>
                         <outlet property="blurredMediaBackground" destination="PxK-ea-dC3" id="wi6-hB-j2X"/>
+                        <outlet property="categoryContainer" destination="PZx-rA-meb" id="PlC-xU-FFY"/>
+                        <outlet property="categoryLabel" destination="PrF-f1-Yd7" id="uBF-9J-j40"/>
                         <outlet property="collectionGamesButton" destination="cai-HL-YMf" id="VEP-vT-ust"/>
+                        <outlet property="companyContainer" destination="OWl-FX-tPG" id="ZNj-4a-Mxi"/>
+                        <outlet property="companyLabel" destination="c4E-Kl-AyK" id="CEf-wg-rgG"/>
                         <outlet property="coverHeightConstraint" destination="AyR-4q-rg4" id="zoU-jU-a1K"/>
                         <outlet property="coverView" destination="1LI-xH-4sd" id="ORB-g8-0f6"/>
                         <outlet property="coverWidthConstraint" destination="Yyl-pu-D1d" id="MtG-rY-Znd"/>
+                        <outlet property="firstReleaseContainer" destination="p9R-5U-syl" id="bPa-No-3dR"/>
+                        <outlet property="firstReleaseLabel" destination="yvz-Tc-KbA" id="S8A-wd-VN8"/>
                         <outlet property="franchiseGamesButton" destination="Pjd-DR-Ta8" id="mZM-M5-4kl"/>
+                        <outlet property="gameEngineContainer" destination="cyj-pj-aPe" id="gpy-F4-Cie"/>
+                        <outlet property="gameEngineLabel" destination="uQr-SJ-NAC" id="58j-Co-Rvr"/>
                         <outlet property="mediaCollectionView" destination="YSx-1v-oD8" id="OZq-PF-KNF"/>
                         <outlet property="mediaContainer" destination="t4O-gE-Tce" id="MXE-KF-Esf"/>
                         <outlet property="mediaCounterBackground" destination="MUo-Dm-8nY" id="bKh-Us-y3w"/>
@@ -1163,6 +1172,8 @@
                         <outlet property="screenshotCollectionViewHeight" destination="sas-kn-aLK" id="KC8-nP-vrF"/>
                         <outlet property="scrollView" destination="d08-pt-uZq" id="J7w-Fy-OX9"/>
                         <outlet property="similarGamesButton" destination="Uwa-oo-vyr" id="xko-r7-ldx"/>
+                        <outlet property="statusContainer" destination="bTk-Cw-H0t" id="utE-lD-OWD"/>
+                        <outlet property="statusLabel" destination="aPb-vy-Ia2" id="QFk-1I-Xb1"/>
                         <outlet property="storylineLabel" destination="95j-iR-cbz" id="pDp-iY-tV3"/>
                         <outlet property="summaryLabel" destination="HsG-Pb-FZz" id="N1U-td-fTG"/>
                         <segue destination="w68-TY-0eO" kind="show" identifier="browser" id="R7m-Lu-tA0"/>
@@ -1177,11 +1188,11 @@
             <objects>
                 <viewController id="w68-TY-0eO" customClass="SimilarGamesController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mDX-aO-Nod">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="9fu-TD-P6V" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
@@ -1211,7 +1222,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fb5-De-cO8">
-                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="51"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKa-5k-VWp" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="20" y="10" width="89" height="41"/>
@@ -1267,7 +1278,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="g6b-zk-oVL"/>
                     <connections>
-                        <outlet property="collectionView" destination="ETD-OZ-1YL" id="v8R-W6-h88"/>
+                        <outlet property="collectionView" destination="ETD-OZ-1YL" id="O8k-f3-Ob3"/>
                         <outlet property="upperBar" destination="Fb5-De-cO8" id="qHJ-XW-52f"/>
                         <segue destination="aGj-6w-gCA" kind="show" identifier="detailed" id="m7g-vP-Cl6"/>
                     </connections>
@@ -1297,7 +1308,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Kvh-Bh-DzW"/>
+        <segue reference="R7m-Lu-tA0"/>
+        <segue reference="m7g-vP-Cl6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="chevron.backward" catalog="system" width="96" height="128"/>

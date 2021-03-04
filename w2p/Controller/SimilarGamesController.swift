@@ -13,7 +13,7 @@ class SimilarGamesController : GameBrowserController{
     override var upperSpacing: CGFloat {
         upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
     }
-    
+
     @IBAction func backButtonPressed(_ sender: CustomButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -27,23 +27,19 @@ class SimilarGamesController : GameBrowserController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
        
-        let request: URLRequest
-
         if category == .similarGames{
-            request = RequestFormer.shared.requestForSimilarGames(for: externalGame)
+            gameApiRequestItem = GameApiRequestItem.formRequestItemForSimilarGames(with: externalGame)
         } else if category == .franchiseGames{
-            request = RequestFormer.shared.formRequestForSpecificGames(externalGame.franchise?.games ?? [])
+            gameApiRequestItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: externalGame.franchise?.games ?? [])
         } else {
-            request = RequestFormer.shared.formRequestForSpecificGames(externalGame.collection?.games ?? [])
+            gameApiRequestItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: externalGame.collection?.games ?? [])
         }
-        
-        loadGames(request: request, withAnimation: true)
+
+        loadGames(withAnimation: true)
     }
     
     
-    
-    
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "detailed":
@@ -66,7 +62,6 @@ class SimilarGamesController : GameBrowserController{
         switch sender.state {
         case .ended:
             let yVelocity = sender.velocity(in: view).y
-            print(yVelocity)
             if yVelocity > 1000 {
                 if self.upperBar.isHidden {
                     self.upperBar.isHidden = false

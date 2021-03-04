@@ -16,8 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -32,8 +32,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "84"
             endingLineNumber = "84"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -48,8 +48,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"
             endingLineNumber = "85"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -64,8 +64,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "55DFDF57-D0AA-48A7-9671-01FECFD8A058 - 55ac6afdb69bacb5"
@@ -112,8 +112,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "88"
             endingLineNumber = "88"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -128,8 +128,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "89"
             endingLineNumber = "89"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -144,8 +144,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
             endingLineNumber = "91"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -160,8 +160,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "92"
             endingLineNumber = "92"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "E763A4C1-5D09-4BFF-AEFD-E6CC80D3C2CE - 871ce97a450bb26f"
@@ -208,8 +208,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "93"
             endingLineNumber = "93"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -224,8 +224,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
             endingLineNumber = "94"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -240,8 +240,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
             endingLineNumber = "96"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -256,8 +256,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "95"
             endingLineNumber = "95"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -272,8 +272,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "97"
             endingLineNumber = "97"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -288,8 +288,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "98"
             endingLineNumber = "98"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -304,8 +304,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "99"
             endingLineNumber = "99"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -320,8 +320,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "100"
             endingLineNumber = "100"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -336,8 +336,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "109"
             endingLineNumber = "109"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -352,8 +352,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "110"
             endingLineNumber = "110"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -368,8 +368,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"
             endingLineNumber = "112"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -384,8 +384,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
             endingLineNumber = "117"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -400,8 +400,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "119"
             endingLineNumber = "119"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "layoutAttributesForElements(in:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -462,8 +462,8 @@
             filePath = "w2p/Model/MainModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "Video"
             landmarkType = "14">
          </BreakpointContent>
@@ -478,8 +478,8 @@
             filePath = "w2p/Model/MainModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
             landmarkName = "AgeRating"
             landmarkType = "14">
          </BreakpointContent>
@@ -560,8 +560,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
             endingLineNumber = "58"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadCover(for:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -576,8 +576,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
             endingLineNumber = "59"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadCover(for:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -592,8 +592,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "60"
             endingLineNumber = "60"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadCover(for:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -608,8 +608,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "61"
             endingLineNumber = "61"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "loadCover(for:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -622,10 +622,118 @@
             filePath = "w2p/Controller/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "w2p/Controller/GameBrowserConroller.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "GameBrowserController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - 19427ca3e17f51b2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.collectionView.getter : Swift.Optional&lt;__C.UICollectionView&gt;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - b23228d4e01121c6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.collectionView.setter : Swift.Optional&lt;__C.UICollectionView&gt;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "148">
+               </Location>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - 5673837d8774b232"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.collectionView.modify : Swift.Optional&lt;__C.UICollectionView&gt;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "60">
+               </Location>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - e262efae62f04f76"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.collectionView.modify : Swift.Optional&lt;__C.UICollectionView&gt; with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "72">
+               </Location>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - da7bf02108eedb59"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; w2p.GameBrowserController"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "940">
+               </Location>
+               <Location
+                  uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - 3c2b004e8f42dcea"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameBrowserController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;w2p.GameBrowserController&gt;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Controller/GameBrowserConroller.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "27"
+                  endingLineNumber = "27"
+                  offsetFromSymbolStart = "916">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

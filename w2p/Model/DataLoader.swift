@@ -2,6 +2,16 @@ import Foundation
 
 class DataLoader{
     
+    var urlSession: URLSession
+    
+    init() {
+        let sessionConfiguration = URLSessionConfiguration.default
+        sessionConfiguration.httpMaximumConnectionsPerHost = 10
+        sessionConfiguration.timeoutIntervalForRequest = 3
+        sessionConfiguration.timeoutIntervalForResource = 3
+        urlSession = URLSession(configuration: sessionConfiguration)
+    }
+    
     func load(with request: URLRequest, completion: @escaping (Data?, NetworkError?) -> Void){
         URLSession.shared.dataTask(with: request){
             data, response, error in
@@ -14,6 +24,8 @@ class DataLoader{
         }.resume()
     }
 }
+
+
 
 enum NetworkError {
     case requestError

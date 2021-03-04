@@ -18,6 +18,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
+    var gameApiRequestItem: GameApiRequestItem?
     var currentOffset = 0
     var feedStep = 50
     var gamesPerRequest = 500
@@ -25,13 +26,19 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     // MARK: - Outlets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    func loadGames(request: URLRequest, withAnimation: Bool){
+    func loadGames(withAnimation: Bool){
+        guard let gameApiRequestItem = gameApiRequestItem else { return }
+        let request = RequestFormer.shared.formRequest(with: gameApiRequestItem)
+        
         let completion = {
             (games: [Game]?, error: NetworkError?) in
             if let games = games {
                 self.gamesSource.push(array: games)
                 self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation)
-
+                if !games.isEmpty {
+                    self.currentOffset += self.gamesPerRequest
+                    self.gameApiRequestItem?.offset = self.currentOffset
+                }
             }
         }
         jsonLoader.load(request: request, completion: completion)
@@ -101,7 +108,6 @@ extension GameBrowserController: UICollectionViewDelegate{
         if indexPath.item == max(0,games.count - 10){
             if gamesSource.isEmpty {
                 loadGames(withAnimation: true)
-                currentOffset += gamesPerRequest
             } else {
                 appendToFeed(newGames: gamesSource.pop(numOfElements: self.feedStep),withAnimation: false)
             }

@@ -27,6 +27,29 @@ class DetailedViewController: UIViewController{
         return false
     }
     
+    
+    
+    
+    
+    @IBOutlet weak var firstReleaseContainer: UIView!
+    @IBOutlet weak var firstReleaseLabel: UILabel!
+    
+    @IBOutlet weak var statusContainer: UIView!
+    @IBOutlet weak var statusLabel: UILabel!
+    
+    @IBOutlet weak var categoryContainer: UIView!
+    @IBOutlet weak var categoryLabel: UILabel!
+    
+    
+    @IBOutlet weak var companyContainer: UIView!
+    @IBOutlet weak var companyLabel: UILabel!
+    
+    @IBOutlet weak var gameEngineContainer: UIView!
+    @IBOutlet weak var gameEngineLabel: UILabel!
+    
+    
+    
+    
     @IBOutlet weak var mediaCounterBackground: UIView!
     @IBOutlet weak var mediaCounterLabel: UILabel!
     @IBOutlet weak var blurredMediaBackground: UIImageView!
@@ -81,12 +104,8 @@ class DetailedViewController: UIViewController{
         setupStorylineLabel()
         setupNavigationButtons()
         setupMedia()
+        setupSecondaryInfo()
             
-        if let gamemodes = game.gameModes{
-            for k in gamemodes{
-                print(k.name)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +143,45 @@ class DetailedViewController: UIViewController{
             setupMediaCounter()
         }
 
+    }
+    
+    private func setupSecondaryInfo(){
+        
+        if let releaseDate = game.firstReleaseDate{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MMMM yyyy"
+            let dateStr = dateFormatter.string(from: releaseDate)
+            firstReleaseLabel.text = dateStr
+        } else {
+            firstReleaseContainer.isHidden = true
+        }
+
+        if let status = game.status {
+            statusLabel.text = GameStatus(rawValue: status)?.toString()
+        } else {
+            statusContainer.isHidden = true
+        }
+        
+        if let category = game.category {
+            categoryLabel.text = GameCategory(rawValue: category)?.toString()
+        } else {
+            categoryContainer.isHidden = true
+        }
+        
+        if let companies = game.involvedCompanies{
+            let lowerIdCompany = companies.min(by: { first, second in first.company.id < second.company.id})
+            companyLabel.text = lowerIdCompany?.company.name
+
+        } else {
+            companyContainer.isHidden = true
+        }
+        
+        if let engines = game.gameEngines {
+            let lowerIdEngine = engines.min(by: {first, second in first.id < second.id})
+            gameEngineLabel.text = lowerIdEngine?.name
+        } else {
+            gameEngineContainer.isHidden = true
+        }
     }
     
     private func setupMediaCounter(){
@@ -237,12 +295,10 @@ class DetailedViewController: UIViewController{
 
         guard let aspect = game.cover?.aspect else {return}
         if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
-            print("<")
             coverHeightConstraint.constant = size.height * heightPercentage
             coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (size.height * heightPercentage)
             
         } else {
-            print(">")
             coverWidthConstraint.constant = size.width
             coverHeightConstraint.constant = size.width * CGFloat(aspect)
         }
@@ -292,8 +348,8 @@ extension DetailedViewController: UICollectionViewDataSource{
             let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCell
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
-            setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
             staticMediaCell.id = staticMedia.id
+            setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
             return staticMediaCell
             
             
@@ -311,7 +367,12 @@ extension DetailedViewController: UICollectionViewDataSource{
             (data: Data?, error: FetchingError?) in
             if let data = data{
                 DispatchQueue.global(qos: .userInteractive).async{
-                    guard let image = UIImage(data: data) else {return}
+                    guard let image = UIImage(data: data) else {
+                        
+                        print(String(data: data, encoding: .utf8))
+                        return
+                        
+                    }
                     
                     let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
                     
@@ -323,6 +384,9 @@ extension DetailedViewController: UICollectionViewDataSource{
                         }
                     }
                 }
+            }
+            if let error = error {
+                print(error)
             }
         }
     }

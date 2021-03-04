@@ -13,6 +13,19 @@ class GameMediaDispatcher{
     
     func fetchCoverFor(game: Game, cache: Bool, completion: @escaping (Data?, FetchingError?) -> Void){
         
+        /*
+        if let coverRequest = RequestFormer.shared.formRequestForCover(for: game, sizeKey: .S264X374) {
+            loadStaticMediaFromInet(request: coverRequest){
+                data, error in
+                if let data = data {
+                    completion(data, nil)
+                } else {
+                    completion(nil, error)
+                }
+            }
+        }
+        */
+        
         CacheManager.shared.loadCover(for: game){
             data in
             if let data = data {
