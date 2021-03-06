@@ -25,9 +25,9 @@ class CacheManager{
         }
         self.container = container
         self.moc = container.viewContext
-        self.moc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+        self.moc.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
         privateMoc = container.newBackgroundContext()
-        privateMoc.mergePolicy = NSMergePolicy(merge: .mergeByPropertyStoreTrumpMergePolicyType)
+        privateMoc.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
     }
     
     func save(coverData: Data,for game: Game){
@@ -107,6 +107,38 @@ class CacheManager{
         }
     }
     
+    func loadFavoriteGames(completion: @escaping ([Game]?) -> Void){
+        privateMoc.perform {
+            print("in private moc")
+            let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
+            fetchRequest.predicate = NSPredicate(format: "inFavorites == YES")
+            
+            
+            if let cdGames = try? self.privateMoc.fetch(fetchRequest) {
+                let games = cdGames.map{ Game(cdGame: $0)}
+                for game in games {
+                    print(game.inFavorites)
+                }
+                print(games.count)
+                completion(games)
+            } else {
+                print("NO GAMES")
+                completion(nil)
+            }
+        }
+    }
+    
+    
+    func save(game: Game) {
+        privateMoc.perform {
+            let entity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
+            let cdGame = CDGame(context: self.privateMoc, entity: entity, game: game)
+            print(cdGame.name)
+            //MARK: -
+            try! self.privateMoc.save()
+        }
+    }
+    
     private func saveScreenshot(data: Data, with screenshot: Screenshot, gameId: Int) {
         privateMoc.perform {
             let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
@@ -132,6 +164,4 @@ class CacheManager{
             try! self.privateMoc.save()
         }
     }
-    
-
 }

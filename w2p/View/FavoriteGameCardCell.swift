@@ -14,6 +14,7 @@ class FavoriteGameCardCell: UITableViewCell{
     }
     @IBOutlet weak var imageWidthConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var container: UIView!

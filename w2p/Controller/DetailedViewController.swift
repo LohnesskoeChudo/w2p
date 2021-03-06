@@ -82,6 +82,21 @@ class DetailedViewController: UIViewController{
         navigationController?.popViewController(animated: true)
     }
 
+    @IBAction func toFavoritesTapped(_ sender: CustomButton) {
+        print("tapped")
+        
+        
+        if game.inFavorites == true {
+            sender.backgroundColor = .blue
+            game.inFavorites = false
+        } else {
+            sender.backgroundColor = .black
+            game.inFavorites = true
+        }
+        mediaDispatcher.save(game: game)
+    }
+    
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -105,7 +120,6 @@ class DetailedViewController: UIViewController{
         setupNavigationButtons()
         setupMedia()
         setupSecondaryInfo()
-            
     }
     
     override func viewWillAppear(_ animated: Bool) {

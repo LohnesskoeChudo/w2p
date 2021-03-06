@@ -28,7 +28,7 @@ struct Game: Codable{
     var gameEngines: [GameEngine]?
     
     var cacheDate: Date?
-    var inFavorites: Bool?
+    var inFavorites: Bool? = false
     
 }
 

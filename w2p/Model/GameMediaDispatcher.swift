@@ -85,6 +85,18 @@ class GameMediaDispatcher{
             }
         }
     }
+    
+    
+    func loadFavoriteGames(completion: @escaping ([Game]?) -> Void){
+        print("Called")
+        CacheManager.shared.loadFavoriteGames(completion: completion)
+    }
+    
+    func save(game: Game) {
+        CacheManager.shared.save(game: game)
+    }
+    
+    
 }
 
 enum FetchingError: Error{

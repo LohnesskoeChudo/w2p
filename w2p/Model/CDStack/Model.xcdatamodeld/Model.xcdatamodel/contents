@@ -21,7 +21,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDCompany" representedClassName="CDCompany" syncable="YES" codeGenerationType="category">
+    <entity name="CDCompany" representedClassName=".CDCompany" syncable="YES" codeGenerationType="category">
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="games" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGame" inverseName="companies" inverseEntity="CDGame"/>
@@ -97,7 +97,7 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
-    <entity name="CDGameEngine" representedClassName="CDGameEngine" syncable="YES" codeGenerationType="category">
+    <entity name="CDGameEngine" representedClassName=".CDGameEngine" syncable="YES" codeGenerationType="category">
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="games" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGame" inverseName="engines" inverseEntity="CDGame"/>
