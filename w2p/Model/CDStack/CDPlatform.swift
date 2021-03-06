@@ -16,3 +16,14 @@ class CDPlatform: NSManagedObject{
         self.name = platform.name
     }
 }
+
+extension Platform {
+    init?(cdPlatform: CDPlatform) {
+        self.id = Int(cdPlatform.id)
+        if let platformName = cdPlatform.name {
+            self.name = platformName
+        } else {
+            return nil
+        }
+    }
+}

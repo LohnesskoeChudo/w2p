@@ -23,9 +23,12 @@ struct Game: Codable{
     var franchise: Franchise?
     var collection: GameCollection?
     var ageRatings: [AgeRating]?
+    
     var involvedCompanies: [InvolvedCompany]?
     var gameEngines: [GameEngine]?
     
+    var cacheDate: Date?
+    var inFavorites: Bool?
     
 }
 

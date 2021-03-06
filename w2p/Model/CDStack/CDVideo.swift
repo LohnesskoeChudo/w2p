@@ -17,3 +17,19 @@ class CDVideo: NSManagedObject {
         self.name = video.name
     }
 }
+
+extension Video {
+    init?(cdVideo: CDVideo){
+        self.id = Int(cdVideo.id)
+        if let videoId = cdVideo.videoId {
+            self.videoId = videoId
+        } else {
+            return nil
+        }
+        if let name = cdVideo.name {
+            self.name = name
+        } else {
+            return nil
+        }
+    }
+}

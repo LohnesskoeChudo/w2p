@@ -21,6 +21,32 @@ class CDGame: NSManagedObject{
         if let status = game.status { self.status = Int64(status)}
         if let aggregatedRating = game.aggregatedRating { self.aggregatedRating = aggregatedRating }
         
+        if let cacheDate = game.cacheDate {
+            self.cacheDate = cacheDate
+        }
+        if let inFavorites = game.inFavorites {
+            self.inFavorites = inFavorites
+        }
+        
+        let companyEntity = NSEntityDescription.entity(forEntityName: "CDCompany", in: context)!
+        if let involvedCompanies = game.involvedCompanies {
+            var cdCompanies = [CDCompany]()
+            let companies = involvedCompanies.map{$0.company}
+            for company in companies{
+                cdCompanies.append(CDCompany(context: context, entity: companyEntity, company: company))
+            }
+            self.companies = NSSet(array: cdCompanies)
+        }
+        
+        let gameEngineEntity = NSEntityDescription.entity(forEntityName: "CDGameEngine", in: context)!
+        if let engines = game.gameEngines {
+            var cdEngines = [CDGameEngine]()
+            for engine in engines {
+                cdEngines.append(CDGameEngine(context: context, entity: gameEngineEntity, gameEngine: engine))
+            }
+            self.engines = NSSet(array: cdEngines)
+        }
+        
         if let similarGamesIds = game.similarGames {
             var similarGames = [CDGame]()
             for similarGameId in similarGamesIds{
@@ -66,6 +92,23 @@ class CDGame: NSManagedObject{
         
         let websiteEntity = NSEntityDescription.entity(forEntityName: "CDWebsite", in: context)!
         if let websites = game.websites{ self.websites = NSSet(array: websites.map{CDWebsite(context: context, entity: websiteEntity, website: $0)})}
-        
     }
 }
+
+
+extension Game {
+    
+    init(cdGame: CDGame) {
+        self.id = Int(cdGame.id)
+        self.name = cdGame.name
+        self.summary = cdGame.summary
+        self.storyline = cdGame.storyline
+        self.cacheDate = cdGame.cacheDate
+        self.inFavorites = cdGame.inFavorites
+        self.category = Int(cdGame.category)
+        
+        
+
+    }
+}
+

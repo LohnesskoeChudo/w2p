@@ -17,3 +17,14 @@ class CDTheme: NSManagedObject{
         self.name = theme.name
     }
 }
+
+extension Theme {
+    init?(cdTheme: CDTheme) {
+        self.id = Int(cdTheme.id)
+        if let themeName = cdTheme.name {
+            self.name = themeName
+        } else {
+            return nil
+        }
+    }
+}

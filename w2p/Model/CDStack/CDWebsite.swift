@@ -19,3 +19,16 @@ class CDWebsite: NSManagedObject {
     }
     
 }
+
+
+extension Website {
+    init?(cdWebsite: CDWebsite) {
+        self.id = Int(cdWebsite.id)
+        if let url = cdWebsite.url {
+            self.url = url
+        } else {
+            return nil
+        }
+        self.category = Int(cdWebsite.category)
+    }
+}

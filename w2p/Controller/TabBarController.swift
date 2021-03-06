@@ -9,4 +9,10 @@ import UIKit
 
 class TabBarController: UITabBarController{
     
+
+    override func viewDidLoad() {
+        selectedIndex = 1
+            tabBar.layer.cornerRadius = 10
+    }
+    
 }

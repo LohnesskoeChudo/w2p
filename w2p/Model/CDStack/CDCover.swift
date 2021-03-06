@@ -22,3 +22,17 @@ class CDCover: NSManagedObject {
     }
     
 }
+
+extension Cover {
+    init?(cdCover: CDCover) {
+        self.id = Int(cdCover.id)
+        self.animated = cdCover.animated
+        if let url = cdCover.url{
+            self.url = url
+        } else {
+            return nil
+        }
+        self.height = Int(cdCover.height)
+        self.width = Int(cdCover.width)
+    }
+}

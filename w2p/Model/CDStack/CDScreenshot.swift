@@ -22,3 +22,18 @@ class CDScreenshot: NSManagedObject {
     }
     
 }
+
+
+extension Screenshot {
+    init? (cdScreenshot: CDScreenshot) {
+        self.id = Int(cdScreenshot.id)
+        self.height = Int(cdScreenshot.height)
+        self.width = Int(cdScreenshot.width)
+        self.animated = cdScreenshot.animated
+        if let url = cdScreenshot.url {
+            self.url = url
+        } else {
+            return nil
+        }
+    }
+}

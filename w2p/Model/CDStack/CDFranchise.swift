@@ -24,3 +24,19 @@ class CDFranchise: NSManagedObject {
         self.games = NSSet(array: collectionGames)
     }
 }
+
+extension Franchise {
+    init? (cdFranchise: CDFranchise) {
+        self.id = Int(cdFranchise.id)
+        if let name = cdFranchise.name {
+            self.name = name
+        } else {
+            return nil
+        }
+        if let games = (cdFranchise.games?.sortedArray(using: [])) as? [CDGame] {
+            self.games = games.map{Int($0.id)}
+        } else {
+            return nil
+        }
+    }
+}

@@ -22,3 +22,17 @@ class CDArtwork: NSManagedObject {
     }
     
 }
+
+extension Artwork {
+    init? (cdArtwork: CDArtwork) {
+        self.id = Int(cdArtwork.id)
+        self.height = Int(cdArtwork.height)
+        self.width = Int(cdArtwork.width)
+        self.animated = cdArtwork.animated
+        if let url = cdArtwork.url {
+            self.url = url
+        } else {
+            return nil
+        }
+    }
+}

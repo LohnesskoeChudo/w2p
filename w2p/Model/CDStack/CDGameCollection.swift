@@ -25,3 +25,21 @@ class CDGameCollection: NSManagedObject {
         
     }
 }
+
+
+//
+extension GameCollection {
+    init? (cdGameCollection: CDGameCollection) {
+        self.id = Int(cdGameCollection.id)
+        if let name = cdGameCollection.name {
+            self.name = name
+        } else {
+            return nil
+        }
+        if let games = (cdGameCollection.games?.sortedArray(using: [])) as? [CDGame] {
+            self.games = games.map{Int($0.id)}
+        } else {
+            return nil
+        }
+    }
+}

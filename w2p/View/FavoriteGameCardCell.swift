@@ -33,8 +33,7 @@ class FavoriteGameCardCell: UITableViewCell{
     
     func setupGameImageView(aspect: CGFloat){
         
-        imageHeightConstraint.constant = imageWidthConstraint.constant * aspect
-        
+
     }
     
     override func prepareForReuse() {

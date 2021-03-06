@@ -17,3 +17,14 @@ class CDGenre: NSManagedObject{
         self.name = genre.name
     }
 }
+
+extension Genre {
+    init?(cdGenre: CDGenre) {
+        self.id = Int(cdGenre.id)
+        if let genreName = cdGenre.name {
+            self.name = genreName
+        } else {
+            return nil
+        }
+    }
+}
