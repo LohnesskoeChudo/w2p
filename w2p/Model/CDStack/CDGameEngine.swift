@@ -9,21 +9,19 @@ import CoreData
 
 class CDGameEngine: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, gameEngine: GameEngine){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, gameEngine: GameEngine){
+        guard let id = gameEngine.id else { return nil }
+        guard let name = gameEngine.name else { return nil }
         self.init(entity: entity, insertInto: context)
-        self.name = gameEngine.name
-        self.id = Int64(gameEngine.id)
+        self.name = name
+        self.id = Int64(id)
     }
 }
 
 extension GameEngine {
-    init? (cdGameEngine: CDGameEngine){
+    convenience init? (cdGameEngine: CDGameEngine){
+        self.init()
         self.id = Int(cdGameEngine.id)
-        if let name = cdGameEngine.name {
-            self.name = name
-        } else {
-            return nil
-        }
+        self.name = cdGameEngine.name
     }
 }

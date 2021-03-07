@@ -255,29 +255,32 @@ class FilterViewController: UIViewController {
         platformFlow.alpha = 0
         
         for genre in SearchFilter.allGenres.shuffled(){
+            guard let name = genre.name, let id = genre.id else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: genre.name, color: UIColor.purple, selectedNow: filter.genres.contains(genre))
+            attrView.setup(text: name, color: UIColor.purple, selectedNow: filter.genres.contains(genre))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(genreTapped), for: .touchUpInside)
-            attrView.tag = genre.id
+            attrView.tag = id
             attrView.translatesAutoresizingMaskIntoConstraints = false
             genreFlow.addSubview(attrView)
         }
         for theme in SearchFilter.allThemes.shuffled(){
+            guard let name = theme.name, let id = theme.id else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: theme.name, color: UIColor.green, selectedNow: filter.themes.contains(theme))
+            attrView.setup(text: name, color: UIColor.green, selectedNow: filter.themes.contains(theme))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(themeTapped), for: .touchUpInside)
-            attrView.tag = theme.id
+            attrView.tag = id
             attrView.translatesAutoresizingMaskIntoConstraints = false
             themeFlow.addSubview(attrView)
         }
         for platform in SearchFilter.mainPlatforms.shuffled(){
+            guard let id = platform.id, let name = platform.name else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: platform.name, color: UIColor.brown, selectedNow: filter.platforms.contains(platform))
+            attrView.setup(text: name, color: UIColor.brown, selectedNow: filter.platforms.contains(platform))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(platformTapped), for: .touchUpInside)
-            attrView.tag = platform.id
+            attrView.tag = id
             attrView.translatesAutoresizingMaskIntoConstraints = false
             platformFlow.addSubview(attrView)
         }

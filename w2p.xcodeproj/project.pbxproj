@@ -284,12 +284,12 @@
 				5DF85F3325E1A65800359227 /* CDArtwork.swift */,
 				5DF85F3625E1A66000359227 /* CDScreenshot.swift */,
 				5DF85F3925E1A66600359227 /* CDVideo.swift */,
-				5DF85F3C25E1A67100359227 /* CDAgeRating.swift */,
 				5D023CDE25E1AFAA003B04CD /* CDGameCollection.swift */,
+				5DF85F3C25E1A67100359227 /* CDAgeRating.swift */,
 				5DF85F3F25E1A67F00359227 /* CDFranchise.swift */,
-				5DD5EFF325DCE6F8000513BB /* Model.xcdatamodeld */,
 				5DCB518325F38D4700079006 /* CDCompany.swift */,
 				5DCB518625F38D7800079006 /* CDGameEngine.swift */,
+				5DD5EFF325DCE6F8000513BB /* Model.xcdatamodeld */,
 			);
 			path = CDStack;
 			sourceTree = "<group>";

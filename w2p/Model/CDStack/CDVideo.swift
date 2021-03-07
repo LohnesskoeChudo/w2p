@@ -8,28 +8,23 @@
 import CoreData
 
 class CDVideo: NSManagedObject {
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, video: Video){
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, video: Video){
         
+        guard let id = video.id else { return nil }
+        guard let videoId = video.videoId else { return nil }
         self.init(entity: entity, insertInto: context)
         
-        self.videoId = video.videoId
-        self.id = Int64(video.id)
+        self.videoId = videoId
+        self.id = Int64(id)
         self.name = video.name
     }
 }
 
 extension Video {
-    init?(cdVideo: CDVideo){
+    convenience init?(cdVideo: CDVideo){
+        self.init()
         self.id = Int(cdVideo.id)
-        if let videoId = cdVideo.videoId {
-            self.videoId = videoId
-        } else {
-            return nil
-        }
-        if let name = cdVideo.name {
-            self.name = name
-        } else {
-            return nil
-        }
+        self.videoId = cdVideo.videoId
+        self.name = cdVideo.name
     }
 }

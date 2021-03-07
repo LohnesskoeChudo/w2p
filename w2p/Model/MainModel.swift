@@ -1,6 +1,7 @@
 import Foundation
 
-struct Game: Codable{
+class Game: Codable{
+    
 
     var id: Int?
     var name: String?
@@ -32,101 +33,133 @@ struct Game: Codable{
     
 }
 
-struct Genre: Codable, Hashable, Identifiable{
-    var name: String
-    var id: Int
+class Genre: Codable, Hashable, Identifiable{
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    
+    static func == (lhs: Genre, rhs: Genre) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    var name: String?
+    var id: Int?
 }
 
-struct Platform: Codable, Hashable, Identifiable{
-    var id: Int
-    var name: String
+class Platform: Codable, Hashable, Identifiable{
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    static func == (lhs: Platform, rhs: Platform) -> Bool {
+        lhs.id == rhs.id
+    }
+    var id: Int?
+    var name: String?
     
 }
 
-struct GameMode: Codable, Hashable, Identifiable{
-    var id: Int
-    var name: String
+class GameMode: Codable, Hashable, Identifiable{
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    static func == (lhs: GameMode, rhs: GameMode) -> Bool {
+        
+        lhs.id == rhs.id
+    }
+    var id: Int?
+    var name: String?
 }
 
-struct Website: Codable{
-    var id: Int
-    var url: String
+class Website: Codable{
+    var id: Int?
+    var url: String?
     var category: Int?
     
 }
 
-struct Theme: Codable, Hashable, Identifiable{
-    var id: Int
-    var name: String
+class Theme: Codable, Hashable, Identifiable{
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+    static func == (lhs: Theme, rhs: Theme) -> Bool {
+        lhs.id == rhs.id
+    }
+    var id: Int?
+    var name: String?
 }
 
-struct Artwork: Codable, MediaDownloadable{
-    var id: Int
-    var url: String
-    var height: Int
-    var width: Int
+class Artwork: Codable, MediaDownloadable{
+    var id: Int?
+    var url: String?
+    var height: Int?
+    var width: Int?
     var animated: Bool?
 }
 
-struct Screenshot: Codable, MediaDownloadable{
-    var id: Int
-    var url: String
-    var height: Int
-    var width: Int
+class Screenshot: Codable, MediaDownloadable{
+    var id: Int?
+    var url: String?
+    var height: Int?
+    var width: Int?
     var animated: Bool?
 }
 
-struct Video: Codable{
-    var id: Int
-    var name: String
-    var videoId: String
+class Video: Codable{
+    var id: Int?
+    var name: String?
+    var videoId: String?
     
 }
 
-struct Franchise: Codable{
-    var id: Int
-    var name: String
-    var games: [Int]
+class Franchise: Codable{
+    var id: Int?
+    var name: String?
+    var games: [Int]?
     
 }
 
-struct GameCollection: Codable{
-    var id: Int
-    var games: [Int]
-    var name: String
+class GameCollection: Codable{
+    var id: Int?
+    var games: [Int]?
+    var name: String?
 }
 
-struct AgeRating: Codable{
-    var id: Int
-    var rating: Int
-    var category: Int
+class AgeRating: Codable{
+    var id: Int?
+    var rating: Int?
+    var category: Int?
     var ratingCoverUrl: String?
 }
 
-struct Cover: Codable, MediaDownloadable{
-    var id: Int
+class Cover: Codable, MediaDownloadable{
+    var id: Int?
     var animated: Bool?
-    var height: Int
-    var width: Int
-    var url: String
+    var height: Int?
+    var width: Int?
+    var url: String?
     
-    var aspect: Double{
-        Double(height) / Double(width)
+    var aspect: Double?{
+        if let h = height, let w = width {
+            return Double(h) / Double(w)
+        } else {
+            return nil
+        }
     }
 }
 
-struct InvolvedCompany: Codable {
-    var company: Company
+class InvolvedCompany: Codable {
+    var company: Company?
 }
 
-struct Company: Codable {
-    var id: Int
-    var name: String
+class Company: Codable {
+    var id: Int?
+    var name: String?
 }
 
-struct GameEngine: Codable {
-    var id: Int
-    var name: String
+class GameEngine: Codable {
+    var id: Int?
+    var name: String?
 }
 
 
@@ -247,6 +280,6 @@ enum GameImageSizeKey: String{
 }
 
 protocol MediaDownloadable {
-    var url: String {get}
-    var id: Int {get}
+    var url: String? {get}
+    var id: Int? {get}
 }

@@ -8,14 +8,14 @@
 import Foundation
 
 
-extension Collection where Element: Identifiable, Element.ID == Int{
+extension Collection where Element: Identifiable, Element.ID == Int?{
     func toIdArrayString(firstBracket: String, secondBracket: String) -> String{
-        return "\(firstBracket)\(self.map{String($0.id)}.joined(separator: ","))\(secondBracket)"
+        return "\(firstBracket)\(self.map{String($0.id ?? 0)}.joined(separator: ","))\(secondBracket)"
     }
 }
 
 extension Int: Identifiable{
-    public var id: Int{
+    public var id: Int?{
         self
     }
 }

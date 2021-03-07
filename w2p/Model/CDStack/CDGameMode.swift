@@ -9,22 +9,21 @@ import CoreData
 
 class CDGameMode: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, gameMode: GameMode){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, gameMode: GameMode){
+            
+        guard let id = gameMode.id else { return nil }
+        guard let name = gameMode.name else { return nil }
         self.init(entity: entity, insertInto: context)
-        self.id = Int64(gameMode.id)
-        self.name = gameMode.name
+        self.id = Int64(id)
+        self.name = name
     }
     
 }
 
 extension GameMode {
-    init?(cdGameMode: CDGameMode) {
+    convenience init?(cdGameMode: CDGameMode) {
+        self.init()
         self.id = Int(cdGameMode.id)
-        if let gmName = cdGameMode.name {
-            self.name = gmName
-        } else {
-            return nil
-        }
+        self.name = cdGameMode.name
     }
 }

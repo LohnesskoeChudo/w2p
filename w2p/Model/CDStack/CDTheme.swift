@@ -9,22 +9,20 @@ import CoreData
 
 class CDTheme: NSManagedObject{
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, theme: Theme){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, theme: Theme){
+        guard let id = theme.id else { return nil }
+        guard let name = theme.name else { return nil }
         self.init(entity: entity, insertInto: context)
+        self.id = Int64(id)
+        self.name = name
         
-        self.id = Int64(theme.id)
-        self.name = theme.name
     }
 }
 
 extension Theme {
-    init?(cdTheme: CDTheme) {
+    convenience init?(cdTheme: CDTheme) {
+        self.init()
         self.id = Int(cdTheme.id)
-        if let themeName = cdTheme.name {
-            self.name = themeName
-        } else {
-            return nil
-        }
+        self.name = cdTheme.name
     }
 }

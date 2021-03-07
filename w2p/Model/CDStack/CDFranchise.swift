@@ -9,14 +9,18 @@ import CoreData
 
 class CDFranchise: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, franchise: Franchise){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, franchise: Franchise){
+            
+        guard let id = franchise.id else { return nil }
+        guard let name = franchise.name else { return nil }
+        guard let games = franchise.games else { return nil }
+
         self.init(entity: entity, insertInto: context)
-        self.name = franchise.name
-        self.id = Int64(franchise.id)
+        self.name = name
+        self.id = Int64(id)
         
         var collectionGames = [CDGame]()
-        for gameId in franchise.games{
+        for gameId in games{
             let game = CDGame(context: context)
             game.id = Int64(gameId)
             collectionGames.append(game)
@@ -26,13 +30,10 @@ class CDFranchise: NSManagedObject {
 }
 
 extension Franchise {
-    init? (cdFranchise: CDFranchise) {
+    convenience init? (cdFranchise: CDFranchise) {
+        self.init()
         self.id = Int(cdFranchise.id)
-        if let name = cdFranchise.name {
-            self.name = name
-        } else {
-            return nil
-        }
+        self.name = cdFranchise.name
         if let games = (cdFranchise.games?.sortedArray(using: [])) as? [CDGame] {
             self.games = games.map{Int($0.id)}
         } else {

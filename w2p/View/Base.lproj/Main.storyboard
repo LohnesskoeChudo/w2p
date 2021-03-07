@@ -45,7 +45,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" systemColor="systemTealColor"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="c2s-vh-mfC" firstAttribute="leading" secondItem="uEL-ob-3IL" secondAttribute="trailing" constant="20" id="6SE-UD-SzQ"/>
                                                         <constraint firstItem="c2s-vh-mfC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="x0n-Uh-nBN" secondAttribute="top" constant="10" id="EtH-Hn-NN5"/>
@@ -69,7 +69,8 @@
                                         <connections>
                                             <outlet property="container" destination="x0n-Uh-nBN" id="fDP-bj-Uic"/>
                                             <outlet property="gameImageView" destination="uEL-ob-3IL" id="TPr-JT-fO6"/>
-                                            <outlet property="imageWidthConstraint" destination="gjh-qY-0QU" id="LRj-6Q-ZrT"/>
+                                            <outlet property="imageHeightConstraint" destination="3DH-6b-GuB" id="neZ-Zi-lN5"/>
+                                            <outlet property="imageWidthConstraint" destination="gjh-qY-0QU" id="yNX-Tw-0tN"/>
                                             <outlet property="label" destination="c2s-vh-mfC" id="mAs-Ah-sm4"/>
                                         </connections>
                                     </tableViewCell>
@@ -666,7 +667,7 @@
             <objects>
                 <viewController id="aGj-6w-gCA" customClass="DetailedViewController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ice-Mg-Kz6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="3000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="2946"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bEe-7w-SIZ">
@@ -1191,7 +1192,7 @@
             <objects>
                 <viewController id="w68-TY-0eO" customClass="SimilarGamesController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mDX-aO-Nod">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
@@ -1311,7 +1312,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="R7m-Lu-tA0"/>
         <segue reference="m7g-vP-Cl6"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -1335,9 +1335,6 @@
         </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemTealColor">
-            <color red="0.35294117647058826" green="0.78431372549019607" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

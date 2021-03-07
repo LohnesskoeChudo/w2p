@@ -182,16 +182,16 @@ class DetailedViewController: UIViewController{
             categoryContainer.isHidden = true
         }
         
-        if let companies = game.involvedCompanies{
-            let lowerIdCompany = companies.min(by: { first, second in first.company.id < second.company.id})
-            companyLabel.text = lowerIdCompany?.company.name
+        if let companies = game.involvedCompanies?.compactMap({$0.company}){
+            let lowerIdCompany = companies.min(by: { first, second in (first.id ?? 0) < (second.id ?? 0)})
+            companyLabel.text = lowerIdCompany?.name
 
         } else {
             companyContainer.isHidden = true
         }
         
         if let engines = game.gameEngines {
-            let lowerIdEngine = engines.min(by: {first, second in first.id < second.id})
+            let lowerIdEngine = engines.min(by: {first, second in (first.id ?? 0) < (second.id ?? 0)})
             gameEngineLabel.text = lowerIdEngine?.name
         } else {
             gameEngineContainer.isHidden = true
@@ -258,22 +258,22 @@ class DetailedViewController: UIViewController{
         var gameAttrs: [GameAttributeView] = []
         for genre in game.genres ?? [] {
             let genreAttr = GameAttributeView()
-            genreAttr.setup(text: genre.name, color: UIColor.red.withAlphaComponent(0.2))
+            genreAttr.setup(text: genre.name ?? "", color: UIColor.red.withAlphaComponent(0.2))
             gameAttrs.append(genreAttr)
         }
         for theme in game.themes ?? [] {
             let themeAttr = GameAttributeView()
-            themeAttr.setup(text: theme.name, color: UIColor.green.withAlphaComponent(0.2))
+            themeAttr.setup(text: theme.name ?? "", color: UIColor.green.withAlphaComponent(0.2))
             gameAttrs.append(themeAttr)
         }
         for mode in game.gameModes ?? []{
             let modeAttr = GameAttributeView()
-            modeAttr.setup(text: mode.name, color: UIColor.blue.withAlphaComponent(0.2))
+            modeAttr.setup(text: mode.name ?? "", color: UIColor.blue.withAlphaComponent(0.2))
             gameAttrs.append(modeAttr)
         }
         for platform in game.platforms ?? [] {
             let platformAttr = GameAttributeView()
-            platformAttr.setup(text: platform.name, color: UIColor.purple.withAlphaComponent(0.2))
+            platformAttr.setup(text: platform.name ?? "", color: UIColor.purple.withAlphaComponent(0.2))
             gameAttrs.append(platformAttr)
         }
         for attrView in gameAttrs{

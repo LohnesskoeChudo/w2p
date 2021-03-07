@@ -9,31 +9,32 @@ import CoreData
 
 class CDScreenshot: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, screenshot: Screenshot){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, screenshot: Screenshot){
+            
+        guard let id = screenshot.id else { return nil }
+        guard let height = screenshot.height else { return nil }
+        guard let width = screenshot.width else { return nil }
+        guard let url = screenshot.url else { return nil }
         self.init(entity: entity, insertInto: context)
         
-        self.id = Int64(screenshot.id)
-        self.height = Int64(screenshot.height)
-        self.width = Int64(screenshot.width)
+        self.id = Int64(id)
+        self.height = Int64(height)
+        self.width = Int64(width)
+        self.url = url
         if let isAnimated = screenshot.animated { self.animated = isAnimated }
-        self.url = screenshot.url
-        
+
     }
     
 }
 
 
 extension Screenshot {
-    init? (cdScreenshot: CDScreenshot) {
+    convenience init? (cdScreenshot: CDScreenshot) {
+        self.init()
         self.id = Int(cdScreenshot.id)
         self.height = Int(cdScreenshot.height)
         self.width = Int(cdScreenshot.width)
         self.animated = cdScreenshot.animated
-        if let url = cdScreenshot.url {
-            self.url = url
-        } else {
-            return nil
-        }
+        self.url = cdScreenshot.url
     }
 }

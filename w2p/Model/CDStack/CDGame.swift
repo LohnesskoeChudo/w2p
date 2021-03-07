@@ -12,6 +12,8 @@ class CDGame: NSManagedObject{
     convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, game: Game){
         
         self.init(entity: entity, insertInto: context)
+            
+        cacheDate = Date()
         
         if let id = game.id{ self.id = Int64(id) }
         if let name = game.name { self.name = name }
@@ -30,21 +32,23 @@ class CDGame: NSManagedObject{
         
         let companyEntity = NSEntityDescription.entity(forEntityName: "CDCompany", in: context)!
         if let involvedCompanies = game.involvedCompanies {
-            var cdCompanies = [CDCompany]()
+            var cdCompanies = [CDCompany?]()
             let companies = involvedCompanies.map{$0.company}
             for company in companies{
-                cdCompanies.append(CDCompany(context: context, entity: companyEntity, company: company))
+                if let company = company {
+                    cdCompanies.append(CDCompany(context: context, entity: companyEntity, company: company))
+                }
             }
-            self.companies = NSSet(array: cdCompanies)
+            self.companies = NSSet(array: cdCompanies.compactMap{$0})
         }
         
         let gameEngineEntity = NSEntityDescription.entity(forEntityName: "CDGameEngine", in: context)!
         if let engines = game.gameEngines {
-            var cdEngines = [CDGameEngine]()
+            var cdEngines = [CDGameEngine?]()
             for engine in engines {
                 cdEngines.append(CDGameEngine(context: context, entity: gameEngineEntity, gameEngine: engine))
             }
-            self.engines = NSSet(array: cdEngines)
+            self.engines = NSSet(array: cdEngines.compactMap{$0})
         }
         
         if let similarGamesIds = game.similarGames {
@@ -58,22 +62,22 @@ class CDGame: NSManagedObject{
         }
         
         let ageRatingEntity = NSEntityDescription.entity(forEntityName: "CDAgeRating", in: context)!
-        if let ageRatings = game.ageRatings{ self.ageRatings = NSSet(array: ageRatings.map{CDAgeRating(context: context, entity: ageRatingEntity, ageRating: $0)})}
+        if let ageRatings = game.ageRatings{ self.ageRatings = NSSet(array: ageRatings.compactMap{CDAgeRating(context: context, entity: ageRatingEntity, ageRating: $0)})}
         
         let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: context)!
-        if let artworks = game.artworks{ self.artworks = NSSet(array: artworks.map{CDArtwork(context: context, entity: artworkEntity, artwork: $0)})}
+        if let artworks = game.artworks{ self.artworks = NSSet(array: artworks.compactMap{CDArtwork(context: context, entity: artworkEntity, artwork: $0)})}
         
         let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: context)!
-        if let screenshots = game.screenshots{self.screenshots = NSSet(array: screenshots.map{CDScreenshot(context: context, entity: screenshotEntity, screenshot: $0)})}
+        if let screenshots = game.screenshots{self.screenshots = NSSet(array: screenshots.compactMap{CDScreenshot(context: context, entity: screenshotEntity, screenshot: $0)})}
         
         let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: context)!
         if let cover = game.cover{ self.cover = CDCover(context: context, entity: coverEntity, cover: cover)}
         
         let genreEntity = NSEntityDescription.entity(forEntityName: "CDGenre", in: context)!
-        if let genres = game.genres { self.genres = NSSet(array: genres.map{CDGenre(context: context, entity: genreEntity, genre: $0)})}
+        if let genres = game.genres { self.genres = NSSet(array: genres.compactMap{CDGenre(context: context, entity: genreEntity, genre: $0)})}
         
         let themeEntity = NSEntityDescription.entity(forEntityName: "CDTheme", in: context)!
-        if let themes = game.themes {self.themes = NSSet(array: themes.map{CDTheme(context: context, entity: themeEntity, theme: $0)})}
+        if let themes = game.themes {self.themes = NSSet(array: themes.compactMap{CDTheme(context: context, entity: themeEntity, theme: $0)})}
         
         let collectionEntity = NSEntityDescription.entity(forEntityName: "CDGameCollection", in: context)!
         if let gameCollection = game.collection{ self.collection = CDGameCollection(context: context, entity: collectionEntity, collection: gameCollection)}
@@ -82,23 +86,25 @@ class CDGame: NSManagedObject{
         if let franchise = game.franchise{ self.franchise = CDFranchise(context: context, entity: franchiseEntity, franchise: franchise)}
         
         let gameModeEntity = NSEntityDescription.entity(forEntityName: "CDGameMode", in: context)!
-        if let gameModes = game.gameModes{ self.gameModes = NSSet(array: gameModes.map{CDGameMode(context: context, entity: gameModeEntity, gameMode: $0)})}
+        if let gameModes = game.gameModes{ self.gameModes = NSSet(array: gameModes.compactMap{CDGameMode(context: context, entity: gameModeEntity, gameMode: $0)})}
         
         let platformEntity = NSEntityDescription.entity(forEntityName: "CDPlatform", in: context)!
-        if let platforms = game.platforms{ self.platforms = NSSet(array: platforms.map{CDPlatform(context: context, entity: platformEntity, platform: $0)})}
+        if let platforms = game.platforms{ self.platforms = NSSet(array: platforms.compactMap{CDPlatform(context: context, entity: platformEntity, platform: $0)})}
         
         let videoEntity = NSEntityDescription.entity(forEntityName: "CDVideo", in: context)!
-        if let videos = game.videos{ self.videos = NSSet(array: videos.map{CDVideo(context: context, entity: videoEntity, video: $0)})}
+        if let videos = game.videos{ self.videos = NSSet(array: videos.compactMap{CDVideo(context: context, entity: videoEntity, video: $0)})}
         
         let websiteEntity = NSEntityDescription.entity(forEntityName: "CDWebsite", in: context)!
-        if let websites = game.websites{ self.websites = NSSet(array: websites.map{CDWebsite(context: context, entity: websiteEntity, website: $0)})}
+        if let websites = game.websites{ self.websites = NSSet(array: websites.compactMap{CDWebsite(context: context, entity: websiteEntity, website: $0)})}
     }
 }
 
+// add similar games
 
 extension Game {
     
-    init(cdGame: CDGame) {
+    convenience init(cdGame: CDGame) {
+        self.init()
         self.id = Int(cdGame.id)
         self.name = cdGame.name
         self.summary = cdGame.summary
@@ -174,7 +180,7 @@ extension Game {
             if !companies.isEmpty {
                 self.involvedCompanies = companies.map{
                     company in
-                    let invCompany = InvolvedCompany(company: company)
+                    let invCompany = InvolvedCompany()
                     return invCompany
                 }
             }

@@ -8,22 +8,20 @@
 import CoreData
 class CDPlatform: NSManagedObject{
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, platform: Platform){
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, platform: Platform){
         
+        guard let id = platform.id else { return nil }
+        guard let name = platform.name else { return nil }
         self.init(entity: entity, insertInto: context)
-        
-        self.id = Int64(platform.id)
-        self.name = platform.name
+        self.id = Int64(id)
+        self.name = name
     }
 }
 
 extension Platform {
-    init?(cdPlatform: CDPlatform) {
+    convenience init?(cdPlatform: CDPlatform) {
+        self.init()
         self.id = Int(cdPlatform.id)
-        if let platformName = cdPlatform.name {
-            self.name = platformName
-        } else {
-            return nil
-        }
+        self.name = cdPlatform.name
     }
 }

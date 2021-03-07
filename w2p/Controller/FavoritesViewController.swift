@@ -61,16 +61,41 @@ extension FavoritesViewController: UITableViewDataSource{
         
         let game = games[indexPath.row]
         
-        favoriteGameCell.label.text = game.name
-        favoriteGameCell.setupGameImageView(aspect: 1.2)
-        favoriteGameCell.gameImageView.image = UIImage(named: "test")
+        setup(favoriteGameCell, with: game)
         
+
         return favoriteGameCell
     }
     
+    private func setup(_ cell: FavoriteGameCardCell, with game: Game) {
+        cell.label.text = game.name
+        cell.id = game.id ?? 0
+        loadImage(for: cell, game: game)
+    }
     
-    
-    
+    private func loadImage(for cell: FavoriteGameCardCell, game: Game){
+        let id = cell.id
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.mediaDispatcher.fetchCoverFor(game: game, cache: true) {
+                data, error in
+                
+                if let data = data {
+                    if let image = UIImage(data: data) {
+                        let resizedImage = ImageResizer.resizeImageToFit(width: FavoriteGameCardCell.imageWidth, image: image)
+                        DispatchQueue.main.async {
+                            if id != cell.id {return}
+                            UIView.transition(with: cell.gameImageView, duration: 0.3, options: .transitionCrossDissolve) {
+                                
+                                cell.gameImageView.image = resizedImage
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 extension FavoritesViewController: UITableViewDelegate{

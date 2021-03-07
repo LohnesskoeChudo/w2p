@@ -8,21 +8,20 @@ import CoreData
 
 class CDCompany: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, company: Company){
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, company: Company){
         
+        guard let id = company.id else { return nil }
+        guard let name = company.name else { return nil }
         self.init(entity: entity, insertInto: context)
-        self.name = company.name
-        self.id = Int64(company.id)
+        self.name = name
+        self.id = Int64(id)
     }
 }
 
 extension Company {
-    init? (cdCompany: CDCompany){
+    convenience init? (cdCompany: CDCompany){
+        self.init()
         self.id = Int(cdCompany.id)
-        if let name = cdCompany.name {
-            self.name = name
-        } else {
-            return nil
-        }
+        self.name = cdCompany.name
     }
 }

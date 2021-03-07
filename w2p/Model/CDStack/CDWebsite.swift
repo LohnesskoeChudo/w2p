@@ -9,26 +9,26 @@ import CoreData
 
 class CDWebsite: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, website: Website){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, website: Website){
+            
+        guard let id = website.id else { return nil }
+        guard let url = website.url else { return nil }
+        guard let category = website.category else { return nil }
         self.init(entity: entity, insertInto: context)
         
-        self.id = Int64(website.id)
-        self.url = website.url
-        if let category = website.category { self.category = Int64(category)}
+        self.id = Int64(id)
+        self.url = url
+        self.category = Int64(category)
     }
     
 }
 
 
 extension Website {
-    init?(cdWebsite: CDWebsite) {
+    convenience init?(cdWebsite: CDWebsite) {
+        self.init()
         self.id = Int(cdWebsite.id)
-        if let url = cdWebsite.url {
-            self.url = url
-        } else {
-            return nil
-        }
+        self.url = cdWebsite.url
         self.category = Int(cdWebsite.category)
     }
 }

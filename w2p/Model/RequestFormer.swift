@@ -76,7 +76,7 @@ class RequestFormer{
     }
 
     private func getImageIdComponent(for media: MediaDownloadable) -> String?{
-        let basicImageUrl = media.url
+        guard let basicImageUrl = media.url else { return nil }
         let components = basicImageUrl.split(separator: "/")
         if let idComponent = components.last{
             return String(idComponent)

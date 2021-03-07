@@ -9,29 +9,30 @@ import CoreData
 
 class CDCover: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, cover: Cover){
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, cover: Cover){
         
+        guard let id = cover.id else {return nil}
+        guard let url = cover.url else {return nil}
+        guard let width = cover.width else { return nil }
+        guard let height = cover.height else { return nil }
         self.init(entity: entity, insertInto: context)
         
-        self.id = Int64(cover.id)
-        self.height = Int64(cover.height)
-        self.width = Int64(cover.width)
-        if let isAnimated = cover.animated { self.animated = isAnimated }
-        self.url = cover.url
-        
+        self.id = Int64(id)
+        self.url = url
+        self.height = Int64(height)
+        self.width = Int64(width)
+        if let isAnimated = cover.animated { self.animated  = isAnimated }
+
     }
     
 }
 
 extension Cover {
-    init?(cdCover: CDCover) {
+    convenience init?(cdCover: CDCover) {
+        self.init()
         self.id = Int(cdCover.id)
         self.animated = cdCover.animated
-        if let url = cdCover.url{
-            self.url = url
-        } else {
-            return nil
-        }
+        self.url = cdCover.url
         self.height = Int(cdCover.height)
         self.width = Int(cdCover.width)
     }

@@ -9,22 +9,19 @@ import CoreData
 
 class CDGenre: NSManagedObject{
     
-    convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, genre: Genre){
-        
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, genre: Genre){
+        guard let id = genre.id else { return nil }
+        guard let name = genre.name else { return nil }
         self.init(entity: entity, insertInto: context)
-        
-        self.id = Int64(genre.id)
-        self.name = genre.name
+        self.id = Int64(id)
+        self.name = name
     }
 }
 
 extension Genre {
-    init?(cdGenre: CDGenre) {
+    convenience init?(cdGenre: CDGenre) {
+        self.init()
         self.id = Int(cdGenre.id)
-        if let genreName = cdGenre.name {
-            self.name = genreName
-        } else {
-            return nil
-        }
+        self.name = cdGenre.name
     }
 }
