@@ -1,6 +1,10 @@
 import Foundation
 
-class Game: Codable{
+class Game: Codable, Equatable{
+    static func == (lhs: Game, rhs: Game) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     
 
     var id: Int?
@@ -264,6 +268,46 @@ enum WebsiteCategory: Int{
          epicgames = 16,
          gog = 17,
          discord = 18
+
+    var name: String{
+        switch self {
+        case .official:
+            return "Official"
+        case .wikia:
+            return "Fandom"
+        case .wikipedia:
+            return "Wikipedia"
+        case .facebook:
+            return "Facebook"
+        case .twitter:
+            return "Twitter"
+        case .twitch:
+            return "Twitch"
+        case .instagram:
+            return "Instagram"
+        case .youtube:
+            return "Youtube"
+        case .iphone:
+            return "Appstore"
+        case .ipad:
+            return "Appstore"
+        case .android:
+            return "Playmarket"
+        case .steam:
+            return "Steam"
+        case .reddit:
+            return "Reddit"
+        case .itch:
+            return "Itch"
+        case .epicgames:
+            return "EpicGames"
+        case .gog:
+            return "GOG"
+        case .discord:
+            return "Discord"
+
+        }
+    }
 }
 
 enum GameImageSizeKey: String{

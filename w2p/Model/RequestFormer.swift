@@ -23,7 +23,6 @@ class RequestFormer{
         let path = pathForImageRequest(sizeKey: sizeKey, idComponent: imageIdComponent)
         urlComponents.path = path
         guard let url = urlComponents.url else {return nil}
-        print(url)
         return URLRequest(url: url)
     }
     

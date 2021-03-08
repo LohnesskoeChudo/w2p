@@ -154,7 +154,6 @@ extension GameBrowserController: UICollectionViewDataSource {
                             DispatchQueue.global().async {
                                 let resizedImage = ImageResizer.resizeImageToFit(width: columnWidth, image: image)
                                 DispatchQueue.main.async{
-                                    print(cell.id, id)
                                     if cell.id == id{
                                         UIView.transition(with: cell.customContent.imageView, duration: 0.3, options: [.transitionCrossDissolve]){
                                             

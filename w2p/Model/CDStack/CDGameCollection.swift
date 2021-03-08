@@ -9,7 +9,7 @@ import CoreData
 
 class CDGameCollection: NSManagedObject {
     
-    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, collection: GameCollection){
+    convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, collection: GameCollection, generatorGame: CDGame){
             
         guard let id = collection.id else { return nil }
         guard let name = collection.name else { return nil }
@@ -18,11 +18,17 @@ class CDGameCollection: NSManagedObject {
         self.init(entity: entity, insertInto: context)
         self.name = name
         self.id = Int64(id)
-        var collectionGames = [CDGame]()
+        let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: context)!
+        var collectionGames = [generatorGame]
         for gameId in games{
-            let game = CDGame(context: context)
-            game.id = Int64(gameId)
-            collectionGames.append(game)
+            if Int64(gameId) == generatorGame.id {
+                continue
+            } else {
+                let game = CDGame(entity: gameEntity, insertInto: context)
+                game.id = Int64(gameId)
+                collectionGames.append(game)
+            }
+
         }
         self.games = NSSet(array: collectionGames)
         

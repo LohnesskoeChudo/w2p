@@ -28,7 +28,6 @@ class CacheManager{
         self.moc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         privateMoc = container.newBackgroundContext()
         privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-        print("IN INIT")
     }
     
     func save(coverData: Data, with cover: Cover, gameId: Int){
@@ -109,15 +108,12 @@ class CacheManager{
     
     func loadFavoriteGames(completion: @escaping ([Game]?) -> Void){
         privateMoc.perform {
-            print("in private moc")
             let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
             fetchRequest.predicate = NSPredicate(format: "inFavorites == YES")
             if let cdGames = try? self.privateMoc.fetch(fetchRequest) {
                 let games = cdGames.map{ Game(cdGame: $0)}
-                print(games.count)
                 completion(games)
             } else {
-                print("NO GAMES")
                 completion(nil)
             }
         }
@@ -128,7 +124,6 @@ class CacheManager{
         privateMoc.perform {
             let entity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
             let cdGame = CDGame(context: self.privateMoc, entity: entity, game: game)
-            print(cdGame.name)
             //MARK: -
             try! self.privateMoc.save()
         }

@@ -36,7 +36,6 @@ class GameMediaDispatcher{
             if let data = data {
                 completion(data, nil)
             } else {
-                print("else BLOCK")
                 guard let coverRequest = RequestFormer.shared.formRequestForCover(with: cover, sizeKey: .S264X374) else {
                     completion(nil, .canNotFormRequest)
                     return
@@ -94,7 +93,6 @@ class GameMediaDispatcher{
     
     
     func loadFavoriteGames(completion: @escaping ([Game]?) -> Void){
-        print("Called")
         CacheManager.shared.loadFavoriteGames(completion: completion)
     }
     

@@ -24,9 +24,7 @@ class CDGame: NSManagedObject{
         if let status = game.status { self.status = Int64(status)}
         if let aggregatedRating = game.aggregatedRating { self.aggregatedRating = aggregatedRating }
         
-        if let cacheDate = game.cacheDate {
-            self.cacheDate = cacheDate
-        }
+        print(game.inFavorites)
         if let inFavorites = game.inFavorites {
             self.inFavorites = inFavorites
         }
@@ -81,10 +79,10 @@ class CDGame: NSManagedObject{
         if let themes = game.themes {self.themes = NSSet(array: themes.compactMap{CDTheme(context: context, entity: themeEntity, theme: $0)})}
         
         let collectionEntity = NSEntityDescription.entity(forEntityName: "CDGameCollection", in: context)!
-        if let gameCollection = game.collection{ self.collection = CDGameCollection(context: context, entity: collectionEntity, collection: gameCollection)}
+        if let gameCollection = game.collection{ self.collection = CDGameCollection(context: context, entity: collectionEntity, collection: gameCollection, generatorGame: self)}
         
         let franchiseEntity = NSEntityDescription.entity(forEntityName: "CDFranchise", in: context)!
-        if let franchise = game.franchise{ self.franchise = CDFranchise(context: context, entity: franchiseEntity, franchise: franchise)}
+        if let franchise = game.franchise{ self.franchise = CDFranchise(context: context, entity: franchiseEntity, franchise: franchise, generatorGame: self)}
         
         let gameModeEntity = NSEntityDescription.entity(forEntityName: "CDGameMode", in: context)!
         if let gameModes = game.gameModes{ self.gameModes = NSSet(array: gameModes.compactMap{CDGameMode(context: context, entity: gameModeEntity, gameMode: $0)})}

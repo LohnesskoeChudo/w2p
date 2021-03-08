@@ -9,9 +9,6 @@ import UIKit
 
 class CustomButton: UIControl{
     
-    private var label: UILabel!
-    private var imageView: UIImageView!
-        
     override init(frame: CGRect){
         super.init(frame: frame)
         customInit()

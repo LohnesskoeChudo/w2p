@@ -171,15 +171,15 @@ class FilterViewController: UIViewController {
     
     private func setupRating(){
         ratingSlider = DoubleSlider(frame: .zero, maxValue: 100, minValue: 1, thumbColor: .black , trackColor: .lightGray)
-
+        
         ratingSlider.delegate = self
         ratingSlider.translatesAutoresizingMaskIntoConstraints = false
         ratingSliderContainer.addSubview(ratingSlider)
         NSLayoutConstraint.activate([
-            ratingSlider.topAnchor.constraint(equalTo: ratingSliderContainer.topAnchor, constant: 20),
+            ratingSlider.topAnchor.constraint(equalTo: ratingSliderContainer.topAnchor),
             ratingSlider.leadingAnchor.constraint(equalTo: ratingSliderContainer.leadingAnchor, constant: 20),
             ratingSlider.trailingAnchor.constraint(equalTo: ratingSliderContainer.trailingAnchor, constant: -20),
-            ratingSlider.bottomAnchor.constraint(equalTo: ratingSliderContainer.bottomAnchor),
+            ratingSlider.bottomAnchor.constraint(equalTo: ratingSliderContainer.bottomAnchor, constant: -20),
             ratingSlider.heightAnchor.constraint(equalToConstant: 30)
         ])
         

@@ -9,8 +9,11 @@ import CoreData
 
 class CustomMergePolicy: NSMergePolicy {
     
+    
     override func resolve(constraintConflicts list: [NSConstraintConflict]) throws {
         
+        
+
         guard list.allSatisfy({$0.databaseObject != nil}) else {
             return try super.resolve(constraintConflicts: list)
         }
@@ -18,7 +21,16 @@ class CustomMergePolicy: NSMergePolicy {
         for conflict in list {
             for conflictingObject in conflict.conflictingObjects {
                 for key in conflictingObject.entity.attributesByName.keys {
-                    
+                    let dbValue = conflict.databaseObject?.value(forKey: key)
+                    if conflictingObject.value(forKey: key) == nil {
+                        if let cdobj = conflictingObject as? CDGame, cdobj.name == "Bootleg Systems" {
+                            print(key)
+                        }
+                        conflictingObject.setValue(dbValue, forKey: key)
+                    }
+                }
+                
+                for key in conflictingObject.entity.relationshipsByName.keys {
                     let dbValue = conflict.databaseObject?.value(forKey: key)
                     if conflictingObject.value(forKey: key) == nil {
                         conflictingObject.setValue(dbValue, forKey: key)

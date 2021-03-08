@@ -46,8 +46,8 @@
 		5DDAFB8D25F0C76400315340 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAFB8C25F0C76400315340 /* Array+.swift */; };
 		5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */; };
 		5DE071CF25E91FB300526BE8 /* SimilarGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */; };
-		5DE47E1025E63AA900439FB7 /* CommonButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E0F25E63AA900439FB7 /* CommonButton.xib */; };
-		5DE47E1325E63B6F00439FB7 /* CommonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE47E1225E63B6F00439FB7 /* CommonButton.swift */; };
+		5DE47E1025E63AA900439FB7 /* TransferButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E0F25E63AA900439FB7 /* TransferButton.xib */; };
+		5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE47E1225E63B6F00439FB7 /* TransferButton.swift */; };
 		5DE47E1625E6402B00439FB7 /* genres.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E1525E6402B00439FB7 /* genres.json */; };
 		5DE47E1925E6404800439FB7 /* platforms.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E1825E6404800439FB7 /* platforms.json */; };
 		5DE47E1C25E640BC00439FB7 /* themes.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E1B25E640BC00439FB7 /* themes.json */; };
@@ -115,8 +115,8 @@
 		5DDAFB8C25F0C76400315340 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleSlider.swift; sourceTree = "<group>"; };
 		5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarGamesController.swift; sourceTree = "<group>"; };
-		5DE47E0F25E63AA900439FB7 /* CommonButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommonButton.xib; sourceTree = "<group>"; };
-		5DE47E1225E63B6F00439FB7 /* CommonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButton.swift; sourceTree = "<group>"; };
+		5DE47E0F25E63AA900439FB7 /* TransferButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransferButton.xib; sourceTree = "<group>"; };
+		5DE47E1225E63B6F00439FB7 /* TransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferButton.swift; sourceTree = "<group>"; };
 		5DE47E1525E6402B00439FB7 /* genres.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = genres.json; sourceTree = "<group>"; };
 		5DE47E1825E6404800439FB7 /* platforms.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = platforms.json; sourceTree = "<group>"; };
 		5DE47E1B25E640BC00439FB7 /* themes.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = themes.json; sourceTree = "<group>"; };
@@ -214,9 +214,9 @@
 			children = (
 				5D530EFE25D7E44300DF5621 /* Main.storyboard */,
 				5DE9937325E575B9004AB0B1 /* CategoryShowButton.xib */,
-				5DE47E0F25E63AA900439FB7 /* CommonButton.xib */,
+				5DE47E0F25E63AA900439FB7 /* TransferButton.xib */,
 				5D530F0325D7E44300DF5621 /* LaunchScreen.storyboard */,
-				5DE47E1225E63B6F00439FB7 /* CommonButton.swift */,
+				5DE47E1225E63B6F00439FB7 /* TransferButton.swift */,
 				5DB4472E25ED0BE500C1663B /* CustomButton.swift */,
 				5DD9BC9F25F1FECD0053C449 /* CustomTabBar.swift */,
 				5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */,
@@ -286,8 +286,8 @@
 				5DF85F3325E1A65800359227 /* CDArtwork.swift */,
 				5DF85F3625E1A66000359227 /* CDScreenshot.swift */,
 				5DF85F3925E1A66600359227 /* CDVideo.swift */,
-				5D023CDE25E1AFAA003B04CD /* CDGameCollection.swift */,
 				5DF85F3C25E1A67100359227 /* CDAgeRating.swift */,
+				5D023CDE25E1AFAA003B04CD /* CDGameCollection.swift */,
 				5DF85F3F25E1A67F00359227 /* CDFranchise.swift */,
 				5DCB518325F38D4700079006 /* CDCompany.swift */,
 				5DCB518625F38D7800079006 /* CDGameEngine.swift */,
@@ -355,7 +355,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DE47E2125E696C900439FB7 /* mainPlatforms.json in Resources */,
-				5DE47E1025E63AA900439FB7 /* CommonButton.xib in Resources */,
+				5DE47E1025E63AA900439FB7 /* TransferButton.xib in Resources */,
 				5DCCCBB725E90BA4007690B9 /* CellContentView.xib in Resources */,
 				5DE47E1C25E640BC00439FB7 /* themes.json in Resources */,
 				5DE47E1925E6404800439FB7 /* platforms.json in Resources */,
@@ -397,7 +397,7 @@
 				5D530F1E25D8067600DF5621 /* RequestFormer.swift in Sources */,
 				5DE8E84F25E16F5A00471078 /* MainModel.swift in Sources */,
 				5D023CDF25E1AFAA003B04CD /* CDGameCollection.swift in Sources */,
-				5DE47E1325E63B6F00439FB7 /* CommonButton.swift in Sources */,
+				5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */,
 				5DD5EFF525DCE6F8000513BB /* Model.xcdatamodeld in Sources */,
 				5DCB518425F38D4700079006 /* CDCompany.swift in Sources */,
 				5DBDC79925E2BAA6003AA46F /* GameAttributeView.swift in Sources */,

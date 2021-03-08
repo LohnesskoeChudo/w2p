@@ -47,7 +47,9 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var gameEngineContainer: UIView!
     @IBOutlet weak var gameEngineLabel: UILabel!
     
-    
+
+    @IBOutlet weak var websitesOpeningButton: CategoryShowButton!
+    @IBOutlet weak var websitesFlowView: LabelFlowView!
     
     
     @IBOutlet weak var mediaCounterBackground: UIView!
@@ -66,16 +68,26 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var storylineLabel: UILabel!
     @IBOutlet weak var attributesContainer: UIView!
     @IBOutlet weak var attributesFlowView: LabelFlowView!
-    @IBOutlet weak var similarGamesButton: CommonButton!
-    @IBOutlet weak var franchiseGamesButton: CommonButton!
-    @IBOutlet weak var collectionGamesButton: CommonButton!
-    @IBAction func similarGamesTapped(_ sender: CommonButton) {
+    @IBOutlet weak var similarGamesButton: TransferButton!
+    @IBOutlet weak var franchiseGamesButton: TransferButton!
+    @IBOutlet weak var collectionGamesButton: TransferButton!
+    
+    
+    @IBAction func websitesOpeningButtonTapped(_ sender: CategoryShowButton) {
+        UIView.animate(withDuration: 0.3) {
+            self.websitesFlowView.superview?.isHidden.toggle()
+        }
+    }
+    
+
+    
+    @IBAction func similarGamesTapped(_ sender: TransferButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
     }
-    @IBAction func franchiseGamesTapped(_ sender: CommonButton) {
+    @IBAction func franchiseGamesTapped(_ sender: TransferButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.franchiseGames)
     }
-    @IBAction func collectionGamesTapped(_ sender: CommonButton) {
+    @IBAction func collectionGamesTapped(_ sender: TransferButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.collectionGames)
     }
     @IBAction func backButtonPressed(_ sender: CustomButton) {
@@ -83,8 +95,7 @@ class DetailedViewController: UIViewController{
     }
 
     @IBAction func toFavoritesTapped(_ sender: CustomButton) {
-        print("tapped")
-        
+
         
         if game.inFavorites == true {
             sender.backgroundColor = .blue
@@ -120,6 +131,7 @@ class DetailedViewController: UIViewController{
         setupNavigationButtons()
         setupMedia()
         setupSecondaryInfo()
+        setupWebsites()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -198,6 +210,52 @@ class DetailedViewController: UIViewController{
         }
     }
     
+    private func setupWebsites(){
+        if let sites = game.websites {
+            if !sites.isEmpty {
+                var websiteButtons = [UIView]()
+                for website in sites {
+                    if let button = setupWebsiteButton(website: website) {
+                        websiteButtons.append(button)
+                    }
+                }
+                if !websiteButtons.isEmpty {
+                    websitesOpeningButton.nameLabel.text = "Websites"
+                    setupWebsitesFlow(with: websiteButtons)
+                    websitesFlowView.superview!.isHidden = true
+                    return
+                }
+            }
+        }
+        websitesOpeningButton.isHidden = true
+        websitesFlowView.superview!.isHidden = true
+    }
+    
+    private func setupWebsiteButton(website: Website) -> UIView?{
+        guard let siteCategory = website.category, let url = website.url, let websiteName = WebsiteCategory(rawValue: siteCategory)?.name else { return nil }
+        let commonButton = CustomButton()
+        commonButton.translatesAutoresizingMaskIntoConstraints = false
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = websiteName
+        commonButton.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: commonButton.leadingAnchor, constant: 10),
+            label.trailingAnchor.constraint(equalTo: commonButton.trailingAnchor, constant: -10),
+            label.topAnchor.constraint(equalTo: commonButton.topAnchor, constant: 5),
+            label.bottomAnchor.constraint(equalTo: commonButton.bottomAnchor, constant: -5)
+        ])
+        return commonButton
+    }
+    
+    private func setupWebsitesFlow(with views: [UIView]){
+        for view in views {
+            websitesFlowView.addSubview(view)
+        }
+        websitesFlowView.setNeedsLayout()
+        websitesFlowView.layoutIfNeeded()
+    }
+    
     private func setupMediaCounter(){
         mediaCounterBackground.layer.backgroundColor = UIColor.black.withAlphaComponent(0.5).cgColor
         let height = mediaCounterBackground.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
@@ -215,17 +273,17 @@ class DetailedViewController: UIViewController{
         if game.similarGames != nil{
             similarGamesButton.textLabel.text = "Similar games"
         } else {
-            similarGamesButton.isHidden = true
+            similarGamesButton.superview?.isHidden = true
         }
         if game.franchise?.games != nil{
             franchiseGamesButton.textLabel.text = "Franchise games"
         } else {
-            franchiseGamesButton.isHidden = true
+            franchiseGamesButton.superview?.isHidden = true
         }
         if game.collection?.games != nil{
             collectionGamesButton.textLabel.text = "Collection games"
         } else {
-            collectionGamesButton.isHidden = true
+            collectionGamesButton.superview?.isHidden = true
         }
     }
     
@@ -293,8 +351,15 @@ class DetailedViewController: UIViewController{
                     let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth, image: blurred)
                         
                     DispatchQueue.main.async {
-                        self.coverView.image = image
-                        self.blurredBackground.image = resizedBlurred
+                        UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
+                            
+                            self.coverView.image = image
+                        }
+                        
+                        UIView.transition(with: self.blurredBackground, duration: 0.2, options: .transitionCrossDissolve){
+                            self.blurredBackground.image = resizedBlurred
+                        }
+                        
                         if self.isMediaSectionAvailable {
                             self.blurredMediaBackground.image = resizedBlurred
                         }
@@ -384,7 +449,6 @@ extension DetailedViewController: UICollectionViewDataSource{
                 DispatchQueue.global(qos: .userInteractive).async{
                     guard let image = UIImage(data: data) else {
                         
-                        print(String(data: data, encoding: .utf8))
                         return
                         
                     }
@@ -401,7 +465,6 @@ extension DetailedViewController: UICollectionViewDataSource{
                 }
             }
             if let error = error {
-                print(error)
             }
         }
     }

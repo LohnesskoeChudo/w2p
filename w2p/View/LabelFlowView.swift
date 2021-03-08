@@ -29,7 +29,7 @@ class LabelFlowView: UIView{
     private func flowLayout(){
             
         guard let subviewHeight = subviews.first?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height else {return}
-        
+
         var lineBuffer = [(UIView, CGFloat)]()
         var yOffset: CGFloat = 0
         var subviewsLineWidth: CGFloat = 0

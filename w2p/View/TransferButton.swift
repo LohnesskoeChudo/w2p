@@ -1,13 +1,10 @@
-//
 //  CommonButton.swift
 //  w2p
-//
 //  Created by vas on 24.02.2021.
-//
 
 import UIKit
 
-class CommonButton: UIControl{
+class TransferButton: UIControl{
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var textLabel: UILabel!
@@ -24,7 +21,7 @@ class CommonButton: UIControl{
     }
     
     func commonInit(){
-        Bundle.main.loadNibNamed("CommonButton", owner: self, options: nil)
+        Bundle.main.loadNibNamed("TransferButton", owner: self, options: nil)
         contentView.fixIn(view: self)
         setupActions()
     }

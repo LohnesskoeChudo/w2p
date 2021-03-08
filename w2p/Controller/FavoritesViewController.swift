@@ -23,13 +23,26 @@ class FavoritesViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("viewdidload")
+        captureFavorites()
+    }
+    
+    private func captureFavorites() {
         mediaDispatcher.loadFavoriteGames{
             games in
-            if let games = games {
+            if var games = games {
+                guard self.games != games else {return}
+                games.sort{
+                    fGame, sGame in
+                    if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
+                        return fd < sd
+                    }
+                    return true
+                }
                 DispatchQueue.main.async {
                     self.games = games
-                    self.tableView.reloadData()
+                    UIView.animate(withDuration: 0.2) {
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }
@@ -39,9 +52,6 @@ class FavoritesViewController: UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
-    
-
 }
 
 extension FavoritesViewController: UITableViewDataSource{
@@ -72,15 +82,13 @@ extension FavoritesViewController: UITableViewDataSource{
         DispatchQueue.global(qos: .userInitiated).async {
             self.mediaDispatcher.fetchCoverDataWith(cover: cover, gameId: gameId, cache: true) {
                 data, error in
-                
                 if let data = data {
-                    
-
                     if let image = UIImage(data: data) {
                         let resizedImage = ImageResizer.resizeImageToFit(width: FavoriteGameCardCell.imageWidth, image: image)
                         DispatchQueue.main.async {
                             if id != cell.id {return}
-                            UIView.transition(with: cell.gameImageView, duration: 0.3, options: .transitionCrossDissolve) {
+                            UIView.transition(with: cell.gameImageView, duration: 0.1, options: .transitionCrossDissolve) {
+                                
                                 
                                 cell.gameImageView.image = resizedImage
                                 
