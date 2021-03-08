@@ -38,9 +38,9 @@
                                                                 <constraint firstAttribute="width" constant="75" id="gjh-qY-0QU"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2s-vh-mfC">
-                                                            <rect key="frame" x="95" y="43.5" width="279" height="21"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c2s-vh-mfC">
+                                                            <rect key="frame" x="95" y="39.5" width="279" height="29"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -48,8 +48,6 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstItem="c2s-vh-mfC" firstAttribute="leading" secondItem="uEL-ob-3IL" secondAttribute="trailing" constant="20" id="6SE-UD-SzQ"/>
-                                                        <constraint firstItem="c2s-vh-mfC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="x0n-Uh-nBN" secondAttribute="top" constant="10" id="EtH-Hn-NN5"/>
-                                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="c2s-vh-mfC" secondAttribute="bottom" constant="20" id="FPq-lz-mHk"/>
                                                         <constraint firstItem="c2s-vh-mfC" firstAttribute="centerY" secondItem="uEL-ob-3IL" secondAttribute="centerY" id="M1D-JY-CoK"/>
                                                         <constraint firstAttribute="bottom" secondItem="uEL-ob-3IL" secondAttribute="bottom" id="TUl-ZJ-Po9"/>
                                                         <constraint firstItem="uEL-ob-3IL" firstAttribute="leading" secondItem="x0n-Uh-nBN" secondAttribute="leading" id="UqA-TD-Uag"/>
@@ -667,14 +665,14 @@
             <objects>
                 <viewController id="aGj-6w-gCA" customClass="DetailedViewController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ice-Mg-Kz6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="2946"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="3000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bEe-7w-SIZ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="2912"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="2829"/>
                             </imageView>
                             <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d08-pt-uZq">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="2912"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="2829"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCt-og-zrO">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="2240.5"/>
@@ -1196,7 +1194,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="9fu-TD-P6V" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
@@ -1226,7 +1224,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fb5-De-cO8">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="51"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="51"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKa-5k-VWp" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="20" y="10" width="89" height="41"/>
@@ -1312,7 +1310,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="m7g-vP-Cl6"/>
+        <segue reference="Kvh-Bh-DzW"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="chevron.backward" catalog="system" width="96" height="128"/>

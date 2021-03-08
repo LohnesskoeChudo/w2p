@@ -9,6 +9,7 @@ import CoreData
 
 class CDGame: NSManagedObject{
     
+    
     convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, game: Game){
         
         self.init(entity: entity, insertInto: context)

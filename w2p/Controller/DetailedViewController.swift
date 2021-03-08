@@ -283,9 +283,10 @@ class DetailedViewController: UIViewController{
     }
    
     private func setupCover(){
+        guard let cover = game.cover, let gameId = game.id else { return }
         let viewWidth = view.bounds.width
         DispatchQueue.global(qos: .userInitiated).async{
-            self.mediaDispatcher.fetchCoverFor(game: self.game, cache: true){
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover, gameId: gameId, cache: true) {
                 data, error in
                 if let data = data, let image = UIImage(data: data){
                     let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)

@@ -10,8 +10,8 @@ import UIKit
 class FavoriteGameCardCell: UITableViewCell{
         
     var id: Int = 0
-    static let imageWidth:CGFloat = 100
-    static let imageHeight:CGFloat = 150
+    static let imageWidth:CGFloat = 50
+    static let imageHeight:CGFloat = 75
     
     override func awakeFromNib() {
         setupAppearance()

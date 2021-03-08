@@ -142,9 +142,10 @@ extension GameBrowserController: UICollectionViewDataSource {
     }
     
     func setCoverToCardCell(_ cell: GameCardCell, game: Game){
+        guard let cover = game.cover, let gameId = game.id else { return }
         let id = game.id ?? -1
         DispatchQueue.global().async {
-            self.mediaDispatcher.fetchCoverFor(game: game, cache: true){
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover,gameId: gameId, cache: true){
                 data, error in
                 if let data = data {
                     if let image = UIImage(data: data){

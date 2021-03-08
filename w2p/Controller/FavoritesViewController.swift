@@ -26,19 +26,13 @@ class FavoritesViewController: UIViewController{
         print("viewdidload")
         mediaDispatcher.loadFavoriteGames{
             games in
-        
             if let games = games {
                 DispatchQueue.main.async {
                     self.games = games
                     self.tableView.reloadData()
                 }
             }
-            
         }
-        
-        
-        
-        
     }
     
     private func setupTableView(){
@@ -60,10 +54,8 @@ extension FavoritesViewController: UITableViewDataSource{
         let favoriteGameCell = tableView.dequeueReusableCell(withIdentifier: "gameFavoriteCell", for: indexPath) as! FavoriteGameCardCell
         
         let game = games[indexPath.row]
-        
         setup(favoriteGameCell, with: game)
         
-
         return favoriteGameCell
     }
     
@@ -74,13 +66,16 @@ extension FavoritesViewController: UITableViewDataSource{
     }
     
     private func loadImage(for cell: FavoriteGameCardCell, game: Game){
+        guard let cover = game.cover,let gameId = game.id else { return }
         let id = cell.id
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.mediaDispatcher.fetchCoverFor(game: game, cache: true) {
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover, gameId: gameId, cache: true) {
                 data, error in
                 
                 if let data = data {
+                    
+
                     if let image = UIImage(data: data) {
                         let resizedImage = ImageResizer.resizeImageToFit(width: FavoriteGameCardCell.imageWidth, image: image)
                         DispatchQueue.main.async {

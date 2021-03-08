@@ -25,23 +25,21 @@ class CacheManager{
         }
         self.container = container
         self.moc = container.viewContext
-        self.moc.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        self.moc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         privateMoc = container.newBackgroundContext()
-        privateMoc.mergePolicy = NSMergePolicy(merge: .overwriteMergePolicyType)
+        privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         print("IN INIT")
     }
     
-    func save(coverData: Data,for game: Game){
-        guard let cover = game.cover, let gameId = game.id else {return}
+    func save(coverData: Data, with cover: Cover, gameId: Int){
         privateMoc.perform {
             let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
             if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
-                
+                cdCover.image = coverData
                 let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
                 let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
                 cdGame.id = Int64(gameId)
-                cdCover.image = coverData
-                cdGame.cover = cdCover
+                cdCover.game = cdGame
                 //MARK: -
                 try! self.privateMoc.save()
             }
@@ -50,16 +48,15 @@ class CacheManager{
 
 
     
-    func loadCover(for game: Game, completion: @escaping (Data?) -> Void){
-        guard let gameId = game.id else {return}
+    func loadCover(with coverId: Int, completion: @escaping (Data?) -> Void){
         privateMoc.perform {
-            let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
-            let propertiesToFetch: [NSString] = ["cover"]
+            let fetchRequest = NSFetchRequest<CDCover>(entityName: "CDCover")
+            let propertiesToFetch: [NSString] = ["image"]
             fetchRequest.propertiesToFetch = propertiesToFetch
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate(format: "id == %d", gameId)
+            fetchRequest.predicate = NSPredicate(format: "id == %d", coverId)
             if let fetchedGameItems = try? self.privateMoc.fetch(fetchRequest), let firstGameItem = fetchedGameItems.first{
-                if let imageData = firstGameItem.cover?.image{
+                if let imageData = firstGameItem.image{
                     completion(imageData)
                 } else {
                     completion(nil)
@@ -115,12 +112,8 @@ class CacheManager{
             print("in private moc")
             let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
             fetchRequest.predicate = NSPredicate(format: "inFavorites == YES")
-
-            
             if let cdGames = try? self.privateMoc.fetch(fetchRequest) {
                 let games = cdGames.map{ Game(cdGame: $0)}
-                
-
                 print(games.count)
                 completion(games)
             } else {
@@ -136,7 +129,7 @@ class CacheManager{
             let entity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
             let cdGame = CDGame(context: self.privateMoc, entity: entity, game: game)
             print(cdGame.name)
-            //MARK: - 
+            //MARK: -
             try! self.privateMoc.save()
         }
     }

@@ -46,6 +46,7 @@
         </uniquenessConstraints>
     </entity>
     <entity name="CDFranchise" representedClassName=".CDFranchise" syncable="YES" codeGenerationType="category">
+        <attribute name="gameIds" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="games" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDGame" inverseName="franchise" inverseEntity="CDGame"/>
@@ -184,20 +185,20 @@
         </uniquenessConstraints>
     </entity>
     <elements>
-        <element name="CDAgeRating" positionX="0" positionY="153" width="128" height="118"/>
-        <element name="CDArtwork" positionX="18" positionY="153" width="128" height="148"/>
-        <element name="CDCover" positionX="0" positionY="117" width="128" height="148"/>
-        <element name="CDFranchise" positionX="0" positionY="126" width="128" height="88"/>
-        <element name="CDGame" positionX="-63" positionY="-18" width="128" height="418"/>
-        <element name="CDGameCollection" positionX="-18" positionY="117" width="128" height="88"/>
-        <element name="CDGameMode" positionX="-18" positionY="135" width="128" height="88"/>
-        <element name="CDGenre" positionX="-63" positionY="72" width="128" height="88"/>
-        <element name="CDPlatform" positionX="-54" positionY="81" width="128" height="88"/>
-        <element name="CDScreenshot" positionX="36" positionY="162" width="128" height="148"/>
-        <element name="CDTheme" positionX="-36" positionY="90" width="128" height="88"/>
-        <element name="CDVideo" positionX="-9" positionY="144" width="128" height="103"/>
-        <element name="CDWebsite" positionX="-9" positionY="135" width="128" height="103"/>
-        <element name="CDCompany" positionX="-18" positionY="135" width="128" height="88"/>
-        <element name="CDGameEngine" positionX="-9" positionY="144" width="128" height="88"/>
+        <element name="CDAgeRating" positionX="10" positionY="147" width="128" height="118"/>
+        <element name="CDArtwork" positionX="160" positionY="29" width="128" height="148"/>
+        <element name="CDCompany" positionX="-34" positionY="13" width="128" height="88"/>
+        <element name="CDCover" positionX="304" positionY="327" width="128" height="148"/>
+        <element name="CDFranchise" positionX="-32" positionY="361" width="128" height="103"/>
+        <element name="CDGame" positionX="-574" positionY="4" width="128" height="418"/>
+        <element name="CDGameCollection" positionX="-338" positionY="-215" width="128" height="88"/>
+        <element name="CDGameEngine" positionX="156" positionY="190" width="128" height="88"/>
+        <element name="CDGameMode" positionX="141" positionY="-226" width="128" height="88"/>
+        <element name="CDGenre" positionX="-65" positionY="-125" width="128" height="88"/>
+        <element name="CDPlatform" positionX="-9" positionY="-308" width="128" height="88"/>
+        <element name="CDScreenshot" positionX="306" positionY="153" width="128" height="148"/>
+        <element name="CDTheme" positionX="-273" positionY="5" width="128" height="88"/>
+        <element name="CDVideo" positionX="300" positionY="27" width="128" height="103"/>
+        <element name="CDWebsite" positionX="179" positionY="-132" width="128" height="103"/>
     </elements>
 </model>

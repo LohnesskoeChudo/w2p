@@ -8,8 +8,7 @@ class RequestFormer{
     //var api = "http://192.168.1.64:8002/"
     
     
-    func formRequestForCover(for game: Game, sizeKey: GameImageSizeKey) -> URLRequest?{
-        guard let cover = game.cover else {return nil}
+    func formRequestForCover(with cover: Cover, sizeKey: GameImageSizeKey) -> URLRequest?{
         guard let imageIdComponent = getImageIdComponent(for: cover) else {return nil}
         var urlComponents = configuredComponentsForRequest()
         let path = pathForImageRequest(sizeKey: .S264X374, idComponent: imageIdComponent)
