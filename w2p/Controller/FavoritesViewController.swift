@@ -76,11 +76,11 @@ extension FavoritesViewController: UITableViewDataSource{
     }
     
     private func loadImage(for cell: FavoriteGameCardCell, game: Game){
-        guard let cover = game.cover,let gameId = game.id else { return }
+        guard let cover = game.cover else { return }
         let id = cell.id
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, gameId: gameId, cache: true) {
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
                 data, error in
                 if let data = data {
                     if let image = UIImage(data: data) {

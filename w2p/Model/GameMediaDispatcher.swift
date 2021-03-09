@@ -11,7 +11,7 @@ class GameMediaDispatcher{
     private let dataLoader = DataLoader()
     
     
-    func fetchCoverDataWith(cover: Cover, gameId: Int, cache: Bool, completion: @escaping (Data?, FetchingError?) -> Void){
+    func fetchCoverDataWith(cover: Cover, cache: Bool, completion: @escaping (Data?, FetchingError?) -> Void){
         
         /*
         if let coverRequest = RequestFormer.shared.formRequestForCover(for: game, sizeKey: .S264X374) {
@@ -25,8 +25,7 @@ class GameMediaDispatcher{
             }
         }
         */
-        
-        
+
         guard let id = cover.id else {
             completion(nil, .noCoverId)
             return
@@ -44,7 +43,7 @@ class GameMediaDispatcher{
                     data, error in
                     if let data = data {
                         if cache{
-                            CacheManager.shared.save(coverData: data, with: cover, gameId: gameId)
+                            CacheManager.shared.save(coverData: data, with: cover)
                         }
                         completion(data, nil)
                     } else {
@@ -100,6 +99,10 @@ class GameMediaDispatcher{
         CacheManager.shared.save(game: game)
     }
     
+    func loadGame(with id: Int, completion: @escaping (Game?, FetchingError?) -> Void) {
+        CacheManager.shared.loadGame(with: id, completion: completion)
+    }
+    
     
 }
 
@@ -107,4 +110,5 @@ enum FetchingError: Error{
     case connectionError
     case canNotFormRequest
     case noCoverId
+    case noItemInDb
 }

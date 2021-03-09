@@ -10,10 +10,13 @@ import UIKit
 class DetailedViewController: UIViewController{
     
     var game: Game!
+    var shouldUpdate: Bool = false
+
     var mediaDispatcher = GameMediaDispatcher()
     var imageBlurrer = ImageBlurrer()
     var staticMediaContent = [MediaDownloadable]()
     var videoMediaContent = [Video]()
+    
     var isMediaSectionAvailable: Bool {
         if let videos = game.videos, !videos.isEmpty {
             return true
@@ -33,25 +36,17 @@ class DetailedViewController: UIViewController{
     
     @IBOutlet weak var firstReleaseContainer: UIView!
     @IBOutlet weak var firstReleaseLabel: UILabel!
-    
     @IBOutlet weak var statusContainer: UIView!
     @IBOutlet weak var statusLabel: UILabel!
-    
     @IBOutlet weak var categoryContainer: UIView!
     @IBOutlet weak var categoryLabel: UILabel!
-    
-    
     @IBOutlet weak var companyContainer: UIView!
     @IBOutlet weak var companyLabel: UILabel!
-    
     @IBOutlet weak var gameEngineContainer: UIView!
     @IBOutlet weak var gameEngineLabel: UILabel!
-    
-
     @IBOutlet weak var websitesOpeningButton: CategoryShowButton!
     @IBOutlet weak var websitesFlowView: LabelFlowView!
-    
-    
+    @IBOutlet weak var favoritesButtonImage: UIImageView!
     @IBOutlet weak var mediaCounterBackground: UIView!
     @IBOutlet weak var mediaCounterLabel: UILabel!
     @IBOutlet weak var blurredMediaBackground: UIImageView!
@@ -72,6 +67,52 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var franchiseGamesButton: TransferButton!
     @IBOutlet weak var collectionGamesButton: TransferButton!
     
+    @IBAction func shareButtonTapped(_ sender: CustomButton) {
+        performActivity()
+        
+    }
+    
+    private func performActivity(){
+        DispatchQueue.global(qos: .userInteractive).async {
+            let dispatchGroup = DispatchGroup()
+            var activityItems = [Any]()
+
+            
+            if let websiteStr = self.game.websites?.first?.url, let siteUrl = URL(string: websiteStr) {
+                activityItems.append(siteUrl)
+            }
+            
+            if let name = self.game.name {
+                if let description = self.game.summary {
+                    activityItems.append("\(name)\n\n\(description)")
+                } else {
+                    activityItems.append(name)
+                }
+            }
+            
+            dispatchGroup.enter()
+            DispatchQueue.global(qos: .userInteractive).async {
+                if let cover = self.game.cover {
+                    self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true, completion: {
+                        data, error in
+                        if let data = data , let image = UIImage(data: data){
+                            print("Image add")
+                            activityItems.append(image)
+                        }
+                        dispatchGroup.leave()
+                    })
+                } else {
+                    dispatchGroup.leave()
+                }
+            }
+            dispatchGroup.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
+                print("MAIN")
+                let activityVC = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
+                activityVC.isModalInPresentation = true
+                self.present(activityVC, animated: true, completion: nil)
+            }))
+        }
+    }
     
     @IBAction func websitesOpeningButtonTapped(_ sender: CategoryShowButton) {
         UIView.animate(withDuration: 0.3) {
@@ -79,7 +120,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-
+    
     
     @IBAction func similarGamesTapped(_ sender: TransferButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
@@ -96,14 +137,12 @@ class DetailedViewController: UIViewController{
 
     @IBAction func toFavoritesTapped(_ sender: CustomButton) {
 
-        
         if game.inFavorites == true {
-            sender.backgroundColor = .blue
             game.inFavorites = false
         } else {
-            sender.backgroundColor = .black
             game.inFavorites = true
         }
+        updateFavoritesButton(animated: true)
         mediaDispatcher.save(game: game)
     }
     
@@ -123,6 +162,18 @@ class DetailedViewController: UIViewController{
     }
     
     override func viewDidLoad() {
+        setupGameMetadata {
+            success in
+            if success {
+                self.setupUIAfterLoadingGameMetadata()
+            }
+        }
+        setupUI()
+        
+    }
+    
+    private func setupUI(){
+        updateFavoritesButton(animated: false)
         setupNameLabel()
         setupGameAttributesViews()
         setupCover()
@@ -134,6 +185,46 @@ class DetailedViewController: UIViewController{
         setupWebsites()
     }
     
+    
+    
+    private func setupGameMetadata(completion: @escaping (_ success: Bool)->Void){
+        guard let id = game.id else { return }
+        DispatchQueue.global(qos: .userInteractive).async {
+            self.mediaDispatcher.loadGame(with: id) {
+                dbGame, error in
+                if let dbGame = dbGame {
+                    self.game.inFavorites = dbGame.inFavorites
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    private func setupUIAfterLoadingGameMetadata() {
+        updateFavoritesButton(animated: true)
+    }
+    
+    
+    private func updateFavoritesButton(animated: Bool) {
+        DispatchQueue.main.async {
+            let action = {
+                self.favoritesButtonImage.tintColor = (self.game.inFavorites ?? false) ? UIColor.yellow : UIColor.gray
+                
+            }
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .beginFromCurrentState){
+                    action()
+                }
+            } else {
+                action()
+            }
+        }
+    }
+    
+    
+   
     override func viewWillAppear(_ animated: Bool) {
         layoutCover(size: view.frame.size)
         layoutMedia(newWidth: view.frame.width)
@@ -147,8 +238,6 @@ class DetailedViewController: UIViewController{
             mediaCollectionView.contentOffset.x = 0
         }
     }
-    
-    
     
 
     private func setupMedia(){
@@ -265,7 +354,7 @@ class DetailedViewController: UIViewController{
     }
     
     private func layoutMedia(newWidth: CGFloat) {
-        screenshotCollectionViewHeight.constant = newWidth * 500 / 889
+        screenshotCollectionViewHeight.constant = floor(newWidth * 500 / 889) + 1
         mediaCollectionView.collectionViewLayout.invalidateLayout()
     }
     
@@ -313,6 +402,7 @@ class DetailedViewController: UIViewController{
     }
     
     private func setupGameAttributesViews(){
+        
         var gameAttrs: [GameAttributeView] = []
         for genre in game.genres ?? [] {
             let genreAttr = GameAttributeView()
@@ -341,19 +431,20 @@ class DetailedViewController: UIViewController{
     }
    
     private func setupCover(){
-        guard let cover = game.cover, let gameId = game.id else { return }
+        guard let cover = game.cover else { return }
         let viewWidth = view.bounds.width
-        DispatchQueue.global(qos: .userInitiated).async{
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, gameId: gameId, cache: true) {
+        DispatchQueue.global(qos: .userInteractive).async{
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
                 data, error in
                 if let data = data, let image = UIImage(data: data){
                     let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
-                    let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth, image: blurred)
+                    let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth / 2, image: blurred)
+                    let resizedImage = ImageResizer.resizeImageToFit(width: viewWidth, image: image)
                         
                     DispatchQueue.main.async {
                         UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
                             
-                            self.coverView.image = image
+                            self.coverView.image = resizedImage
                         }
                         
                         UIView.transition(with: self.blurredBackground, duration: 0.2, options: .transitionCrossDissolve){
@@ -398,14 +489,11 @@ class DetailedViewController: UIViewController{
 
 extension DetailedViewController: UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        CGSize(width: view.bounds.width, height: view.bounds.height * 500 / 889 )
-        
+        CGSize(width: view.bounds.width, height: view.bounds.width * 500 / 889 )
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updateMediaCounter()
-
     }
 
 }

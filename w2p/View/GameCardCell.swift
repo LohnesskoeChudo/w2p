@@ -49,15 +49,20 @@ class GameCardCell: UICollectionViewCell{
         cv.addTarget(self, action: #selector(touchDown), for: .touchDown)
         cv.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         cv.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
+        cv.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
 
     var touchDownAnimationFinished = true
     
+    
+    
+    
     @objc func touchDown(){
         touchDownAnimationFinished = false
-        UIView.animate(withDuration: 0.1, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
             self.contentView.transform = CGAffineTransform(scaleX: 0.95 , y: 0.95)
+            self.customContent.layer.shadowOpacity = 0.4
         }, completion: {
             _ in
             self.touchDownAnimationFinished = true
@@ -65,8 +70,9 @@ class GameCardCell: UICollectionViewCell{
     }
     
     @objc func touchUp(){
-        UIView.animate(withDuration: 0.1, delay: touchDownAnimationFinished ? 0 : 0.1, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+        UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
+            self.layer.shadowOpacity = 1
         }){ _ in
             self.action?()
         }
@@ -75,8 +81,10 @@ class GameCardCell: UICollectionViewCell{
     @objc func touchDragExit(){
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
             self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
+            self.layer.shadowOpacity = 1
         }
     }
+    
 }
 
 enum CardViewComponentsHeight: CGFloat {

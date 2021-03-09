@@ -30,15 +30,11 @@ class CacheManager{
         privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
     }
     
-    func save(coverData: Data, with cover: Cover, gameId: Int){
+    func save(coverData: Data, with cover: Cover){
         privateMoc.perform {
             let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
             if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
                 cdCover.image = coverData
-                let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
-                let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
-                cdGame.id = Int64(gameId)
-                cdCover.game = cdGame
                 //MARK: -
                 try! self.privateMoc.save()
             }
@@ -100,9 +96,9 @@ class CacheManager{
     
     func saveStaticMedia(data: Data, media: MediaDownloadable, gameId: Int) {
         if let screenshot = media as? Screenshot {
-            saveScreenshot(data: data, with: screenshot, gameId: gameId)
+            saveScreenshot(data: data, with: screenshot)
         } else if let artwork = media as? Artwork {
-            saveArtwork(data: data, with: artwork, gameId: gameId)
+            saveArtwork(data: data, with: artwork)
         }
     }
     
@@ -129,33 +125,34 @@ class CacheManager{
         }
     }
     
-    private func saveScreenshot(data: Data, with screenshot: Screenshot, gameId: Int) {
+    func loadGame(with id: Int, completion: @escaping (Game?, FetchingError?) -> Void){
+        let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
+        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(format: "id == %d", id)
+        if let cdGame = try? self.privateMoc.fetch(fetchRequest).first {
+            let game = Game(cdGame: cdGame)
+            completion(game, nil)
+        } else {
+            completion(nil, .noItemInDb)
+        }
+    }
+    
+    private func saveScreenshot(data: Data, with screenshot: Screenshot) {
         privateMoc.perform {
-            
             let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: self.privateMoc)!
             if let cdScreenshot = CDScreenshot(context: self.privateMoc, entity: screenshotEntity, screenshot: screenshot) {
-                
-                let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
-                let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
-                cdGame.id = Int64(gameId)
                 cdScreenshot.image = data
-                cdGame.addToScreenshots(cdScreenshot)
                 try! self.privateMoc.save()
             }
         }
     }
     
-    private func saveArtwork(data: Data, with artwork: Artwork, gameId: Int) {
+
+    private func saveArtwork(data: Data, with artwork: Artwork) {
         privateMoc.perform {
             let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: self.privateMoc)!
             if let cdArtwork = CDArtwork(context: self.privateMoc, entity: artworkEntity, artwork: artwork) {
-                
-                let gameEntity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
-                let cdGame = CDGame(entity: gameEntity, insertInto: self.privateMoc)
-                cdGame.id = Int64(gameId)
-
                 cdArtwork.image = data
-                cdGame.addToArtworks(cdArtwork)
                 try! self.privateMoc.save()
             }
         }
