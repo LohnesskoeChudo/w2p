@@ -14,13 +14,15 @@ class SearchViewController: GameBrowserController{
    
 
     // MARK: - Outlets
-    @IBOutlet weak var searchBar: UIView!
+    
+    @IBOutlet weak var searchBar: UIVisualEffectView!
     @IBOutlet weak var searchFieldBackground: UIView!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
     
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
+        
         games = []
         gamesSource.clear()
         collectionView.reloadData()
@@ -69,7 +71,6 @@ class SearchViewController: GameBrowserController{
 
     private func setupSearchBar(){
         searchBar.layer.cornerRadius = searchBar.frame.height / 2
-        searchBar.alpha = 0.9
         searchField.delegate = self
         searchFieldBackground.layer.cornerRadius = searchFieldBackground.frame.height / 2
         searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
@@ -92,13 +93,13 @@ class SearchViewController: GameBrowserController{
             if yVelocity > 1000 {
                 if self.searchBar.isHidden {
                     self.searchBar.isHidden = false
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.searchBar.alpha = 0.9
+                    UIView.animate(withDuration: 0.3,delay: 0,options: [.beginFromCurrentState], animations: {
+                        self.searchBar.alpha = 1
                     })
                 }
             } else if yVelocity < -500 {
                 if !self.searchBar.isHidden{
-                    UIView.animate(withDuration: 0.3, animations: {
+                    UIView.animate(withDuration: 0.3,delay: 0,options: [.beginFromCurrentState], animations: {
                         self.searchBar.alpha = 0
                     }, completion: {
                         _ in
@@ -116,7 +117,7 @@ class SearchViewController: GameBrowserController{
         if scrollView.contentOffset.y <= 0{
             self.searchBar.isHidden = false
             UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.alpha = 0.9
+                self.searchBar.alpha = 1
             })
         }
     }

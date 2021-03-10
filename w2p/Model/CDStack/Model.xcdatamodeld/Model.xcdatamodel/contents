@@ -57,7 +57,6 @@
         </uniquenessConstraints>
     </entity>
     <entity name="CDGame" representedClassName=".CDGame" syncable="YES" codeGenerationType="category">
-        <attribute name="aggregatedRating" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <attribute name="cacheDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="category" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="firstReleaseDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -67,6 +66,7 @@
         <attribute name="status" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="storyline" optional="YES" attributeType="String"/>
         <attribute name="summary" optional="YES" attributeType="String"/>
+        <attribute name="totalRating" optional="YES" attributeType="Double" usesScalarValueType="YES"/>
         <relationship name="ageRatings" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDAgeRating" inverseName="game" inverseEntity="CDAgeRating"/>
         <relationship name="artworks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDArtwork" inverseName="game" inverseEntity="CDArtwork"/>
         <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGameCollection" inverseName="games" inverseEntity="CDGameCollection"/>

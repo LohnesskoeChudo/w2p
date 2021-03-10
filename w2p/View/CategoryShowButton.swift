@@ -29,24 +29,25 @@ class CategoryShowButton: UIControl {
         Bundle.main.loadNibNamed("CategoryShowButton", owner: self, options: nil)
         contentView.fixIn(view: self)
         setupActions()
+        imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
     }
     
     func setup(name: String){
         nameLabel.text = name
-        imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
     }
     
     func setupActions(){
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
+        self.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
     @objc func touchUp(){
         self.opened.toggle()
+        FeedbackManager.generateFeedbackForButtonsTapped()
         UIView.animate(withDuration: 0.1, delay: 0.1) {
             self.nameLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
-            self.imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
             if self.opened{
                 self.imageView.transform = CGAffineTransform.identity
             } else {
@@ -63,6 +64,13 @@ class CategoryShowButton: UIControl {
     }
     
     @objc func touchDragExit(){
-        
+        UIView.animate(withDuration: 0.1){
+            self.nameLabel.transform = .identity
+            if self.opened{
+                self.imageView.transform = CGAffineTransform.identity
+            } else {
+                self.imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            }
+        }
     }
 }

@@ -136,9 +136,11 @@ extension GameBrowserController: UICollectionViewDataSource {
     func configureCell(_ cell: GameCardCell, game: Game){
         cell.id = game.id ?? -1
         cell.customContent.label.text = game.name
-        cell.action = { [weak self] in
+        let action = { [weak self] in
             self?.performSegue(withIdentifier: "detailed", sender: game)
+            return
         }
+        cell.setActionToControl(action: action)
     }
     
     func setCoverToCardCell(_ cell: GameCardCell, game: Game){

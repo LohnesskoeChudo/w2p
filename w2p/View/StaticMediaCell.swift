@@ -19,5 +19,7 @@ class StaticMediaCell: UICollectionViewCell {
         id = nil
         staticMediaView.image = nil
     }
+    
+    
 
 }

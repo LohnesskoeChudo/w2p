@@ -162,6 +162,7 @@ class DetailedViewController: UIViewController{
     }
     
     override func viewDidLoad() {
+        print(game.totalRating)
         setupGameMetadata {
             success in
             if success {
@@ -311,13 +312,14 @@ class DetailedViewController: UIViewController{
                 if !websiteButtons.isEmpty {
                     websitesOpeningButton.nameLabel.text = "Websites"
                     setupWebsitesFlow(with: websiteButtons)
-                    websitesFlowView.superview!.isHidden = true
+                    websitesFlowView.superview?.isHidden = true
+                    websitesOpeningButton.superview?.isHidden = true
                     return
                 }
             }
         }
-        websitesOpeningButton.isHidden = true
-        websitesFlowView.superview!.isHidden = true
+        websitesOpeningButton.superview?.isHidden = true
+        websitesFlowView.superview?.isHidden = true
     }
     
     private func setupWebsiteButton(website: Website) -> UIView?{
@@ -406,22 +408,26 @@ class DetailedViewController: UIViewController{
         var gameAttrs: [GameAttributeView] = []
         for genre in game.genres ?? [] {
             let genreAttr = GameAttributeView()
-            genreAttr.setup(text: genre.name ?? "", color: UIColor.red.withAlphaComponent(0.2))
+            let color = ThemeManager.colorForGenreAttribute(trait: traitCollection)
+            genreAttr.setup(text: genre.name ?? "", color: color)
             gameAttrs.append(genreAttr)
         }
         for theme in game.themes ?? [] {
             let themeAttr = GameAttributeView()
-            themeAttr.setup(text: theme.name ?? "", color: UIColor.green.withAlphaComponent(0.2))
+            let color = ThemeManager.colorForThemeAttribute(trait: traitCollection)
+            themeAttr.setup(text: theme.name ?? "", color: color)
             gameAttrs.append(themeAttr)
         }
         for mode in game.gameModes ?? []{
             let modeAttr = GameAttributeView()
-            modeAttr.setup(text: mode.name ?? "", color: UIColor.blue.withAlphaComponent(0.2))
+            let color = ThemeManager.colorForGameModeAttribute(trait: traitCollection)
+            modeAttr.setup(text: mode.name ?? "", color: color)
             gameAttrs.append(modeAttr)
         }
         for platform in game.platforms ?? [] {
             let platformAttr = GameAttributeView()
-            platformAttr.setup(text: platform.name ?? "", color: UIColor.purple.withAlphaComponent(0.2))
+            let color = ThemeManager.colorForPlatformAttribute(trait: traitCollection)
+            platformAttr.setup(text: platform.name ?? "", color: color)
             gameAttrs.append(platformAttr)
         }
         for attrView in gameAttrs{

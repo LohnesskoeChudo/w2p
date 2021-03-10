@@ -33,18 +33,35 @@ class CustomButton: UIControl{
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
+        self.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
+    }
+    
+    var touchDownAnimationFinished = true
+
+    
+    
+    @objc func touchDown(){
+        touchDownAnimationFinished = false
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
+            self.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        }, completion: {
+            _ in
+            self.touchDownAnimationFinished = true
+        })
     }
     
     @objc func touchUp(){
         
-    }
-    
-    @objc func touchDown(){
-        
+        UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
+            FeedbackManager.generateFeedbackForButtonsTapped()
+            self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        })
     }
     
     @objc func touchDragExit(){
-        
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
+            self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        }
     }
     
 }

@@ -11,7 +11,7 @@ class Game: Codable, Equatable{
     var name: String?
     var summary: String?
     var storyline: String?
-    var aggregatedRating: Double?
+    var totalRating: Double?
     var status: Int?
     var category: Int?
     var firstReleaseDate: Date?

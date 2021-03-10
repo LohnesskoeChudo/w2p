@@ -100,7 +100,7 @@ class GameApiRequestItem {
         category,
         summary,
         storyline,
-        aggregated_rating,
+        total_rating,
         status,
         first_release_date,
         similar_games,
@@ -217,15 +217,15 @@ class GameApiRequestItem {
         }
 
         if let aggrRatingUpperBound = filter.ratingUpperBound{
-            filterComponents.append("aggregated_rating <= \(aggrRatingUpperBound)")
+            filterComponents.append("total_rating <= \(aggrRatingUpperBound)")
         }
         
         if let aggrRatingLowerBound = filter.ratingLowerBound{
-            filterComponents.append("aggregated_rating >= \(aggrRatingLowerBound)")
+            filterComponents.append("total_rating >= \(aggrRatingLowerBound)")
         }
             
         if let releaseUpperBound = filter.releaseDateUpperBound{
-            filterComponents.append("first_release_date <= \(Int(releaseUpperBound.timeIntervalSince1970))")
+            filterComponents.append("total_rating <= \(Int(releaseUpperBound.timeIntervalSince1970))")
         }
 
         if let releaseLowerBound = filter.releaseDateLowerBound{

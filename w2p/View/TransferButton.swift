@@ -34,9 +34,11 @@ class TransferButton: UIControl{
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
+        self.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
     @objc func touchUp(){
+        FeedbackManager.generateFeedbackForButtonsTapped()
         UIView.animate(withDuration: 0.1, delay: 0.1, options: [.allowUserInteraction]) {
             self.textLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
@@ -57,8 +59,5 @@ class TransferButton: UIControl{
         }
     }
     
-    override var intrinsicContentSize: CGSize{
-        textLabel.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-    }
     
 }

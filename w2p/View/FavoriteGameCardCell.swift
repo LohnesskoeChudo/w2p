@@ -10,27 +10,35 @@ import UIKit
 class FavoriteGameCardCell: UITableViewCell{
         
     var id: Int = 0
-    static let imageWidth:CGFloat = 50
-    static let imageHeight:CGFloat = 75
+    static let imageWidth:CGFloat = 75
+    static let imageHeight:CGFloat = 100
+    
+    @IBOutlet weak var ratingView: CircularRatingView!
     
     override func awakeFromNib() {
         setupAppearance()
+        setupControl()
     }
     
     @IBOutlet weak var label: UILabel!
 
     @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var container: UIView!
+    @IBOutlet weak var control: CellControlView!
     @IBOutlet weak var gameImageView: UIImageView!
     
     private func setupAppearance(){
         self.clipsToBounds = false
-        container.layer.cornerRadius = 16
-        container.layer.shadowColor = UIColor.darkGray.cgColor
-        container.layer.shadowRadius = 2.5
-        container.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
-        container.layer.shadowOpacity = 1
+        control.layer.cornerRadius = 16
+        if ThemeManager.contentItemsHaveShadows(trait: traitCollection) {
+            control.layer.shadowColor = UIColor.darkGray.cgColor
+            control.layer.shadowRadius = 2.5
+            control.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+            
+            control.layer.shadowOpacity = 1
+        } else {
+            control.layer.shadowOpacity = 0
+        }
         gameImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         gameImageView.layer.cornerRadius = 16
         
@@ -38,10 +46,32 @@ class FavoriteGameCardCell: UITableViewCell{
         imageHeightConstraint.constant = Self.imageHeight
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setupAppearance()
+    }
+    
+    func setupRatingView(with rating: Double?) {
+        if let rating = rating, rating > 0{
+            ratingView.rating = rating
+        } else {
+            ratingView.isHidden = true
+        }
+    }
+    
+    func setActionToControl(action: @escaping () -> Void) {
+        control.action = action
+    }
+    
+    private func setupControl(){
+        control.cell = self
+        control.viewToAnimate = control
+    }
+    
 
     override func prepareForReuse() {
         gameImageView.image = nil
         label.text = nil
         id = 0
+        ratingView.isHidden = false
     }
 }

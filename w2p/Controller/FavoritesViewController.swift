@@ -49,7 +49,6 @@ class FavoritesViewController: UIViewController{
     }
     
     private func setupTableView(){
-        tableView.delegate = self
         tableView.dataSource = self
     }
 }
@@ -72,6 +71,7 @@ extension FavoritesViewController: UITableViewDataSource{
     private func setup(_ cell: FavoriteGameCardCell, with game: Game) {
         cell.label.text = game.name
         cell.id = game.id ?? 0
+        cell.setupRatingView(with: game.totalRating)
         loadImage(for: cell, game: game)
     }
     
@@ -101,6 +101,4 @@ extension FavoritesViewController: UITableViewDataSource{
     }
 }
 
-extension FavoritesViewController: UITableViewDelegate{
-    
-}
+

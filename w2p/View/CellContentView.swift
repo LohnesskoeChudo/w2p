@@ -24,9 +24,10 @@ class CellContentView: UIView {
         commonInit()
     }
     
-    func commonInit(){
+    private func commonInit(){
         Bundle.main.loadNibNamed("CellContentView", owner: self, options: nil)
         contentView.fixIn(view: self)
     }
+
 }
     

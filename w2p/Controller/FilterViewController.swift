@@ -257,7 +257,8 @@ class FilterViewController: UIViewController {
         for genre in SearchFilter.allGenres.shuffled(){
             guard let name = genre.name, let id = genre.id else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: name, color: UIColor.purple, selectedNow: filter.genres.contains(genre))
+            let color = ThemeManager.colorForGenreAttribute(trait: traitCollection)
+            attrView.setup(text: name, color: color, selectedNow: filter.genres.contains(genre))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(genreTapped), for: .touchUpInside)
             attrView.tag = id
@@ -267,7 +268,8 @@ class FilterViewController: UIViewController {
         for theme in SearchFilter.allThemes.shuffled(){
             guard let name = theme.name, let id = theme.id else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: name, color: UIColor.green, selectedNow: filter.themes.contains(theme))
+            let color = ThemeManager.colorForThemeAttribute(trait: traitCollection)
+            attrView.setup(text: name, color: color, selectedNow: filter.themes.contains(theme))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(themeTapped), for: .touchUpInside)
             attrView.tag = id
@@ -277,7 +279,8 @@ class FilterViewController: UIViewController {
         for platform in SearchFilter.mainPlatforms.shuffled(){
             guard let id = platform.id, let name = platform.name else {continue}
             let attrView = GameAttributeView()
-            attrView.setup(text: name, color: UIColor.brown, selectedNow: filter.platforms.contains(platform))
+            let color = ThemeManager.colorForPlatformAttribute(trait: traitCollection)
+            attrView.setup(text: name, color: color, selectedNow: filter.platforms.contains(platform))
             attrView.setupActions()
             attrView.addTarget(self, action: #selector(platformTapped), for: .touchUpInside)
             attrView.tag = id

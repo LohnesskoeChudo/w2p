@@ -22,8 +22,8 @@ class CDGame: NSManagedObject{
         if let storyline = game.storyline { self.storyline = storyline }
         if let category = game.category { self.category = Int64(category) }
         if let status = game.status { self.status = Int64(status)}
-        if let aggregatedRating = game.aggregatedRating { self.aggregatedRating = aggregatedRating }
-        
+        if let totalRating = game.totalRating { self.totalRating = totalRating
+        }
         print(game.inFavorites)
         if let inFavorites = game.inFavorites {
             self.inFavorites = inFavorites
@@ -111,6 +111,7 @@ extension Game {
         self.cacheDate = cdGame.cacheDate
         self.inFavorites = cdGame.inFavorites
         self.category = Int(cdGame.category)
+        self.totalRating = cdGame.totalRating
         
         if let cdCover = cdGame.cover {
             self.cover = Cover(cdCover: cdCover)

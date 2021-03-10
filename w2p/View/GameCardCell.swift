@@ -9,20 +9,27 @@ import UIKit
 
 class GameCardCell: UICollectionViewCell{
         
-    
-    var reusing: Bool = false
-    var action: (() -> Void)?
+    var reusing = false
     var id: Int = 0
     
     override func awakeFromNib() {
         setupAppearance()
-        setupActionsForEvents()
         contentView.isExclusiveTouch = true
         contentView.fixIn(view: self)
-
+        setupControl()
     }
     
-
+    func setActionToControl(action: @escaping () -> Void ){
+        let control = contentView as! CellControlView
+        control.action = action
+    }
+    
+    private func setupControl(){
+        let control = contentView as! CellControlView
+        control.cell = self
+        control.viewToAnimate = customContent
+    }
+    
     @IBOutlet weak var customContent: CellContentView!
     
         
@@ -35,56 +42,20 @@ class GameCardCell: UICollectionViewCell{
     private func setupAppearance(){
         self.clipsToBounds = false
         self.contentView.layer.cornerRadius = 16
-        self.layer.shadowColor = UIColor.darkGray.cgColor
-        self.layer.shadowRadius = 2.5
-        self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
-        self.layer.shadowOpacity = 1
-    }
-    
-    private func setupActionsForEvents(){
-        for subview in contentView.subviews{
-            subview.isUserInteractionEnabled = false
+        if ThemeManager.contentItemsHaveShadows(trait: traitCollection) {
+            self.layer.shadowColor = UIColor.darkGray.cgColor
+            self.layer.shadowRadius = 2.5
+            self.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+            self.layer.shadowOpacity = 1
+        } else {
+            self.layer.shadowOpacity = 0
         }
-        let cv = contentView as! UIControl
-        cv.addTarget(self, action: #selector(touchDown), for: .touchDown)
-        cv.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
-        cv.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
-        cv.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setupAppearance()
+    }
 
-    var touchDownAnimationFinished = true
-    
-    
-    
-    
-    @objc func touchDown(){
-        touchDownAnimationFinished = false
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
-            self.contentView.transform = CGAffineTransform(scaleX: 0.95 , y: 0.95)
-            self.customContent.layer.shadowOpacity = 0.4
-        }, completion: {
-            _ in
-            self.touchDownAnimationFinished = true
-        })
-    }
-    
-    @objc func touchUp(){
-        UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
-            self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
-            self.layer.shadowOpacity = 1
-        }){ _ in
-            self.action?()
-        }
-    }
-    
-    @objc func touchDragExit(){
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
-            self.contentView.transform = CGAffineTransform(scaleX: 1 , y: 1)
-            self.layer.shadowOpacity = 1
-        }
-    }
-    
 }
 
 enum CardViewComponentsHeight: CGFloat {
