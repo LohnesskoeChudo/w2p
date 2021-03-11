@@ -14,6 +14,17 @@ class FavoritesViewController: UIViewController{
     var games: [Game] = []
     
     
+    @IBAction func searchFieldValueChanged(_ sender: UITextField) {
+        
+        
+    }
+    
+    
+    @IBAction func resetTapped(_ sender: CustomButton) {
+    }
+    
+    @IBOutlet weak var resetButton: CustomButton!
+    @IBOutlet weak var messageTextLabel: UILabel!
     @IBOutlet weak var searchBar: UIView!
     @IBOutlet weak var searchTextFieldBackground: UIView!
     @IBOutlet weak var searchTextField: UITextField!
@@ -22,41 +33,88 @@ class FavoritesViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        setupAppearance()
+    }
+    
+    private func setupAppearance(){
+        resetButton.setup(colorPressed: UIColor.lightGray.withAlphaComponent(0.15), colorReleazed: UIColor.lightGray.withAlphaComponent(0.3))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupSearchBar()
         captureFavorites()
+        setupSearchBar()
     }
     
-    private func captureFavorites() {
-        hideGames()
-        startLoadingAnimation()
-        mediaDispatcher.loadFavoriteGames{
+    private func captureFavorites(with search: String? = nil) {
+        searchBar.isHidden = true
+        hideInfoMessage(animated: false)
+        cleanGames()
+        self.mediaDispatcher.loadFavoriteGames{
             games in
-            if let games = games {
-                guard self.games != games else {
-                    self.endLoadingAnimation()
-                    self.showEmptyResultMessage()
-                    return
+            if let games = games, !games.isEmpty {
+                
+                self.games = games
+                if let searchRequest = search {
+                    self.filterGames(search: searchRequest)
                 }
                 
-                if !games.isEmpty {
-                    self.games = games
-                    self.prepareGamesForShowing(completion: self.endLoadingAnimation)
-                    self.showGames()
+                if !self.games.isEmpty {
+                    self.prepareGamesForShowing(completion: self.showGames)
                 } else {
-                    self.endLoadingAnimation()
                     self.showEmptyResultMessage()
                 }
+                
+            } else {
+                self.showNoFavoritesAtAllMessage()
             }
         }
     }
     
+    private func filterGames(search: String){
+        
+    }
+    
+    private func cleanGames(){
+        games = []
+        tableView.reloadData()
+        tableView.isScrollEnabled = false
+    }
     
     private func showEmptyResultMessage(){
-        
+        showInfo(message: "No results")
+    }
+    
+    private func showNoFavoritesAtAllMessage(){
+        showInfo(message: "You have no games in favorites yet")
+    }
+    
+    private func showInfo(message: String) {
+        DispatchQueue.main.async {
+            self.messageTextLabel.text = message
+            self.messageTextLabel.isHidden = false
+            UIView.animate(withDuration: 0.3){
+                self.messageTextLabel.alpha = 1
+            }
+        }
+
+    }
+    
+    private func hideInfoMessage(animated: Bool, completion: (() -> Void)? = nil){
+        let action = {
+            self.messageTextLabel.alpha = 0
+        }
+        if animated {
+            UIView.animate(withDuration: 0.3, animations: action) {
+                _ in
+                self.messageTextLabel.isHidden = true
+                completion?()
+            }
+        } else {
+            action()
+            self.messageTextLabel.isHidden = true
+            completion?()
+        }
     }
     
     
@@ -70,6 +128,7 @@ class FavoritesViewController: UIViewController{
     
 
     private func prepareGamesForShowing(completion: () -> Void){
+        DispatchQueue.main.async { self.tableView.isScrollEnabled = true }
         self.games.sort{
             fGame, sGame in
             if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
@@ -77,18 +136,15 @@ class FavoritesViewController: UIViewController{
             }
             return true
         }
+        completion()
     }
-    
-    private func hideGames(){
-        tableView.alpha = 0
-    }
-    
+
     private func showGames(){
         DispatchQueue.main.async {
-            self.tableView.reloadData()
-            UIView.animate(withDuration: 0.2) {
-                self.tableView.alpha = 1
-            }
+            self.searchBar.isHidden = false
+            UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.tableView.reloadData()
+            }, completion: nil )
         }
     }
     

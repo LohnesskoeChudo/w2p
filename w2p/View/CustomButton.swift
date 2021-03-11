@@ -9,19 +9,29 @@ import UIKit
 
 class CustomButton: UIControl{
     
+    var colorForPressedState: UIColor = UIColor.black.withAlphaComponent(0.6)
+    var colorForReleasedState: UIColor = UIColor.black.withAlphaComponent(0.3)
+    
     override init(frame: CGRect){
         super.init(frame: frame)
-        customInit()
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        customInit()
+        commonInit()
     }
     
-    func customInit(){
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+    func setup(colorPressed: UIColor, colorReleazed: UIColor) {
+        self.colorForPressedState = colorPressed
+        self.colorForReleasedState = colorReleazed
+        self.backgroundColor = colorReleazed
+        
+    }
+    
+    private func commonInit(){
         setActions()
+        self.backgroundColor = colorForReleasedState
     }
     
     override func layoutSubviews() {
@@ -43,7 +53,7 @@ class CustomButton: UIControl{
     @objc func touchDown(){
         touchDownAnimationFinished = false
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
-            self.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            self.backgroundColor = self.colorForPressedState
         }, completion: {
             _ in
             self.touchDownAnimationFinished = true
@@ -54,13 +64,13 @@ class CustomButton: UIControl{
         
         UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             FeedbackManager.generateFeedbackForButtonsTapped()
-            self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.backgroundColor = self.colorForReleasedState
         })
     }
     
     @objc func touchDragExit(){
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
-            self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            self.backgroundColor = self.colorForReleasedState
         }
     }
     

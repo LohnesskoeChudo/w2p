@@ -53,6 +53,7 @@
 		5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01B325DB157400FF2C1C /* BinarySearch.swift */; };
 		5DDAFB8D25F0C76400315340 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAFB8C25F0C76400315340 /* Array+.swift */; };
 		5DDCFB2025F9F0F2001DFAF1 /* LineRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDCFB1F25F9F0F2001DFAF1 /* LineRatingView.swift */; };
+		5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */; };
 		5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */; };
 		5DE071CF25E91FB300526BE8 /* SimilarGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */; };
 		5DE47E1025E63AA900439FB7 /* TransferButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E0F25E63AA900439FB7 /* TransferButton.xib */; };
@@ -131,6 +132,7 @@
 		5DDA01B325DB157400FF2C1C /* BinarySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinarySearch.swift; sourceTree = "<group>"; };
 		5DDAFB8C25F0C76400315340 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
 		5DDCFB1F25F9F0F2001DFAF1 /* LineRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineRatingView.swift; sourceTree = "<group>"; };
+		5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Boyer-Moore.swift"; sourceTree = "<group>"; };
 		5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleSlider.swift; sourceTree = "<group>"; };
 		5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarGamesController.swift; sourceTree = "<group>"; };
 		5DE47E0F25E63AA900439FB7 /* TransferButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransferButton.xib; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				5DDA01B325DB157400FF2C1C /* BinarySearch.swift */,
 				5D33CBF125EE0FE300377372 /* FIFO.swift */,
 				5D33CBF425EE10D000377372 /* LinkedList.swift */,
+				5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */,
 			);
 			path = "Algorithms and DS's";
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				5D023CDF25E1AFAA003B04CD /* CDGameCollection.swift in Sources */,
 				5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */,
 				5DC4751825F8B4C700412048 /* CircularRatingView.swift in Sources */,
+				5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */,
 				5DD5EFF525DCE6F8000513BB /* Model.xcdatamodeld in Sources */,
 				5DDCFB2025F9F0F2001DFAF1 /* LineRatingView.swift in Sources */,
 				5DCB518425F38D4700079006 /* CDCompany.swift in Sources */,
