@@ -16,15 +16,18 @@ class GameAttributeView: UIControl{
     var attrSelected: Bool = false
     var backColor: UIColor!
     
-    func setup(text: String, color: UIColor, selectedNow: Bool? = false){
-        attrSelected = selectedNow ?? false
-        backColor = color
-        if attrSelected{
-            backgroundColor = UIColor.red.withAlphaComponent(0.5)
-        } else {
-            backgroundColor = backColor
-        }
-        label.text = text
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
         label.font = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
         addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -32,6 +35,18 @@ class GameAttributeView: UIControl{
             label.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             label.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
+    }
+    
+    
+    func setup(text: String, color: UIColor, selectedNow: Bool? = false){
+        attrSelected = selectedNow ?? false
+        backColor = color
+        if attrSelected{
+        } else {
+            backgroundColor = backColor
+        }
+        label.text = text
+
     }
     
     override func layoutSubviews() {
@@ -47,6 +62,7 @@ class GameAttributeView: UIControl{
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(dragExit), for: .touchDragExit)
+        self.addTarget(self, action: #selector(dragExit), for: .touchCancel)
     }
     
     @objc func touchUp() {

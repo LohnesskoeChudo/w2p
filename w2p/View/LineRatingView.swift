@@ -77,7 +77,7 @@ class LineRatingView: UIView {
         let backYOffset = (frame.height - frame.height * 0.8) / 2
         backRatingView.frame = CGRect(x: labelContainerWidth + spacing, y: backYOffset, width: ratingBackWidth, height: frame.height * 0.8)
 
-        let ratingWidth: CGFloat = (CGFloat(rating) / 100) * (backRatingView.frame.width - 2 * ratingViewPadding)
+        let ratingWidth: CGFloat = max((CGFloat(rating) / 100) * (backRatingView.frame.width - 2 * ratingViewPadding), 2 * insCornerRadius)
         let ratingHeight: CGFloat = backRatingView.frame.height - 2 * ratingViewPadding
         
         ratingView.frame = CGRect(x: ratingViewPadding, y: ratingViewPadding, width: ratingWidth, height: ratingHeight )

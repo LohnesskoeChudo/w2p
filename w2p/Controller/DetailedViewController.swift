@@ -310,6 +310,7 @@ class DetailedViewController: UIViewController{
     }
     
     private func setupWebsites(){
+        websitesFlowView.superview?.isHidden = true
         if let sites = game.websites {
             if !sites.isEmpty {
                 var websiteButtons = [UIView]()
@@ -321,14 +322,12 @@ class DetailedViewController: UIViewController{
                 if !websiteButtons.isEmpty {
                     websitesOpeningButton.nameLabel.text = "Websites"
                     setupWebsitesFlow(with: websiteButtons)
-                    websitesFlowView.superview?.isHidden = true
-                    websitesOpeningButton.superview?.isHidden = true
+                    websitesOpeningButton.superview?.isHidden = false
                     return
                 }
             }
         }
         websitesOpeningButton.superview?.isHidden = true
-        websitesFlowView.superview?.isHidden = true
     }
     
     private func setupWebsiteButton(website: Website) -> UIView?{
@@ -413,7 +412,9 @@ class DetailedViewController: UIViewController{
     }
     
     private func setupGameAttributesViews(){
-        
+        for subview in attributesFlowView.subviews {
+            subview.removeFromSuperview()
+        }
         var gameAttrs: [GameAttributeView] = []
         for genre in game.genres ?? [] {
             let genreAttr = GameAttributeView()
@@ -445,6 +446,11 @@ class DetailedViewController: UIViewController{
         }
     }
    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setupGameAttributesViews()
+    }
+    
+    
     private func setupCover(){
         guard let cover = game.cover else { return }
         let viewWidth = view.bounds.width

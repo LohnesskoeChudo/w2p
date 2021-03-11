@@ -10,10 +10,14 @@ import UIKit
 class FavoriteGameCardCell: UITableViewCell{
         
     var id: Int = 0
-    static let imageWidth:CGFloat = 75
-    static let imageHeight:CGFloat = 100
+    static let imageWidth:CGFloat = 80
+    static let imageHeight:CGFloat = 110
     
     @IBOutlet weak var ratingView: CircularRatingView!
+    
+    
+    
+    @IBOutlet weak var genreAttributeVIew: GameAttributeView!
     
     override func awakeFromNib() {
         setupAppearance()
@@ -45,6 +49,10 @@ class FavoriteGameCardCell: UITableViewCell{
         imageWidthConstraint.constant = Self.imageWidth
         imageHeightConstraint.constant = Self.imageHeight
     }
+    
+    
+    
+    
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setupAppearance()

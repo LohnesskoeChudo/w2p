@@ -22,7 +22,7 @@ class SearchViewController: GameBrowserController{
     
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
-        
+        FeedbackManager.generateFeedbackForButtonsTapped()
         games = []
         gamesSource.clear()
         collectionView.reloadData()
@@ -33,7 +33,7 @@ class SearchViewController: GameBrowserController{
     }
     
     @IBAction func filterTapped(_ sender: UIButton) {
-
+        FeedbackManager.generateFeedbackForButtonsTapped()
     }
     
     @IBAction func searchFieldEditingChanged(_ sender: UITextField) {
@@ -73,7 +73,7 @@ class SearchViewController: GameBrowserController{
         searchBar.layer.cornerRadius = searchBar.frame.height / 2
         searchField.delegate = self
         searchFieldBackground.layer.cornerRadius = searchFieldBackground.frame.height / 2
-        searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
     private func setupButtons(){

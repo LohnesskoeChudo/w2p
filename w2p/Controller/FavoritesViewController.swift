@@ -14,6 +14,9 @@ class FavoritesViewController: UIViewController{
     var games: [Game] = []
     
     
+    @IBOutlet weak var searchBar: UIView!
+    @IBOutlet weak var searchTextFieldBackground: UIView!
+    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -23,33 +26,82 @@ class FavoritesViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        setupSearchBar()
         captureFavorites()
     }
     
     private func captureFavorites() {
+        hideGames()
+        startLoadingAnimation()
         mediaDispatcher.loadFavoriteGames{
             games in
-            if var games = games {
-                guard self.games != games else {return}
-                games.sort{
-                    fGame, sGame in
-                    if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
-                        return fd < sd
-                    }
-                    return true
+            if let games = games {
+                guard self.games != games else {
+                    self.endLoadingAnimation()
+                    self.showEmptyResultMessage()
+                    return
                 }
-                DispatchQueue.main.async {
+                
+                if !games.isEmpty {
                     self.games = games
-                    UIView.animate(withDuration: 0.2) {
-                        self.tableView.reloadData()
-                    }
+                    self.prepareGamesForShowing(completion: self.endLoadingAnimation)
+                    self.showGames()
+                } else {
+                    self.endLoadingAnimation()
+                    self.showEmptyResultMessage()
                 }
+            }
+        }
+    }
+    
+    
+    private func showEmptyResultMessage(){
+        
+    }
+    
+    
+    
+    private func setupSearchBar(){
+        searchBar.layer.cornerRadius = searchBar.frame.height / 2
+        searchTextField.delegate = self
+        searchTextFieldBackground.layer.cornerRadius = searchTextFieldBackground.frame.height / 2
+        searchTextFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+    }
+    
+
+    private func prepareGamesForShowing(completion: () -> Void){
+        self.games.sort{
+            fGame, sGame in
+            if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
+                return fd < sd
+            }
+            return true
+        }
+    }
+    
+    private func hideGames(){
+        tableView.alpha = 0
+    }
+    
+    private func showGames(){
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            UIView.animate(withDuration: 0.2) {
+                self.tableView.alpha = 1
             }
         }
     }
     
     private func setupTableView(){
         tableView.dataSource = self
+    }
+    
+    private func startLoadingAnimation(){
+        
+    }
+    
+    private func endLoadingAnimation(){
+        
     }
 }
 
@@ -102,3 +154,16 @@ extension FavoritesViewController: UITableViewDataSource{
 }
 
 
+extension FavoritesViewController: UITableViewDelegate{
+    
+    
+    
+}
+
+extension FavoritesViewController: UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
