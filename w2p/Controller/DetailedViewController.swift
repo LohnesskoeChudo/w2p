@@ -33,6 +33,7 @@ class DetailedViewController: UIViewController{
     
     
     
+    @IBOutlet weak var ratingVIew: LineRatingView!
     
     @IBOutlet weak var firstReleaseContainer: UIView!
     @IBOutlet weak var firstReleaseLabel: UILabel!
@@ -176,6 +177,7 @@ class DetailedViewController: UIViewController{
     private func setupUI(){
         updateFavoritesButton(animated: false)
         setupNameLabel()
+        setupRating()
         setupGameAttributesViews()
         setupCover()
         setupSummaryLabel()
@@ -187,6 +189,13 @@ class DetailedViewController: UIViewController{
     }
     
     
+    private func setupRating(){
+        if let rating = game.totalRating, rating > 0 {
+            ratingVIew.rating = rating
+        } else {
+            ratingVIew.superview?.isHidden = true
+        }
+    }
     
     private func setupGameMetadata(completion: @escaping (_ success: Bool)->Void){
         guard let id = game.id else { return }
@@ -562,6 +571,11 @@ extension DetailedViewController: UICollectionViewDataSource{
             }
         }
     }
+    
+    
+    
+    
+    
 }
 
 enum BrowserGameCategory {

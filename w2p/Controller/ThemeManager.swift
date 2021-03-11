@@ -71,7 +71,7 @@ class ThemeManager {
     static func colorForUIelementsBackground(trait: UITraitCollection) -> UIColor{
         switch trait.userInterfaceStyle {
         case .dark:
-            return #colorLiteral(red: 0.2081218274, green: 0.2081218274, blue: 0.2081218274, alpha: 1)
+            return #colorLiteral(red: 0.2056828997, green: 0.2056828997, blue: 0.2056828997, alpha: 1)
         default:
             return #colorLiteral(red: 0.7868020305, green: 0.7868020305, blue: 0.7868020305, alpha: 1)
         }

@@ -10,7 +10,7 @@ import UIKit
 class CellControlView: UIControl {
     
     var action: (() -> Void)?
-    weak var cell: UIView?
+    weak var container: UIView?
     weak var viewToAnimate: UIView?
     
     required init?(coder: NSCoder) {
@@ -37,7 +37,7 @@ class CellControlView: UIControl {
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
             self.viewToAnimate?.alpha = 0.6
             if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection) {
-                self.cell?.layer.shadowOpacity = 0.5
+                self.container?.layer.shadowOpacity = 0.5
             }
         }, completion: {
             _ in
@@ -51,7 +51,7 @@ class CellControlView: UIControl {
         UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             self.viewToAnimate?.alpha = 1
             if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection){
-                self.cell?.layer.shadowOpacity = 1
+                self.container?.layer.shadowOpacity = 1
             }
         })
     }
@@ -60,7 +60,7 @@ class CellControlView: UIControl {
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
             self.viewToAnimate?.alpha = 1
             if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection){
-                self.cell?.layer.shadowOpacity = 1
+                self.container?.layer.shadowOpacity = 1
             }}
     }
     

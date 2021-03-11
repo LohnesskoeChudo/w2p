@@ -26,7 +26,7 @@ class GameCardCell: UICollectionViewCell{
     
     private func setupControl(){
         let control = contentView as! CellControlView
-        control.cell = self
+        control.container = self
         control.viewToAnimate = customContent
     }
     

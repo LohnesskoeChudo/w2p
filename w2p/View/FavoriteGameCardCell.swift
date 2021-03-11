@@ -63,7 +63,7 @@ class FavoriteGameCardCell: UITableViewCell{
     }
     
     private func setupControl(){
-        control.cell = self
+        control.container = control
         control.viewToAnimate = control
     }
     
