@@ -9,8 +9,8 @@ import UIKit
 
 class CustomButton: UIControl{
     
-    var colorForPressedState: UIColor = UIColor.black.withAlphaComponent(0.6)
-    var colorForReleasedState: UIColor = UIColor.black.withAlphaComponent(0.3)
+    var colorForPressedState: UIColor = UIColor.black.withAlphaComponent(0.3)
+    var colorForReleasedState: UIColor = UIColor.black.withAlphaComponent(0.6)
     
     override init(frame: CGRect){
         super.init(frame: frame)

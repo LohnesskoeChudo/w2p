@@ -12,15 +12,18 @@ class FavoritesViewController: UIViewController{
     var favoritesFilter = SearchFilter()
     var mediaDispatcher = GameMediaDispatcher()
     var games: [Game] = []
+    var allFavoriteGames: [Game] = []
     
     
-    @IBAction func searchFieldValueChanged(_ sender: UITextField) {
-        
-        
+    
+    @IBAction func searchTapped(_ sender: UIButton) {
+        FeedbackManager.generateFeedbackForButtonsTapped()
+        captureFavorites(animated: true, with: searchTextField.text)
     }
     
-    
+
     @IBAction func resetTapped(_ sender: CustomButton) {
+        captureFavorites(animated: true)
     }
     
     @IBOutlet weak var resetButton: CustomButton!
@@ -42,50 +45,78 @@ class FavoritesViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        captureFavorites()
+        captureFavorites(animated: false)
         setupSearchBar()
     }
     
-    private func captureFavorites(with search: String? = nil) {
-        searchBar.isHidden = true
-        hideInfoMessage(animated: false)
-        cleanGames()
-        self.mediaDispatcher.loadFavoriteGames{
-            games in
-            if let games = games, !games.isEmpty {
-                
-                self.games = games
-                if let searchRequest = search {
-                    self.filterGames(search: searchRequest)
-                }
-                
-                if !self.games.isEmpty {
-                    self.prepareGamesForShowing(completion: self.showGames)
+    private func captureFavorites( animated: Bool, with search: String? = nil) {
+        searchBar.isHidden = false
+        hideInfoMessage(animated: animated)
+        cleanGames(animated: animated){
+            self.mediaDispatcher.loadFavoriteGames{
+                games in
+                if let games = games, !games.isEmpty {
+    
+                    self.allFavoriteGames = games
+    
+                    if let searchRequest = search {
+                        self.filterGames(search: searchRequest)
+                    } else {
+                        self.games = self.allFavoriteGames
+                    }
+    
+                    if !self.games.isEmpty {
+                        self.prepareGamesForShowing(completion: self.showGames)
+                    } else {
+                        self.showEmptyResultMessage()
+                    }
+    
                 } else {
-                    self.showEmptyResultMessage()
+                    self.showNoFavoritesAtAllMessage()
                 }
-                
-            } else {
-                self.showNoFavoritesAtAllMessage()
             }
         }
     }
     
     private func filterGames(search: String){
-        
+        self.games = []
+        let search = search.lowercased()
+        for game in allFavoriteGames{
+            if let name = game.name, name.lowercased().index(of: search) != nil {
+                self.games.append(game)
+            }
+        }
     }
     
-    private func cleanGames(){
+    private func cleanGames(animated: Bool, completion: @escaping () -> Void ){
+        allFavoriteGames = []
         games = []
-        tableView.reloadData()
+        let action = { self.tableView.reloadData() }
+        if animated {
+            UIView.transition(with: tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                action()
+            }) {
+                _ in
+                completion()
+            }
+        } else {
+            action()
+            completion()
+        }
         tableView.isScrollEnabled = false
     }
     
     private func showEmptyResultMessage(){
+        DispatchQueue.main.async {
+            self.searchBar.isHidden = false
+        }
         showInfo(message: "No results")
     }
     
     private func showNoFavoritesAtAllMessage(){
+        DispatchQueue.main.async {
+            self.searchBar.isHidden = true
+        }
         showInfo(message: "You have no games in favorites yet")
     }
     
