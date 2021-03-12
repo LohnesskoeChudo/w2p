@@ -28,7 +28,15 @@ class SearchViewController: GameBrowserController{
         collectionView.reloadData()
         currentOffset = 0
         gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: searchFilter, limit: 500)
-        loadGames(withAnimation: true)
+        loadGames(withAnimation: true) {
+            gamesIsNotEmpty in
+            if gamesIsNotEmpty {
+                self.panGestureRecognizer.isEnabled = true
+                
+            } else {
+                self.panGestureRecognizer.isEnabled = false
+            }
+        }
         currentOffset += gamesPerRequest
     }
     
@@ -84,6 +92,7 @@ class SearchViewController: GameBrowserController{
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
         panGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(panGestureRecognizer)
+        panGestureRecognizer.isEnabled = false
     }
     
     @objc func pan(sender: UIPanGestureRecognizer){

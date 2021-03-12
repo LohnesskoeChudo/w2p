@@ -24,6 +24,7 @@ class FavoritesViewController: UIViewController{
 
     @IBAction func resetTapped(_ sender: CustomButton) {
         captureFavorites(animated: true)
+        searchTextField.text = ""
     }
     
     @IBOutlet weak var resetButton: CustomButton!
@@ -56,15 +57,12 @@ class FavoritesViewController: UIViewController{
             self.mediaDispatcher.loadFavoriteGames{
                 games in
                 if let games = games, !games.isEmpty {
-    
                     self.allFavoriteGames = games
-    
                     if let searchRequest = search {
                         self.filterGames(search: searchRequest)
                     } else {
                         self.games = self.allFavoriteGames
                     }
-    
                     if !self.games.isEmpty {
                         self.prepareGamesForShowing(completion: self.showGames)
                     } else {
@@ -128,7 +126,6 @@ class FavoritesViewController: UIViewController{
                 self.messageTextLabel.alpha = 1
             }
         }
-
     }
     
     private func hideInfoMessage(animated: Bool, completion: (() -> Void)? = nil){
@@ -148,8 +145,6 @@ class FavoritesViewController: UIViewController{
         }
     }
     
-    
-    
     private func setupSearchBar(){
         searchBar.layer.cornerRadius = searchBar.frame.height / 2
         searchTextField.delegate = self
@@ -157,7 +152,6 @@ class FavoritesViewController: UIViewController{
         searchTextFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-
     private func prepareGamesForShowing(completion: () -> Void){
         DispatchQueue.main.async { self.tableView.isScrollEnabled = true }
         self.games.sort{
@@ -181,14 +175,6 @@ class FavoritesViewController: UIViewController{
     
     private func setupTableView(){
         tableView.dataSource = self
-    }
-    
-    private func startLoadingAnimation(){
-        
-    }
-    
-    private func endLoadingAnimation(){
-        
     }
 }
 
@@ -240,12 +226,6 @@ extension FavoritesViewController: UITableViewDataSource{
     }
 }
 
-
-extension FavoritesViewController: UITableViewDelegate{
-    
-    
-    
-}
 
 extension FavoritesViewController: UITextFieldDelegate{
     

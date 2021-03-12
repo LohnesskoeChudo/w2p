@@ -22,26 +22,80 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var currentOffset = 0
     var feedStep = 50
     var gamesPerRequest = 500
+    var isLoading = false
 
-    // MARK: - Outlets
+    // MARK: - Outets
     @IBOutlet weak var collectionView: UICollectionView!
 
-    func loadGames(withAnimation: Bool){
+    func loadGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil){
+        isLoading = true
+        if games.isEmpty { collectionView.isScrollEnabled = false }
         guard let gameApiRequestItem = gameApiRequestItem else { return }
         let request = RequestFormer.shared.formRequest(with: gameApiRequestItem)
         
-        let completion = {
+        let action = {
             (games: [Game]?, error: NetworkError?) in
-            if let games = games {
+            if let games = games, !games.isEmpty {
                 self.gamesSource.push(array: games)
-                self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation)
-                if !games.isEmpty {
-                    self.currentOffset += self.gamesPerRequest
-                    self.gameApiRequestItem?.offset = self.currentOffset
+                self.endAnimationsLoading(){
+                    
+                    self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
+                        
+                        completion?(true)
+                        self.collectionView.isScrollEnabled = true
+                        self.isLoading = false
+                    }
+
+                }
+                self.currentOffset += self.gamesPerRequest
+                self.gameApiRequestItem?.offset = self.currentOffset
+                return
+            }
+            
+            self.endAnimationsLoading{
+                self.showNoResultMessageIfNeeded(){
+                    completion?(false)
+                    self.isLoading = false
                 }
             }
         }
-        jsonLoader.load(request: request, completion: completion)
+        
+        
+        startAnimationLoading(){
+            self.jsonLoader.load(request: request, completion: action)
+        }
+    }
+    
+    private func showInfoMessage(){
+        
+    }
+    
+    private func showNoResultMessageIfNeeded(completion: (()->Void)? = nil){
+        
+    }
+    
+    private func hideInfoMessages(withAnimation: Bool, completion: (()->Void)? = nil ){
+        
+    }
+    
+    private func startAnimationLoading(completion: (()->Void)? = nil){
+        if games.isEmpty {
+            startAnimationLoadingWithNoItems(completion: completion)
+        } else {
+            startAnimationLoadingWithItems(completion: completion)
+        }
+    }
+    
+    private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
+        
+    }
+    
+    private func startAnimationLoadingWithItems(completion: (()->Void)? = nil){
+        
+    }
+    
+    private func endAnimationsLoading(completion: (()->Void)? = nil){
+        
     }
 
     override func viewDidLoad() {
@@ -62,18 +116,23 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
     }
 
-    private func appendToFeed(newGames: [Game], withAnimation: Bool){
+    private func appendToFeed(newGames: [Game], withAnimation: Bool, completion: (()->Void)? = nil ){
         let indexPaths = (self.games.count..<self.games.count+newGames.count).map{IndexPath(item: $0, section: 0)}
+        
+        let action = {
+            self.collectionView.insertItems(at: indexPaths)
+            completion?()
+        }
+        
         DispatchQueue.main.async {
             self.games += newGames
             
-            
             if withAnimation{
                 UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction]){
-                    self.collectionView.insertItems(at: indexPaths)
+                    action()
                 }
             } else {
-                self.collectionView.insertItems(at: indexPaths)
+                action()
             }
         }
     }
@@ -83,7 +142,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         let gameItem = games[indexPath.item]
         let height = ((collectionView.frame.width - CGFloat((numberOfColumns + 1)) * spacing) / CGFloat(numberOfColumns)) * CGFloat((gameItem.cover?.aspect ?? 0))
         
-        var additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
+        let additionHeight: CGFloat = CardViewComponentsHeight.name.rawValue
         return height + additionHeight
     }
     
@@ -104,12 +163,13 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 extension GameBrowserController: UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
         if indexPath.item == max(0,games.count - 10){
-            if gamesSource.isEmpty {
-                loadGames(withAnimation: true)
-            } else {
-                appendToFeed(newGames: gamesSource.pop(numOfElements: self.feedStep),withAnimation: false)
+            if !isLoading{
+                if gamesSource.isEmpty {
+                    loadGames(withAnimation: true)
+                } else {
+                    appendToFeed(newGames: gamesSource.pop(numOfElements: self.feedStep),withAnimation: false)
+                }
             }
         }
     }

@@ -1,11 +1,3 @@
-//
-//  Boyer-Moore.swift
-//  w2p
-//
-//  Created by vas on 11.03.2021.
-//
-
-
 //MARK: - BORROWED https://github.com/raywenderlich/swift-algorithm-club/tree/master/Boyer-Moore-Horspool
 
 import Foundation

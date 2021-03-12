@@ -109,6 +109,11 @@
                                         <constraint firstItem="V26-cn-v1l" firstAttribute="top" secondItem="Xdx-lL-cnD" secondAttribute="top" constant="20" id="r2E-hW-ecb"/>
                                     </constraints>
                                 </view>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="Hxu-fX-unb">
+                                    <rect key="frame" x="0.0" y="296" width="414" height="8"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="gameFavoriteCell" rowHeight="118" id="3J0-Mh-ybj" customClass="FavoriteGameCardCell" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="150" width="414" height="118"/>
