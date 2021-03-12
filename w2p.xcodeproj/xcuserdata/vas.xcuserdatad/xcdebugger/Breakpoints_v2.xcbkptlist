@@ -640,8 +640,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "27"
             endingLineNumber = "27"
-            landmarkName = "collectionView"
-            landmarkType = "24">
+            landmarkName = "GameBrowserController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "8AC114F6-F8ED-49A8-B0FD-0D7E45E3A602 - 19427ca3e17f51b2"

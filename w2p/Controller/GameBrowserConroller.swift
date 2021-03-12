@@ -25,6 +25,10 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var isLoading = false
 
     // MARK: - Outets
+    @IBOutlet weak var infoContainer: UIView!
+    @IBOutlet weak var infoImageView: UIImageView!
+    @IBOutlet weak var infoLabel: UILabel!
+    
     @IBOutlet weak var collectionView: UICollectionView!
 
     func loadGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil){
@@ -40,15 +44,14 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                 self.endAnimationsLoading(){
                     
                     self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
-                        
+                        self.currentOffset += self.gamesPerRequest
+                        self.gameApiRequestItem?.offset = self.currentOffset
                         completion?(true)
                         self.collectionView.isScrollEnabled = true
                         self.isLoading = false
                     }
 
                 }
-                self.currentOffset += self.gamesPerRequest
-                self.gameApiRequestItem?.offset = self.currentOffset
                 return
             }
             
@@ -59,8 +62,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                 }
             }
         }
-        
-        
         startAnimationLoading(){
             self.jsonLoader.load(request: request, completion: action)
         }
@@ -87,15 +88,75 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
     private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
+        infoContainer.isHidden = false
+        infoContainer.alpha = 1
+        let imageAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        imageAnimation.duration = 1
+        imageAnimation.fromValue = CGFloat.pi / 4.5
+        imageAnimation.toValue = -CGFloat.pi / 4.5
+        imageAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        imageAnimation.autoreverses = true
+        imageAnimation.repeatCount = .infinity
+        infoImageView.layer.add(imageAnimation, forKey: "loading infoImage animation")
         
+        let labelAnimation = CABasicAnimation(keyPath: "opacity")
+        labelAnimation.duration = 0.7
+        labelAnimation.fromValue = 1
+        labelAnimation.toValue = 0.6
+        labelAnimation.autoreverses = true
+        labelAnimation.repeatCount = .infinity
+        labelAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+
+        infoImageView.isHidden = false
+        UIView.animate(withDuration: 0.3){
+            self.infoImageView.alpha = 1
+        } completion: { _ in
+            completion?()
+        }
+        
+        infoLabel.text = "Loading"
+        infoLabel.isHidden = false
+        UIView.animate(withDuration: 0.7){
+            self.infoLabel.alpha = 1
+        } completion: { _ in
+            self.infoLabel.layer.add(labelAnimation, forKey: "loading label animation")
+        }
+    }
+    
+    private func endAnimationLoadingWithNoItems(completion: (() -> Void)? = nil){
+        DispatchQueue.main.async {
+            guard !self.infoContainer.isHidden else {
+                completion?()
+                return
+            }
+            
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.allowAnimatedContent, .beginFromCurrentState]) {
+                self.infoContainer.alpha = 0
+            } completion: { _ in
+                self.infoLabel.layer.removeAllAnimations()
+                self.infoImageView.layer.removeAllAnimations()
+                self.infoLabel.alpha = 0
+                self.infoImageView.alpha = 0
+                self.infoContainer.isHidden = true
+                self.infoLabel.isHidden = true
+                self.infoImageView.isHidden = true
+                completion?()
+            }
+        }
     }
     
     private func startAnimationLoadingWithItems(completion: (()->Void)? = nil){
         
     }
     
-    private func endAnimationsLoading(completion: (()->Void)? = nil){
+    private func endAnimationLoadingWithItems(completion: (()->Void)? = nil) {
         
+    }
+    
+    
+    private func endAnimationsLoading(completion: (()->Void)? = nil){
+        endAnimationLoadingWithNoItems(completion: completion)
+        endAnimationLoadingWithItems(completion: completion)
     }
 
     override func viewDidLoad() {

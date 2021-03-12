@@ -25,19 +25,24 @@ class SearchViewController: GameBrowserController{
         FeedbackManager.generateFeedbackForButtonsTapped()
         games = []
         gamesSource.clear()
-        collectionView.reloadData()
         currentOffset = 0
-        gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: searchFilter, limit: 500)
-        loadGames(withAnimation: true) {
-            gamesIsNotEmpty in
-            if gamesIsNotEmpty {
-                self.panGestureRecognizer.isEnabled = true
-                
-            } else {
-                self.panGestureRecognizer.isEnabled = false
+        panGestureRecognizer.isEnabled = false
+        
+        UIView.transition(with: collectionView, duration: 0.3, options: .transitionCrossDissolve) {
+            (self.collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
+            self.collectionView.reloadData()
+        } completion:  { _ in
+            self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
+            self.loadGames(withAnimation: true) { _ in
+                if !self.games.isEmpty {
+                    self.panGestureRecognizer.isEnabled = true
+                    
+                } else {
+                    self.panGestureRecognizer.isEnabled = false
+                }
             }
+            self.currentOffset += self.gamesPerRequest
         }
-        currentOffset += gamesPerRequest
     }
     
     @IBAction func filterTapped(_ sender: UIButton) {

@@ -121,17 +121,10 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.item]
     }
-   //////////
-    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-        if let collectionView = collectionView{
-            if collectionView.bounds.size != newBounds.size{
-                cache = []
-                xOffset = []
-                yOffset = []
-                return true
-            }
-        }
-        return false
+
+    override func invalidateLayout() {
+        super.invalidateLayout()
+        cache = []
     }
     
 
