@@ -11,8 +11,10 @@ class GameCardCell: UICollectionViewCell{
         
     var reusing = false
     var id: Int = 0
+    var isLoading = false
     
     override func awakeFromNib() {
+        super.awakeFromNib()
         setupAppearance()
         contentView.isExclusiveTouch = true
         contentView.fixIn(view: self)
@@ -37,9 +39,12 @@ class GameCardCell: UICollectionViewCell{
         super.prepareForReuse()
         customContent.imageView.superview!.isHidden = false
         customContent.imageView.image = nil
+        customContent.imageView.alpha = 0
+        isLoading = false
     }
     
     private func setupAppearance(){
+        customContent.imageView.superview!.backgroundColor = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection)
         self.clipsToBounds = false
         self.contentView.layer.cornerRadius = 16
         if ThemeManager.contentItemsHaveShadows(trait: traitCollection) {
@@ -50,6 +55,22 @@ class GameCardCell: UICollectionViewCell{
         } else {
             self.layer.shadowOpacity = 0
         }
+    }
+    
+    func startContentLoadingAnimation(){
+        let animation = CABasicAnimation(keyPath: "backgroundColor")
+        
+        animation.fromValue = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.toValue = ThemeManager.firstColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.duration = 1
+        animation.autoreverses = true
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.repeatCount = .infinity
+        customContent.imageView.superview?.layer.add(animation, forKey: "image loading animation")
+    }
+    
+    func endContentLoadingAnimation(){
+        customContent.imageView.superview?.layer.removeAllAnimations()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

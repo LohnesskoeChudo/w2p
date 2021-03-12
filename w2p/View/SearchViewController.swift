@@ -32,6 +32,7 @@ class SearchViewController: GameBrowserController{
             (self.collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
             self.collectionView.reloadData()
         } completion:  { _ in
+            self.collectionView.contentOffset = .zero
             self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
             self.loadGames(withAnimation: true) { _ in
                 if !self.games.isEmpty {

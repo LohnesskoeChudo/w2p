@@ -18,17 +18,21 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
+    var footer: UIControl!
+    var collectionViewFooterIsHiden = true
+    var footerImageView: UIImageView!
     var gameApiRequestItem: GameApiRequestItem?
     var currentOffset = 0
     var feedStep = 50
     var gamesPerRequest = 500
+    let footerHeight: CGFloat = 50
+    let footerWidth: CGFloat = 50
     var isLoading = false
 
     // MARK: - Outets
     @IBOutlet weak var infoContainer: UIView!
     @IBOutlet weak var infoImageView: UIImageView!
     @IBOutlet weak var infoLabel: UILabel!
-    
     @IBOutlet weak var collectionView: UICollectionView!
 
     func loadGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil){
@@ -39,6 +43,14 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         
         let action = {
             (games: [Game]?, error: NetworkError?) in
+            
+            if error != nil {
+                self.showConnectionError() {
+                    completion?(false)
+                }
+                return
+            }
+            
             if let games = games, !games.isEmpty {
                 self.gamesSource.push(array: games)
                 self.endAnimationsLoading(){
@@ -65,6 +77,22 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         startAnimationLoading(){
             self.jsonLoader.load(request: request, completion: action)
         }
+    }
+    
+    private func showConnectionError(completion: (()->Void)? = nil) {
+        if self.games.isEmpty {
+            showConnectionErrorIfNoItemsPresented(completion: completion)
+        } else {
+            showConnectionErrorIfItemsPresented(completion: completion)
+        }
+    }
+    
+    private func showConnectionErrorIfNoItemsPresented(completion: (() -> Void)? = nil){
+        
+    }
+    
+    private func showConnectionErrorIfItemsPresented(completion: (() -> Void)? = nil) {
+        
     }
     
     private func showInfoMessage(){
@@ -146,24 +174,29 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
     private func startAnimationLoadingWithItems(completion: (()->Void)? = nil){
-        
+        completion?()
     }
     
     private func endAnimationLoadingWithItems(completion: (()->Void)? = nil) {
-        
+        completion?()
     }
     
     
     private func endAnimationsLoading(completion: (()->Void)? = nil){
-        endAnimationLoadingWithNoItems(completion: completion)
-        endAnimationLoadingWithItems(completion: completion)
+        if games.isEmpty {
+            endAnimationLoadingWithNoItems(completion: completion)
+        } else {
+            endAnimationLoadingWithItems(completion: completion)
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
         navigationController?.setNavigationBarHidden(true, animated: false)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAnimations), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
+    
 
     private func setupCollectionView(){
         collectionView.delegate = self
@@ -171,18 +204,45 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
             waterfallLayout.delegate = self
         }
+        collectionView.register(GameBrowserFooter.self, forSupplementaryViewOfKind: WaterfallSupplementaryViewKind.footer.rawValue, withReuseIdentifier: "footer")
+        
+        
     }
     
+
+    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        updateAnimations()
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            self.collectionViewFooterIsHiden = false
+            self.collectionView.insertItems(at: [IndexPath(item: -1, section: 1)])
+        })
+
+    }
+    
+    @objc private func updateAnimations(){
         if self.isLoading {
             startAnimationLoading()
         }
-        
+        animateCellsIfNeeded()
+    }
+    
+     private func animateCellsIfNeeded(){
+        for subview in collectionView.subviews {
+            if let gameCell = subview as? GameCardCell {
+                if gameCell.isLoading {
+                    gameCell.startContentLoadingAnimation()
+                }
+            }
+        }
     }
 
     private func appendToFeed(newGames: [Game], withAnimation: Bool, completion: (()->Void)? = nil ){
@@ -231,6 +291,8 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 // MARK: - Delegates
 extension GameBrowserController: UICollectionViewDelegate{
     
+
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == max(0,games.count - 10){
             if !isLoading{
@@ -242,14 +304,53 @@ extension GameBrowserController: UICollectionViewDelegate{
             }
         }
     }
+    
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        let supplementaryViewType = WaterfallSupplementaryViewKind(rawValue: kind)!
+        
+        switch supplementaryViewType {
+            case.footer:
+                
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
+                
+                
+            return footer
+                
+        }
+        
+    }
+    
+    
+    
+
+    
 }
 
 
 extension GameBrowserController: UICollectionViewDataSource {
-
-
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let gameCardCell = cell as? GameCardCell {
+            gameCardCell.endContentLoadingAnimation()
+        }
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        games.count
+        if section == 0{
+            return games.count
+        } else {
+            if !collectionViewFooterIsHiden {
+                return 1
+            } else {
+                return 0
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -273,7 +374,10 @@ extension GameBrowserController: UICollectionViewDataSource {
     }
     
     func setCoverToCardCell(_ cell: GameCardCell, game: Game){
+        cell.customContent.imageView.alpha = 0
         guard let cover = game.cover else { return }
+        cell.startContentLoadingAnimation()
+        cell.isLoading = true
         let id = game.id ?? -1
         DispatchQueue.global().async {
             self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true){
@@ -286,9 +390,12 @@ extension GameBrowserController: UICollectionViewDataSource {
                                 let resizedImage = ImageResizer.resizeImageToFit(width: columnWidth, image: image)
                                 DispatchQueue.main.async{
                                     if cell.id == id{
-                                        UIView.transition(with: cell.customContent.imageView, duration: 0.3, options: [.transitionCrossDissolve]){
-                                            
-                                            cell.customContent.imageView.image = resizedImage
+                                        cell.customContent.imageView.image = resizedImage
+                                        cell.isLoading = false
+                                        UIView.animate(withDuration: 0.3) {
+                                            cell.customContent.imageView.alpha = 1
+                                        } completion: { _ in
+                                            cell.endContentLoadingAnimation()
                                         }
                                     }
                                 }

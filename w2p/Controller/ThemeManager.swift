@@ -86,6 +86,22 @@ class ThemeManager {
         }
     }
     
+    static func firstColorForImagePlaceholder(trait: UITraitCollection) -> UIColor {
+        switch trait.userInterfaceStyle {
+        case .dark:
+            return #colorLiteral(red: 0.1549214784, green: 0.1549214784, blue: 0.1549214784, alpha: 1)
+        default:
+            return #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        }
+    }
     
+    static func secondColorForImagePlaceholder(trait: UITraitCollection) -> UIColor{
+        switch trait.userInterfaceStyle {
+        case .dark:
+            return #colorLiteral(red: 0.08629441624, green: 0.08629441624, blue: 0.08629441624, alpha: 1)
+        default:
+            return #colorLiteral(red: 0.7208121827, green: 0.7208121827, blue: 0.7208121827, alpha: 1)
+        }
+    }
 
 }

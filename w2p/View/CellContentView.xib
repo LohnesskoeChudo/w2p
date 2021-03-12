@@ -47,7 +47,7 @@
                         <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xEE-Xu-MXA">
                             <rect key="frame" x="0.0" y="65" width="322" height="336"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rRL-cL-wFq">
+                                <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rRL-cL-wFq">
                                     <rect key="frame" x="0.0" y="0.0" width="322" height="336"/>
                                 </imageView>
                             </subviews>
