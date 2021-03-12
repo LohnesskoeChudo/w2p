@@ -176,6 +176,14 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.isLoading {
+            startAnimationLoading()
+        }
+        
+    }
 
     private func appendToFeed(newGames: [Game], withAnimation: Bool, completion: (()->Void)? = nil ){
         let indexPaths = (self.games.count..<self.games.count+newGames.count).map{IndexPath(item: $0, section: 0)}
