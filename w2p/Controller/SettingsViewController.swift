@@ -69,10 +69,10 @@ class SettingsViewController: UIViewController{
     @objc private func startHeartAnimation(){
         let animation = CABasicAnimation(keyPath: "transform.scale")
         
-        animation.duration = 1
+        animation.duration = 1.2
         animation.autoreverses = true
         animation.fromValue = 1
-        animation.toValue = 0.7
+        animation.toValue = 0.8
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         animation.repeatCount = .infinity
         

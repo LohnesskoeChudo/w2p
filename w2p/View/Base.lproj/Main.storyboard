@@ -112,7 +112,7 @@
                                 <view key="tableFooterView" contentMode="scaleToFill" id="Hxu-fX-unb">
                                     <rect key="frame" x="0.0" y="296" width="414" height="8"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="0.0" reuseIdentifier="gameFavoriteCell" rowHeight="118" id="3J0-Mh-ybj" customClass="FavoriteGameCardCell" customModule="w2p" customModuleProvider="target">

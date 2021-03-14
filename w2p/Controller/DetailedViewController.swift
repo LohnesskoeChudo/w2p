@@ -238,6 +238,12 @@ class DetailedViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         layoutCover(size: view.frame.size)
         layoutMedia(newWidth: view.frame.width)
+        setupGameMetadata() {
+            success in
+            if success {
+                self.updateFavoritesButton(animated: true)
+            }
+        }
     }
     
 

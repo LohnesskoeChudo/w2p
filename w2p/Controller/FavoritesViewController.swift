@@ -46,12 +46,13 @@ class FavoritesViewController: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        searchBar.isHidden = false
+        searchBar.alpha = 0
         captureFavorites(animated: false)
         setupSearchBar()
     }
     
     private func captureFavorites( animated: Bool, with search: String? = nil) {
-        searchBar.isHidden = false
         hideInfoMessage(animated: animated)
         cleanGames(animated: animated){
             self.mediaDispatcher.loadFavoriteGames{
@@ -71,11 +72,13 @@ class FavoritesViewController: UIViewController{
     
                 } else {
                     self.showNoFavoritesAtAllMessage()
+
                 }
             }
         }
     }
     
+
     private func filterGames(search: String){
         self.games = []
         let search = search.lowercased()
@@ -153,7 +156,6 @@ class FavoritesViewController: UIViewController{
     }
     
     private func prepareGamesForShowing(completion: () -> Void){
-        DispatchQueue.main.async { self.tableView.isScrollEnabled = true }
         self.games.sort{
             fGame, sGame in
             if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
@@ -161,13 +163,19 @@ class FavoritesViewController: UIViewController{
             }
             return true
         }
+        DispatchQueue.main.async {
+            self.tableView.isScrollEnabled = true
+            self.searchBar.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.searchBar.alpha = 1
+            }
+        }
         completion()
     }
 
     private func showGames(){
         DispatchQueue.main.async {
-            self.searchBar.isHidden = false
-            UIView.transition(with: self.tableView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            UIView.transition(with: self.tableView, duration: 0.3, options: [.transitionCrossDissolve], animations: {
                 self.tableView.reloadData()
             }, completion: nil )
         }
