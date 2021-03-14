@@ -104,15 +104,13 @@ class GameMediaDispatcher{
     }
     
     
-    func clearImageCache(completion: (() -> Void)? = nil) {
+    func clearImageCache(completion: ((_ success: Bool) -> Void)? = nil) {
         
     }
     
-    func clearFavorites(completion: (() -> Void)? = nil) {
-        
-        
+    func clearFavorites(completion: ((_ success: Bool) -> Void)? = nil) {
+        CacheManager.shared.clearFavorites(completion: completion)
     }
-    
     
 }
 

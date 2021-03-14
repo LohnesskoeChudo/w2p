@@ -44,6 +44,8 @@
 		5DC4751F25F8BBFE00412048 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751E25F8BBFE00412048 /* CGRect+.swift */; };
 		5DC4752625F8C29600412048 /* RedGreenMaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752525F8C29600412048 /* RedGreenMaper.swift */; };
 		5DC4752925F8FDE900412048 /* CellControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752825F8FDE900412048 /* CellControllView.swift */; };
+		5DC811B725FE303400CE8B24 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC811B625FE303400CE8B24 /* Atomic.swift */; };
+		5DC811BA25FE39DA00CE8B24 /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC811B925FE39DA00CE8B24 /* UserDefaults+.swift */; };
 		5DCB518425F38D4700079006 /* CDCompany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCB518325F38D4700079006 /* CDCompany.swift */; };
 		5DCB518725F38D7800079006 /* CDGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCB518625F38D7800079006 /* CDGameEngine.swift */; };
 		5DCCCBB725E90BA4007690B9 /* CellContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DCCCBB625E90BA4007690B9 /* CellContentView.xib */; };
@@ -124,6 +126,8 @@
 		5DC4751E25F8BBFE00412048 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		5DC4752525F8C29600412048 /* RedGreenMaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedGreenMaper.swift; sourceTree = "<group>"; };
 		5DC4752825F8FDE900412048 /* CellControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellControllView.swift; sourceTree = "<group>"; };
+		5DC811B625FE303400CE8B24 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
+		5DC811B925FE39DA00CE8B24 /* UserDefaults+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
 		5DCB518325F38D4700079006 /* CDCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCompany.swift; sourceTree = "<group>"; };
 		5DCB518625F38D7800079006 /* CDGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGameEngine.swift; sourceTree = "<group>"; };
 		5DCCCBB625E90BA4007690B9 /* CellContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellContentView.xib; sourceTree = "<group>"; };
@@ -291,17 +295,19 @@
 			children = (
 				5D33CBF025EE0FBB00377372 /* Algorithms and DS's */,
 				5D0AA4D525DBD90A0026543E /* ImageResizer.swift */,
-				5DE47E1825E6404800439FB7 /* platforms.json */,
-				5DE47E2025E696C900439FB7 /* mainPlatforms.json */,
-				5D59BBF325F7D7580073FFD1 /* FileManager+.swift */,
-				5DE47E1525E6402B00439FB7 /* genres.json */,
-				5DE47E1B25E640BC00439FB7 /* themes.json */,
 				5DF307BE25E027B10052433C /* ImageBlurrer.swift */,
+				5DC4752525F8C29600412048 /* RedGreenMaper.swift */,
+				5DC811B625FE303400CE8B24 /* Atomic.swift */,
+				5D59BBF325F7D7580073FFD1 /* FileManager+.swift */,
 				5DBC88C025E4E6A30048985E /* Collection+Identifiable+Int.swift */,
 				5DE9937625E581F7004AB0B1 /* View+.swift */,
+				5DC811B925FE39DA00CE8B24 /* UserDefaults+.swift */,
 				5DDAFB8C25F0C76400315340 /* Array+.swift */,
 				5DC4751E25F8BBFE00412048 /* CGRect+.swift */,
-				5DC4752525F8C29600412048 /* RedGreenMaper.swift */,
+				5DE47E1B25E640BC00439FB7 /* themes.json */,
+				5DE47E1525E6402B00439FB7 /* genres.json */,
+				5DE47E2025E696C900439FB7 /* mainPlatforms.json */,
+				5DE47E1825E6404800439FB7 /* platforms.json */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -417,6 +423,7 @@
 				5DF85F3D25E1A67100359227 /* CDAgeRating.swift in Sources */,
 				5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */,
 				5D530F2525D80DD500DF5621 /* JsonLoader.swift in Sources */,
+				5DC811B725FE303400CE8B24 /* Atomic.swift in Sources */,
 				5DBC88C125E4E6A30048985E /* Collection+Identifiable+Int.swift in Sources */,
 				5DE9937125E56A08004AB0B1 /* CategoryShowButton.swift in Sources */,
 				5DCCCBBA25E90D4C007690B9 /* CellContentView.swift in Sources */,
@@ -439,6 +446,7 @@
 				5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */,
 				5DD5EFF525DCE6F8000513BB /* Model.xcdatamodeld in Sources */,
 				5DDCFB2025F9F0F2001DFAF1 /* LineRatingView.swift in Sources */,
+				5DC811BA25FE39DA00CE8B24 /* UserDefaults+.swift in Sources */,
 				5DCB518425F38D4700079006 /* CDCompany.swift in Sources */,
 				5DBDC79925E2BAA6003AA46F /* GameAttributeView.swift in Sources */,
 				5DC4752925F8FDE900412048 /* CellControllView.swift in Sources */,

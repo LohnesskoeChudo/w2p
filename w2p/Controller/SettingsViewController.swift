@@ -15,6 +15,7 @@ class SettingsViewController: UIViewController{
     
     @IBOutlet weak var darkModeSwitch: UISwitch!
     
+    @IBOutlet weak var cacheImagesSizeLabel: UILabel!
     
     @IBAction func hapticFeedbackSwitched(_ sender: UISwitch) {
         GlobalSettings.shared.hapticFeedback.toggle()
@@ -46,14 +47,18 @@ class SettingsViewController: UIViewController{
         darkModeSwitch.isOn = GlobalSettings.shared.darkMode
     }
     
+    private func updateCacheImagesSizeLabel() {
+        let cacheImagesSize = UserDefaults.standard.double(forKey: UserDefaults.keyForCachedImagesSize) / (1024 * 1024)
+        cacheImagesSizeLabel.text = "\(String(format: "%.1f", cacheImagesSize)) Mb"
+    }
+    
     @IBOutlet weak var heartImage: UIImageView!
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         heartImage.alpha = 0
-        
-
+        updateCacheImagesSizeLabel()
     }
     
     override func viewDidAppear(_ animated: Bool) {

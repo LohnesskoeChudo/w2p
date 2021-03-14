@@ -359,6 +359,7 @@
                         <imageReference key="image" image="gearshape.2.fill" catalog="system" renderingMode="template"/>
                     </tabBarItem>
                     <connections>
+                        <outlet property="cacheImagesSizeLabel" destination="DOJ-iL-TaN" id="mcx-et-HHD"/>
                         <outlet property="darkModeSwitch" destination="IaC-fR-4Em" id="dMx-Kb-shf"/>
                         <outlet property="hapticSwitch" destination="AP2-NT-f1w" id="JJk-3B-KrM"/>
                         <outlet property="heartImage" destination="RLs-lS-Fsc" id="3p0-DZ-hG8"/>

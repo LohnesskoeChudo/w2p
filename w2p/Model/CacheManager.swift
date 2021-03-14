@@ -14,7 +14,13 @@ class CacheManager{
     private var container: NSPersistentContainer
     private var moc: NSManagedObjectContext
     private var privateMoc: NSManagedObjectContext
-
+    
+    private var imagesCacheSize = Atomic(UserDefaults.standard.double(forKey: UserDefaults.keyForCachedImagesSize))
+    
+    private func saveCacheSize() {
+        UserDefaults.standard.setValue(imagesCacheSize.value, forKey: UserDefaults.keyForCachedImagesSize)
+    }
+    
     private init(){
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores{
@@ -31,17 +37,46 @@ class CacheManager{
     }
     
     func save(coverData: Data, with cover: Cover){
+        
+        let coverDataSize = Double(coverData.count)
+        
         privateMoc.perform {
             let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
             if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
                 cdCover.image = coverData
-                //MARK: -
-                try! self.privateMoc.save()
+                if let _ = try? self.privateMoc.save() {
+                    self.imagesCacheSize.mutate(block: {$0 += coverDataSize})
+                    self.saveCacheSize()
+                } else {
+                    print("Failed to save cover for coverId: \(cover.id ?? -1)")
+                }
+                
             }
         }
     }
 
-
+    
+    func clearAllImages() {
+        
+    }
+    
+    func clearFavorites (completion: ((_ success: Bool) -> Void)? = nil) {
+        privateMoc.perform {
+            let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
+            fetchRequest.predicate = NSPredicate(format: "inFavorites == YES")
+            if let cdGames = try? self.privateMoc.fetch(fetchRequest) {
+                for cdGame in cdGames {
+                    cdGame.inFavorites = false
+                }
+                if let _ = try? self.privateMoc.save() {
+                    completion?(true)
+                } else {
+                    completion?(false)
+                }
+            }
+        }
+    }
+    
     
     func loadCover(with coverId: Int, completion: @escaping (Data?) -> Void){
         privateMoc.perform {
@@ -95,10 +130,21 @@ class CacheManager{
     }
     
     func saveStaticMedia(data: Data, media: MediaDownloadable, gameId: Int) {
+        
+        let dataSize = Double(data.count)
+        
+        let succesAction = { (_ success: Bool) -> Void in
+            if success {
+                self.imagesCacheSize.mutate(block: {$0 += dataSize})
+                self.saveCacheSize()
+            }
+        }
+        
         if let screenshot = media as? Screenshot {
-            saveScreenshot(data: data, with: screenshot)
+            saveScreenshot(data: data, with: screenshot, competion: succesAction)
+            
         } else if let artwork = media as? Artwork {
-            saveArtwork(data: data, with: artwork)
+            saveArtwork(data: data, with: artwork, completion: succesAction)
         }
     }
     
@@ -116,12 +162,15 @@ class CacheManager{
     }
     
     
-    func save(game: Game) {
+    func save(game: Game, completion: ((_ success: Bool) -> Void)? = nil) {
         privateMoc.perform {
             let entity = NSEntityDescription.entity(forEntityName: "CDGame", in: self.privateMoc)!
-            let cdGame = CDGame(context: self.privateMoc, entity: entity, game: game)
-            //MARK: -
-            try! self.privateMoc.save()
+            let _ = CDGame(context: self.privateMoc, entity: entity, game: game)
+            if let _ = try? self.privateMoc.save() {
+                completion?(true)
+            } else {
+                completion?(false)
+            }
         }
     }
     
@@ -137,23 +186,31 @@ class CacheManager{
         }
     }
     
-    private func saveScreenshot(data: Data, with screenshot: Screenshot) {
+    private func saveScreenshot(data: Data, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: self.privateMoc)!
             if let cdScreenshot = CDScreenshot(context: self.privateMoc, entity: screenshotEntity, screenshot: screenshot) {
                 cdScreenshot.image = data
-                try! self.privateMoc.save()
+                if let _ = try? self.privateMoc.save() {
+                    competion(true)
+                } else {
+                    competion(false)
+                }
             }
         }
     }
     
 
-    private func saveArtwork(data: Data, with artwork: Artwork) {
+    private func saveArtwork(data: Data, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: self.privateMoc)!
             if let cdArtwork = CDArtwork(context: self.privateMoc, entity: artworkEntity, artwork: artwork) {
                 cdArtwork.image = data
-                try! self.privateMoc.save()
+                if let _ = try? self.privateMoc.save() {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
             }
         }
     }
