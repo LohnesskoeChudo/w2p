@@ -104,6 +104,16 @@ class GameMediaDispatcher{
     }
     
     
+    func clearImageCache(completion: (() -> Void)? = nil) {
+        
+    }
+    
+    func clearFavorites(completion: (() -> Void)? = nil) {
+        
+        
+    }
+    
+    
 }
 
 enum FetchingError: Error{

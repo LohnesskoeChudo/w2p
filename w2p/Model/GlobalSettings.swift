@@ -12,6 +12,9 @@ class GlobalSettings: Codable {
     static let fileName = "settings"
     static let ext = "json"
     
+    var hapticFeedback = true { didSet {save()} }
+    var darkMode = true { didSet {save()} }
+    
     static let shared: GlobalSettings = {
         if let fileUrl = FileManager.default.documentsUrlForFile(with: GlobalSettings.fileName), let data = try? Data(contentsOf: fileUrl) {
             if let decoded = try? JSONDecoder().decode(GlobalSettings.self, from: data) {
@@ -36,8 +39,7 @@ class GlobalSettings: Codable {
         
     }
     
-    var controlHaptics: Bool = true
-    
+
 
     
 }

@@ -8,6 +8,13 @@
 import UIKit
 
 class ThemeManager {
+    
+
+    static weak var window: UIWindow? {
+        didSet {
+            updateUIAppearance()
+        }
+    }
         
     static func contentItemsHaveShadows(trait: UITraitCollection) -> Bool{
         
@@ -102,6 +109,19 @@ class ThemeManager {
         default:
             return #colorLiteral(red: 0.7208121827, green: 0.7208121827, blue: 0.7208121827, alpha: 1)
         }
+    }
+    
+    
+    private static func uiStyleForCurrentAppearanceMode() -> UIUserInterfaceStyle{
+        if GlobalSettings.shared.darkMode {
+            return .dark
+        } else {
+            return.light
+        }
+    }
+    
+    static func updateUIAppearance() {
+        window?.overrideUserInterfaceStyle = uiStyleForCurrentAppearanceMode()
     }
 
 }

@@ -12,7 +12,7 @@ class FeedbackManager {
     static let feedBackGenerator = UIImpactFeedbackGenerator(style: .light)
     
     static func generateFeedbackForButtonsTapped() {
-        if GlobalSettings.shared.controlHaptics {
+        if GlobalSettings.shared.hapticFeedback {
             feedBackGenerator.impactOccurred()
         }
     }
