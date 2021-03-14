@@ -15,7 +15,6 @@ class CellControlView: UIControl {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        print("common init")
         commonInit()
     }
     

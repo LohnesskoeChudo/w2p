@@ -29,8 +29,11 @@ class SearchViewController: GameBrowserController{
         panGestureRecognizer.isEnabled = false
         
         UIView.transition(with: collectionView, duration: 0.3, options: .transitionCrossDissolve) {
-            (self.collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
-            self.collectionView.reloadData()
+
+            let wfInvalidationContext = WFLayoutInvalidationContext()
+            wfInvalidationContext.action = .rebuild
+            self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
+            
         } completion:  { _ in
             self.collectionView.contentOffset = .zero
             self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)

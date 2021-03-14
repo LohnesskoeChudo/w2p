@@ -43,10 +43,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
             xOffset.append((CGFloat(columnIndex) * columnWidth) + delegate.spacing * CGFloat(columnIndex + 1))
         }
         yOffset = .init(repeating: delegate.upperSpacing, count: columns)
-        for item in 0..<collectionView.numberOfItems(inSection: 0){
-            let indexPath = IndexPath(item: item, section: 0)
-            layoutItemAt(indexPath: indexPath)
-        }
+
     }
     
 
@@ -81,13 +78,13 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         return CGSize(width: contentWidth, height: height)
     }
     
-    override func prepare() {
-        initialLayout()
-    }
+
     
     //MARK: - using binary search to find elements
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-
+        
+        print("in rect", cache.count)
+        
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
 
         if cache.count > 0 {
@@ -128,21 +125,48 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        print("getting attr")
         return cache[indexPath.item]
     }
 
-    override func invalidateLayout() {
-        super.invalidateLayout()
-        cache = []
+    
+    
+    override class var invalidationContextClass: AnyClass {
+        WFLayoutInvalidationContext.self
     }
     
-
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        if let context = context as? WFLayoutInvalidationContext {
+            if context.action == WFInvalidationAction.insertion {
+                print("INV CONTEXT")
+                if let insertedIPs = context.indexPaths {
+                    for insertedItemIP in insertedIPs {
+                        layoutItemAt(indexPath: insertedItemIP)
+                    }
+                }
+            }
+            if context.action == WFInvalidationAction.rebuild {
+                cache = []
+                initialLayout()
+            }
+        }
+        print(cache.count)
+        super.invalidateLayout(with: context)
+    }
+    
+    /*
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         let maxItem = cache.count - 1
         for item in updateItems{
             guard let indexPath = item.indexPathAfterUpdate, indexPath.item > maxItem, item.indexPathBeforeUpdate == nil else {continue}
             layoutItemAt(indexPath: indexPath)
         }
+    } */
+    
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attrs = cache[itemIndexPath.item].copy() as! UICollectionViewLayoutAttributes
+        attrs.alpha = 0
+        return attrs
     }
 
 }

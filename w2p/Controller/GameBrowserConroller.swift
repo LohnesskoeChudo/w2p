@@ -59,7 +59,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                         self.collectionView.isScrollEnabled = true
                         self.isLoading = false
                     }
-
                 }
                 return
             }
@@ -208,7 +207,9 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("viewWillTransition")
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -232,18 +233,23 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             }
         }
     }
+    
+
 
     private func appendToFeed(newGames: [Game], withAnimation: Bool, completion: (()->Void)? = nil ){
         let indexPaths = (self.games.count..<self.games.count+newGames.count).map{IndexPath(item: $0, section: 0)}
-        
+
         let action = {
+            let wfInvalidationContext = WFLayoutInvalidationContext()
+            wfInvalidationContext.action = .insertion
+            wfInvalidationContext.indexPaths = indexPaths
+            self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
             self.collectionView.insertItems(at: indexPaths)
             completion?()
         }
         
         DispatchQueue.main.async {
             self.games += newGames
-            
             if withAnimation{
                 UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction]){
                     action()
@@ -290,6 +296,7 @@ extension GameBrowserController: UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == max(0,games.count - 10){
+            print("WILL DISPLAY AT \(indexPath.item)")
             if !isLoading{
                 if gamesSource.isEmpty {
                     loadGames(withAnimation: true)

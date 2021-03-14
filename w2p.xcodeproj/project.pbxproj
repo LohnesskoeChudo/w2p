@@ -46,6 +46,7 @@
 		5DC4752925F8FDE900412048 /* CellControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752825F8FDE900412048 /* CellControllView.swift */; };
 		5DC811B725FE303400CE8B24 /* Atomic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC811B625FE303400CE8B24 /* Atomic.swift */; };
 		5DC811BA25FE39DA00CE8B24 /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC811B925FE39DA00CE8B24 /* UserDefaults+.swift */; };
+		5DC811BF25FE638400CE8B24 /* WFLayoutInvalidationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */; };
 		5DCB518425F38D4700079006 /* CDCompany.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCB518325F38D4700079006 /* CDCompany.swift */; };
 		5DCB518725F38D7800079006 /* CDGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DCB518625F38D7800079006 /* CDGameEngine.swift */; };
 		5DCCCBB725E90BA4007690B9 /* CellContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DCCCBB625E90BA4007690B9 /* CellContentView.xib */; };
@@ -128,6 +129,7 @@
 		5DC4752825F8FDE900412048 /* CellControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellControllView.swift; sourceTree = "<group>"; };
 		5DC811B625FE303400CE8B24 /* Atomic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Atomic.swift; sourceTree = "<group>"; };
 		5DC811B925FE39DA00CE8B24 /* UserDefaults+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
+		5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFLayoutInvalidationContext.swift; sourceTree = "<group>"; };
 		5DCB518325F38D4700079006 /* CDCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCompany.swift; sourceTree = "<group>"; };
 		5DCB518625F38D7800079006 /* CDGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGameEngine.swift; sourceTree = "<group>"; };
 		5DCCCBB625E90BA4007690B9 /* CellContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellContentView.xib; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				5D530F2D25D8148A00DF5621 /* SettingsViewController.swift */,
 				5D530F2725D8140E00DF5621 /* TabBarController.swift */,
 				5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */,
+				5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				5DF85F2E25E1A64700359227 /* CDGameMode.swift in Sources */,
 				5D530F1E25D8067600DF5621 /* RequestFormer.swift in Sources */,
 				5DE8E84F25E16F5A00471078 /* MainModel.swift in Sources */,
+				5DC811BF25FE638400CE8B24 /* WFLayoutInvalidationContext.swift in Sources */,
 				5D59BBF425F7D7580073FFD1 /* FileManager+.swift in Sources */,
 				5D023CDF25E1AFAA003B04CD /* CDGameCollection.swift in Sources */,
 				5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */,

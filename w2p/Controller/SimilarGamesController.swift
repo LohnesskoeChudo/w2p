@@ -19,14 +19,24 @@ class SimilarGamesController : GameBrowserController{
     }
     @IBOutlet weak var upperBar: UIView!
     
+    var needToUpdateGames = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
+        setupApiRequestItem()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       
+        if needToUpdateGames {
+            loadGames(withAnimation: true)
+            needToUpdateGames = false
+        }
+    }
+    
+    
+    private func setupApiRequestItem() {
         if category == .similarGames{
             gameApiRequestItem = GameApiRequestItem.formRequestItemForSimilarGames(with: externalGame)
         } else if category == .franchiseGames{
@@ -34,10 +44,19 @@ class SimilarGamesController : GameBrowserController{
         } else {
             gameApiRequestItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: externalGame.collection?.games ?? [])
         }
-
-        loadGames(withAnimation: true)
     }
     
+
+    func loadGames(withAnimation: Bool) {
+        
+        games = []
+        gamesSource.clear()
+        gameApiRequestItem?.offset = 0
+        let wfInvalidationContext = WFLayoutInvalidationContext()
+        wfInvalidationContext.action = .rebuild
+        collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
+        super.loadGames(withAnimation: true)
+    }
     
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

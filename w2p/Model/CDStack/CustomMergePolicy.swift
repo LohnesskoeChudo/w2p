@@ -23,9 +23,6 @@ class CustomMergePolicy: NSMergePolicy {
                 for key in conflictingObject.entity.attributesByName.keys {
                     let dbValue = conflict.databaseObject?.value(forKey: key)
                     if conflictingObject.value(forKey: key) == nil {
-                        if let cdobj = conflictingObject as? CDGame, cdobj.name == "Bootleg Systems" {
-                            print(key)
-                        }
                         conflictingObject.setValue(dbValue, forKey: key)
                     }
                 }

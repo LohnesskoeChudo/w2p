@@ -24,7 +24,6 @@ class CDGame: NSManagedObject{
         if let status = game.status { self.status = Int64(status)}
         if let totalRating = game.totalRating { self.totalRating = totalRating
         }
-        print(game.inFavorites)
         if let inFavorites = game.inFavorites {
             self.inFavorites = inFavorites
         }

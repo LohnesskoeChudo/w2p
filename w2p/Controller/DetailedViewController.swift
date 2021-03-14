@@ -97,7 +97,6 @@ class DetailedViewController: UIViewController{
                     self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true, completion: {
                         data, error in
                         if let data = data , let image = UIImage(data: data){
-                            print("Image add")
                             activityItems.append(image)
                         }
                         dispatchGroup.leave()
@@ -107,7 +106,6 @@ class DetailedViewController: UIViewController{
                 }
             }
             dispatchGroup.notify(queue: DispatchQueue.main, work: DispatchWorkItem(block: {
-                print("MAIN")
                 let activityVC = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
                 activityVC.isModalInPresentation = true
                 self.present(activityVC, animated: true, completion: nil)
@@ -163,7 +161,6 @@ class DetailedViewController: UIViewController{
     }
     
     override func viewDidLoad() {
-        print(game.totalRating)
         setupGameMetadata {
             success in
             if success {
@@ -485,6 +482,12 @@ class DetailedViewController: UIViewController{
                 }
             }
         }
+    }
+    
+    private func setupPlaceholderBlurredBackgroundForMediaSectionIfNeeded() {
+        
+        
+        
     }
     
     private func layoutCover(size: CGSize){
