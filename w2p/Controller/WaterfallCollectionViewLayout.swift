@@ -10,17 +10,19 @@ import UIKit
 class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
     var delegate: WaterfallCollectionViewLayoutDelegate?
-    var cellPadding: CGFloat = 0
     private var cache = [UICollectionViewLayoutAttributes]()
+    
     var contentWidth: CGFloat {
         guard let collectionView = collectionView else { return 0 }
         let insets = collectionView.contentInset
         let width = collectionView.bounds.width - (insets.left + insets.right)
         return width
     }
+    
     var columns: Int{
         delegate?.numberOfColumns ?? 0
     }
+    
     var columnWidth: CGFloat{
         guard let delegate = delegate else { return 0}
         if columns > 0{
@@ -32,9 +34,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
     var xOffset: [CGFloat] = []
     var yOffset: [CGFloat] = []
-    
-    var footerAttrs: UICollectionViewLayoutAttributes?
-    var footerIsPresented: Bool = false
 
     private func initialLayout(){
         if !cache.isEmpty {return}
@@ -51,7 +50,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     }
     
 
-    
     private func layoutItemAt(indexPath: IndexPath){
         guard let delegate = delegate else {return}
         let cellHeight = delegate.heightForCell(at: indexPath)
@@ -78,11 +76,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
             return .zero
         }
         
-        var height: CGFloat = max(frameHeight, contentHeight) + (delegate?.spacing ?? 0)
-        
-        if let footerAttrs = footerAttrs {
-            height += (footerAttrs.frame.height) + (delegate?.spacing ?? 0)
-        }
+        let height: CGFloat = max(frameHeight, contentHeight) + (delegate?.spacing ?? 0)
         
         return CGSize(width: contentWidth, height: height)
     }
@@ -93,19 +87,9 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
     //MARK: - using binary search to find elements
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        
-        
-        
+
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
-        
-        
-        
-        
-        if footerAttrs != nil {
-            visibleLayoutAttributes.append(footerAttrs!)
-        }
-        
-        
+
         if cache.count > 0 {
             let indexOfPredecessorOfFirstVisibleItem = customBinarySearch(collection: cache,trueProperty: {
                 index in
@@ -144,13 +128,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        if indexPath.section == 0 {
-            return cache[indexPath.item]
-        }
-        if indexPath.section == 1 {
-            return footerAttrs
-        }
-        return nil
+        return cache[indexPath.item]
     }
 
     override func invalidateLayout() {
@@ -160,52 +138,13 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        
         let maxItem = cache.count - 1
         for item in updateItems{
-            
-            if item.indexPathBeforeUpdate?.item == -1, item.indexPathAfterUpdate == nil{
-                removeFooter()
-            }
-                
-            if item.indexPathAfterUpdate?.item == -1, item.indexPathBeforeUpdate == nil{
-                addFooter()
-            }
-
             guard let indexPath = item.indexPathAfterUpdate, indexPath.item > maxItem, item.indexPathBeforeUpdate == nil else {continue}
             layoutItemAt(indexPath: indexPath)
         }
     }
-    
 
-    private func addFooter() {
-        guard let collectionView = collectionView else {return}
-        let attrs = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: WaterfallSupplementaryViewKind.footer.rawValue, with: IndexPath(item: -1, section: 1))
-        if let footer = collectionView.supplementaryView(forElementKind: WaterfallSupplementaryViewKind.footer.rawValue, at: IndexPath(item:cache.count, section: 0)) {
-            let footerSize = footer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-            attrs.frame = CGRect(origin: CGPoint(x: (collectionView.frame.width - footerSize.width) / 2 , y: (yOffset.max() ?? 0) + (delegate?.spacing ?? 0)) , size: footerSize)
-            footerAttrs = attrs
-        }
-    }
-    
-    private func removeFooter(){
-        footerAttrs = nil
-    }
-    
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        
-        print(itemIndexPath.item, itemIndexPath.section)
-        
-        if itemIndexPath.section == 0{
-            let attrs = cache[itemIndexPath.item].copy() as! UICollectionViewLayoutAttributes
-            attrs.alpha = 0
-            return attrs
-        }
-        
-        return nil
-
-    }
-    
 }
 
 
@@ -219,8 +158,4 @@ protocol WaterfallCollectionViewLayoutDelegate: AnyObject {
     
     var upperSpacing: CGFloat {get}
     
-}
-
-enum WaterfallSupplementaryViewKind: String{
-    case footer = "footer"
 }

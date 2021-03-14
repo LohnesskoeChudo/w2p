@@ -12,27 +12,39 @@ class GameBrowserFooter: UICollectionReusableView {
     
     var control: UIControl!
     var footerImageView: UIImageView!
-    let footerWidth: CGFloat = 50
-    let footerHeight: CGFloat = 50
+    static let footerWidth: CGFloat = 50
+    static let footerHeight: CGFloat = 50
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+        
+    }
     
-    private func setupFooter(){
-        footerImageView.image = UIImage(named: "test")
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        
+        translatesAutoresizingMaskIntoConstraints = false
         control = UIControl()
         control.translatesAutoresizingMaskIntoConstraints = false
         footerImageView = UIImageView()
+        footerImageView.image = UIImage(named: "test")
         footerImageView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(footerImageView)
-        
+
         NSLayoutConstraint.activate([
-            widthAnchor.constraint(equalToConstant: footerWidth),
-            heightAnchor.constraint(equalToConstant: footerHeight)
+            widthAnchor.constraint(equalToConstant: Self.footerWidth),
+            heightAnchor.constraint(equalToConstant: Self.footerHeight)
         ])
         footerImageView.fixIn(view: control)
         control.fixIn(view: self)
         setupFooterActions()
-
     }
+    
+
     
     private func setupFooterActions() {
         control.addTarget(self, action: #selector(self.footerTouchUpInside), for: .touchUpInside)
@@ -50,6 +62,15 @@ class GameBrowserFooter: UICollectionReusableView {
     }
     
     @objc func footerTouchDragExit() {
+        
+    }
+    
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        
+        layoutAttributes.frame.size = systemLayoutSizeFitting(UICollectionView.layoutFittingCompressedSize)
+        
+        return layoutAttributes
         
     }
 

@@ -19,14 +19,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
     var footer: UIControl!
-    var collectionViewFooterIsHiden = true
     var footerImageView: UIImageView!
     var gameApiRequestItem: GameApiRequestItem?
     var currentOffset = 0
     var feedStep = 50
     var gamesPerRequest = 500
-    let footerHeight: CGFloat = 50
-    let footerWidth: CGFloat = 50
     var isLoading = false
 
     // MARK: - Outets
@@ -204,13 +201,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
             waterfallLayout.delegate = self
         }
-        collectionView.register(GameBrowserFooter.self, forSupplementaryViewOfKind: WaterfallSupplementaryViewKind.footer.rawValue, withReuseIdentifier: "footer")
         
         
     }
     
 
-    
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
@@ -219,13 +214,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateAnimations()
-        
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-            self.collectionViewFooterIsHiden = false
-            self.collectionView.insertItems(at: [IndexPath(item: -1, section: 1)])
-        })
-
     }
     
     @objc private func updateAnimations(){
@@ -266,6 +254,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         }
     }
 
+    //MARK: - LayoutDelegate
 
     func heightForCell(at indexPath: IndexPath) -> CGFloat {
         let gameItem = games[indexPath.item]
@@ -285,6 +274,12 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var upperSpacing: CGFloat {
         0
     }
+
+    var footerHeight: CGFloat {
+        0
+    }
+    
+    
 }
 
 
@@ -308,18 +303,10 @@ extension GameBrowserController: UICollectionViewDelegate{
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let supplementaryViewType = WaterfallSupplementaryViewKind(rawValue: kind)!
-        
-        switch supplementaryViewType {
-            case.footer:
+        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) as! GameBrowserFooter
+
+        return footer
                 
-            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
-                
-                
-            return footer
-                
-        }
-        
     }
     
     
@@ -332,25 +319,17 @@ extension GameBrowserController: UICollectionViewDelegate{
 extension GameBrowserController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let gameCardCell = cell as? GameCardCell {
+        if let gameCardCell = cell as? GameCardCell, indexPath.item == 0 {
             gameCardCell.endContentLoadingAnimation()
         }
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        2
+        1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0{
-            return games.count
-        } else {
-            if !collectionViewFooterIsHiden {
-                return 1
-            } else {
-                return 0
-            }
-        }
+        return games.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -361,6 +340,8 @@ extension GameBrowserController: UICollectionViewDataSource {
         setCoverToCardCell(cardCell, game: game)
         cardCell.reusing = true
         return cardCell
+        
+
     }
     
     func configureCell(_ cell: GameCardCell, game: Game){
