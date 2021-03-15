@@ -19,4 +19,8 @@ extension UIView{
             self.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+    
+    func removeAllSubviews() {
+        subviews.forEach{$0.removeFromSuperview()}
+    }
 }

@@ -41,6 +41,11 @@ class DoubleSlider: UIControl{
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didPan))
         panGestureRecognizer.maximumNumberOfTouches = 1
         addGestureRecognizer(panGestureRecognizer)
+        
+        upperThumb.borderWidth = 2
+        upperThumb.borderColor = UIColor.secondaryLabel.cgColor
+        lowerThumb.borderWidth = 2
+        lowerThumb.borderColor = UIColor.secondaryLabel.cgColor
     }
     
     

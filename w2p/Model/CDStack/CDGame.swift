@@ -191,7 +191,6 @@ extension Game {
                 self.ageRatings = ageRatings
             }
         }
-        
         if let gameModes = cdGame.gameModes?.sortedArray(using: []) as? [CDGameMode] {
             let gameModes = gameModes.compactMap{GameMode(cdGameMode: $0)}
             if !gameModes.isEmpty {

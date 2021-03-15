@@ -17,7 +17,16 @@ class FilterViewController: UIViewController {
     @IBOutlet weak var platformFlow: LabelFlowView!
     @IBOutlet weak var genreControl: CategoryShowButton!
     @IBOutlet weak var themeControl: CategoryShowButton!
+    @IBOutlet weak var morePlatformsButton: UIButton!
     @IBOutlet weak var platformControl: CategoryShowButton!
+    
+    
+    
+    @IBAction func morePlatformsTapped(_ sender: UIButton) {
+        FeedbackManager.generateFeedbackForButtonsTapped()
+    }
+    
+    
     @IBAction func genreControlAction(_ sender: CategoryShowButton) {
         if sender.opened{
             show(section: genreFlow.superview, subview: genreFlow, animated: true)
@@ -117,6 +126,16 @@ class FilterViewController: UIViewController {
         filter.excludeWithoutCover = sender.isOn
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "morePlatforms":
+            let destinationVC = segue.destination as! AdditionalPlatformsController
+            destinationVC.searchFilter = filter
+        default:
+            return
+        }
+    }
+    
     
     private func show(section: UIView?, subview: UIView, animated: Bool){
         
@@ -154,14 +173,28 @@ class FilterViewController: UIViewController {
         setupControls()
         setupNavigationBar()
         setupRating()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateFlows()
         updateGameModesUI()
         updateReleaseDateUI(animated: false)
         updateExcludeUI(animated: false)
     }
     
+    private func updateControls() {
+        morePlatformsButton.layer.cornerRadius = (morePlatformsButton.frame.height / 2)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateControls()
+    }
+    
     private func updateGameModesUI(){
-        singleplayerSwitch.isOn = filter.singleplayer
-        multiplayerSwitch.isOn = filter.multiplayer
+        singleplayerSwitch.setOn(filter.singleplayer, animated: true)
+        multiplayerSwitch.setOn(filter.multiplayer, animated: true)
     }
     
     private func updateExcludeUI(animated: Bool){
@@ -170,7 +203,7 @@ class FilterViewController: UIViewController {
     }
     
     private func setupRating(){
-        ratingSlider = DoubleSlider(frame: .zero, maxValue: 100, minValue: 1, thumbColor: .black , trackColor: .lightGray)
+        ratingSlider = DoubleSlider(frame: .zero, maxValue: 100, minValue: 1, thumbColor: #colorLiteral(red: 0.4921983402, green: 0.6199769, blue: 0.7437539657, alpha: 1) , trackColor: ThemeManager.colorForUIelementsBackground(trait: traitCollection))
         
         ratingSlider.delegate = self
         ratingSlider.translatesAutoresizingMaskIntoConstraints = false
@@ -188,6 +221,13 @@ class FilterViewController: UIViewController {
     
     private func setupNavigationBar(){
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Clear", style: UIBarButtonItem.Style.plain, target: self, action: #selector(clearFilter))
+        navigationItem.leftBarButtonItem?.tintColor = ThemeManager.colorForBarButtons(trait: traitCollection)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItem.Style.plain, target: self, action: #selector(closeVC))
+        navigationItem.rightBarButtonItem?.tintColor = ThemeManager.colorForBarButtons(trait: traitCollection)
+    }
+    
+    @objc private func closeVC() {
+        dismiss(animated: true, completion: nil)
     }
     
     private func setupControls() {
@@ -195,6 +235,9 @@ class FilterViewController: UIViewController {
         themeControl.setup(name: "Theme")
         platformControl.setup(name: "Platform")
         
+        morePlatformsButton.setTitleColor( ThemeManager.colorForPlainButtons(trait: traitCollection), for: .normal)
+        morePlatformsButton.setTitleColor(ThemeManager.colorForPlainButtons(trait: traitCollection).withAlphaComponent(0.5), for: .highlighted)
+
     }
     
     private func updateReleaseDateUI(animated: Bool){
@@ -245,16 +288,17 @@ class FilterViewController: UIViewController {
         }
     }
     
-
-    private func setupFlows(){
-        genreFlow.superview?.isHidden = true
-        genreFlow.alpha = 0
-        themeFlow.superview?.isHidden = true
-        themeFlow.alpha = 0
-        platformFlow.superview?.isHidden = true
-        platformFlow.alpha = 0
-        
-        for genre in SearchFilter.allGenres.shuffled(){
+    private func clearFlows() {
+        genreFlow.removeAllSubviews()
+        themeFlow.removeAllSubviews()
+        platformFlow.removeAllSubviews()
+    }
+    
+    
+    
+    private func updateFlows() {
+        clearFlows()
+        for genre in SearchFilter.allGenres{
             guard let name = genre.name, let id = genre.id else {continue}
             let attrView = GameAttributeView()
             let color = ThemeManager.colorForGenreAttribute(trait: traitCollection)
@@ -265,7 +309,7 @@ class FilterViewController: UIViewController {
             attrView.translatesAutoresizingMaskIntoConstraints = false
             genreFlow.addSubview(attrView)
         }
-        for theme in SearchFilter.allThemes.shuffled(){
+        for theme in SearchFilter.allThemes{
             guard let name = theme.name, let id = theme.id else {continue}
             let attrView = GameAttributeView()
             let color = ThemeManager.colorForThemeAttribute(trait: traitCollection)
@@ -276,7 +320,7 @@ class FilterViewController: UIViewController {
             attrView.translatesAutoresizingMaskIntoConstraints = false
             themeFlow.addSubview(attrView)
         }
-        for platform in SearchFilter.mainPlatforms.shuffled(){
+        for platform in SearchFilter.mainPlatforms{
             guard let id = platform.id, let name = platform.name else {continue}
             let attrView = GameAttributeView()
             let color = ThemeManager.colorForPlatformAttribute(trait: traitCollection)
@@ -287,6 +331,16 @@ class FilterViewController: UIViewController {
             attrView.translatesAutoresizingMaskIntoConstraints = false
             platformFlow.addSubview(attrView)
         }
+    }
+
+    private func setupFlows(){
+        genreFlow.superview?.isHidden = true
+        genreFlow.alpha = 0
+        themeFlow.superview?.isHidden = true
+        themeFlow.alpha = 0
+        platformFlow.superview?.isHidden = true
+        platformFlow.alpha = 0
+
     }
     
     
@@ -326,10 +380,7 @@ class FilterViewController: UIViewController {
 
         clear(gameAttrs: genreAttrs + themeAttrs + platformAttrs)
         
-        //UIkit bug?
-        if ratingSwitch.isOn {
-            updateRatingUI(animated: true)
-        }
+        if ratingSwitch.isOn { updateRatingUI(animated: true) }
         updateGameModesUI()
         updateReleaseDateUI(animated: true)
         updateExcludeUI(animated: true)

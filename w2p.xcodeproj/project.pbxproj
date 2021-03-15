@@ -34,6 +34,7 @@
 		5D59BBF425F7D7580073FFD1 /* FileManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBF325F7D7580073FFD1 /* FileManager+.swift */; };
 		5D59BBF725F7E2090073FFD1 /* FeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBF625F7E2090073FFD1 /* FeedbackManager.swift */; };
 		5D59BBFC25F818DF0073FFD1 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBFB25F818DF0073FFD1 /* ThemeManager.swift */; };
+		5DA1154C25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA1154B25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift */; };
 		5DA4786D25FBDD5800FE19CE /* GameBrowserFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA4786C25FBDD5800FE19CE /* GameBrowserFooter.swift */; };
 		5DA6099325E50DA400F7B814 /* LabelFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA6099225E50DA400F7B814 /* LabelFlowView.swift */; };
 		5DB4472F25ED0BE500C1663B /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB4472E25ED0BE500C1663B /* CustomButton.swift */; };
@@ -117,6 +118,7 @@
 		5D59BBF325F7D7580073FFD1 /* FileManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+.swift"; sourceTree = "<group>"; };
 		5D59BBF625F7E2090073FFD1 /* FeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackManager.swift; sourceTree = "<group>"; };
 		5D59BBFB25F818DF0073FFD1 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		5DA1154B25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalPlatformsController.swift; sourceTree = "<group>"; };
 		5DA4786C25FBDD5800FE19CE /* GameBrowserFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBrowserFooter.swift; sourceTree = "<group>"; };
 		5DA6099225E50DA400F7B814 /* LabelFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFlowView.swift; sourceTree = "<group>"; };
 		5DB4472E25ED0BE500C1663B /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				5D59BBF625F7E2090073FFD1 /* FeedbackManager.swift */,
 				5D59BBFB25F818DF0073FFD1 /* ThemeManager.swift */,
 				5D0AA4D825DBE7750026543E /* FilterViewController.swift */,
+				5DA1154B25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift */,
 				5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */,
 				5D530F3525D82ECE00DF5621 /* DetailedViewController.swift */,
 				5DB9E67725F000EA003BF705 /* GameBrowserConroller.swift */,
@@ -439,6 +442,7 @@
 				5D59BBEE25F768D00073FFD1 /* AnimatedControl.swift in Sources */,
 				5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */,
 				5D530F2825D8140E00DF5621 /* TabBarController.swift in Sources */,
+				5DA1154C25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift in Sources */,
 				5DF85F2E25E1A64700359227 /* CDGameMode.swift in Sources */,
 				5D530F1E25D8067600DF5621 /* RequestFormer.swift in Sources */,
 				5DE8E84F25E16F5A00471078 /* MainModel.swift in Sources */,

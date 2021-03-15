@@ -9,7 +9,7 @@ import UIKit
 
 class GameAttributeView: UIControl{
     
-    private var label = UILabel(frame: .zero)
+    var label = UILabel(frame: .zero)
     let horizontalPadding: CGFloat = 15
     let verticalPadding: CGFloat = 7
     
@@ -29,11 +29,14 @@ class GameAttributeView: UIControl{
     
     private func commonInit() {
         label.font = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
+        label.lineBreakMode = .byClipping
+        label.lineBreakStrategy = .standard
         addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            label.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+            label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            
         ])
     }
     
@@ -42,6 +45,7 @@ class GameAttributeView: UIControl{
         attrSelected = selectedNow ?? false
         backColor = color
         if attrSelected{
+            backgroundColor = ThemeManager.colorForSelection(trait: traitCollection)
         } else {
             backgroundColor = backColor
         }
@@ -50,7 +54,7 @@ class GameAttributeView: UIControl{
     }
     
     override func layoutSubviews() {
-        let labelSize = self.label.systemLayoutSizeFitting(UIView.layoutFittingExpandedSize)
+        let labelSize = self.label.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         self.layer.cornerRadius = (labelSize.height + 2 * verticalPadding) / 2
     }
     
@@ -69,7 +73,7 @@ class GameAttributeView: UIControl{
         attrSelected.toggle()
         UIView.animate(withDuration: 0.1, delay: 0.1, options: [.allowUserInteraction, .beginFromCurrentState]) {
             if self.attrSelected {
-                self.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                self.backgroundColor = ThemeManager.colorForSelection(trait: self.traitCollection)
             } else {
                 self.backgroundColor = self.backColor
             }
