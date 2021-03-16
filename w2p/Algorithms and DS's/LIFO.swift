@@ -1,13 +1,13 @@
 //
-//  FIFO.swift
+//  LIFO.swift
 //  w2p
 //
-//  Created by vas on 02.03.2021.
+//  Created by vas on 15.03.2021.
 //
 
 import Foundation
 
-class FifoQueue<T> {
+class LifoQueue<T> {
         
     var queue: LinkedList<T>
     
@@ -19,10 +19,9 @@ class FifoQueue<T> {
         self.queue = LinkedList()
     }
     
-    
-    
+
     func pop() -> T?{
-        queue.popFront()
+        queue.popBack()
     }
     
     func push(element: T){
@@ -36,7 +35,9 @@ class FifoQueue<T> {
     }
     
     func pop(numOfElements: Int) -> [T]{
+        let numOfElements = min(self.count, numOfElements)
         var result = [T]()
+        
         for _ in 0..<numOfElements {
             if let item = pop() {
                 result.append(item)
@@ -58,5 +59,4 @@ class FifoQueue<T> {
     var isEmpty: Bool {
         count == 0
     }
-    
 }

@@ -161,14 +161,8 @@ class DetailedViewController: UIViewController{
     }
     
     override func viewDidLoad() {
-        setupGameMetadata {
-            success in
-            if success {
-                self.setupUIAfterLoadingGameMetadata()
-            }
-        }
+        super.viewDidLoad()
         setupUI()
-        
     }
     
     private func setupUI(){

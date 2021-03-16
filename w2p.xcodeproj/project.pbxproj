@@ -34,6 +34,8 @@
 		5D59BBF425F7D7580073FFD1 /* FileManager+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBF325F7D7580073FFD1 /* FileManager+.swift */; };
 		5D59BBF725F7E2090073FFD1 /* FeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBF625F7E2090073FFD1 /* FeedbackManager.swift */; };
 		5D59BBFC25F818DF0073FFD1 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D59BBFB25F818DF0073FFD1 /* ThemeManager.swift */; };
+		5D68EA0225FFAD0700E8169B /* PriorityQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68EA0125FFAD0700E8169B /* PriorityQueue.swift */; };
+		5D68EA0525FFAD1600E8169B /* Heap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D68EA0425FFAD1600E8169B /* Heap.swift */; };
 		5DA1154C25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA1154B25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift */; };
 		5DA4786D25FBDD5800FE19CE /* GameBrowserFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA4786C25FBDD5800FE19CE /* GameBrowserFooter.swift */; };
 		5DA6099325E50DA400F7B814 /* LabelFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA6099225E50DA400F7B814 /* LabelFlowView.swift */; };
@@ -73,6 +75,7 @@
 		5DE9937725E581F7004AB0B1 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE9937625E581F7004AB0B1 /* View+.swift */; };
 		5DEB7B4225EBB19B0087FF67 /* FavoriteGameCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */; };
 		5DF307BF25E027B10052433C /* ImageBlurrer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF307BE25E027B10052433C /* ImageBlurrer.swift */; };
+		5DF5BB0825FFCCCD00261502 /* LIFO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF5BB0725FFCCCD00261502 /* LIFO.swift */; };
 		5DF70BD725EF710900B99E31 /* StaticMediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF70BD625EF710900B99E31 /* StaticMediaCell.swift */; };
 		5DF85F1F25E1A31700359227 /* CDGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F1E25E1A31700359227 /* CDGame.swift */; };
 		5DF85F2225E1A61900359227 /* CDCover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F2125E1A61900359227 /* CDCover.swift */; };
@@ -118,6 +121,8 @@
 		5D59BBF325F7D7580073FFD1 /* FileManager+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+.swift"; sourceTree = "<group>"; };
 		5D59BBF625F7E2090073FFD1 /* FeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackManager.swift; sourceTree = "<group>"; };
 		5D59BBFB25F818DF0073FFD1 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		5D68EA0125FFAD0700E8169B /* PriorityQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityQueue.swift; sourceTree = "<group>"; };
+		5D68EA0425FFAD1600E8169B /* Heap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Heap.swift; sourceTree = "<group>"; };
 		5DA1154B25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalPlatformsController.swift; sourceTree = "<group>"; };
 		5DA4786C25FBDD5800FE19CE /* GameBrowserFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBrowserFooter.swift; sourceTree = "<group>"; };
 		5DA6099225E50DA400F7B814 /* LabelFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelFlowView.swift; sourceTree = "<group>"; };
@@ -157,6 +162,7 @@
 		5DE9937625E581F7004AB0B1 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGameCardCell.swift; sourceTree = "<group>"; };
 		5DF307BE25E027B10052433C /* ImageBlurrer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBlurrer.swift; sourceTree = "<group>"; };
+		5DF5BB0725FFCCCD00261502 /* LIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIFO.swift; sourceTree = "<group>"; };
 		5DF70BD625EF710900B99E31 /* StaticMediaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMediaCell.swift; sourceTree = "<group>"; };
 		5DF85F1E25E1A31700359227 /* CDGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGame.swift; sourceTree = "<group>"; };
 		5DF85F2125E1A61900359227 /* CDCover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCover.swift; sourceTree = "<group>"; };
@@ -188,7 +194,10 @@
 			children = (
 				5DDA01B325DB157400FF2C1C /* BinarySearch.swift */,
 				5D33CBF125EE0FE300377372 /* FIFO.swift */,
+				5DF5BB0725FFCCCD00261502 /* LIFO.swift */,
 				5D33CBF425EE10D000377372 /* LinkedList.swift */,
+				5D68EA0125FFAD0700E8169B /* PriorityQueue.swift */,
+				5D68EA0425FFAD1600E8169B /* Heap.swift */,
 				5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */,
 			);
 			path = "Algorithms and DS's";
@@ -219,6 +228,7 @@
 				5D530F1725D7E47A00DF5621 /* View */,
 				5D530F1825D7FC9D00DF5621 /* Controller */,
 				5DDA01B225DB156100FF2C1C /* Util */,
+				5D33CBF025EE0FBB00377372 /* Algorithms and DS's */,
 				5D530F0625D7E44300DF5621 /* Info.plist */,
 				5D530F0125D7E44300DF5621 /* Assets.xcassets */,
 			);
@@ -299,7 +309,6 @@
 		5DDA01B225DB156100FF2C1C /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				5D33CBF025EE0FBB00377372 /* Algorithms and DS's */,
 				5D0AA4D525DBD90A0026543E /* ImageResizer.swift */,
 				5DF307BE25E027B10052433C /* ImageBlurrer.swift */,
 				5DC4752525F8C29600412048 /* RedGreenMaper.swift */,
@@ -426,6 +435,7 @@
 				5DF85F2B25E1A64000359227 /* CDPlatform.swift in Sources */,
 				5D2C018C25F5FD1B00F17F14 /* CustomMergePolicy.swift in Sources */,
 				5D530EFD25D7E44300DF5621 /* SearchViewController.swift in Sources */,
+				5DF5BB0825FFCCCD00261502 /* LIFO.swift in Sources */,
 				5DF85F3D25E1A67100359227 /* CDAgeRating.swift in Sources */,
 				5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */,
 				5D530F2525D80DD500DF5621 /* JsonLoader.swift in Sources */,
@@ -466,6 +476,7 @@
 				5D0AA4D625DBD90A0026543E /* ImageResizer.swift in Sources */,
 				5DE9937725E581F7004AB0B1 /* View+.swift in Sources */,
 				5DDA01AE25DAFD7E00FF2C1C /* GameMediaDispatcher.swift in Sources */,
+				5D68EA0225FFAD0700E8169B /* PriorityQueue.swift in Sources */,
 				5D0AA4D925DBE7750026543E /* FilterViewController.swift in Sources */,
 				5DCB518725F38D7800079006 /* CDGameEngine.swift in Sources */,
 				5DF85F3725E1A66000359227 /* CDScreenshot.swift in Sources */,
@@ -476,6 +487,7 @@
 				5DB9E67825F000EA003BF705 /* GameBrowserConroller.swift in Sources */,
 				5D530EFB25D7E44300DF5621 /* SceneDelegate.swift in Sources */,
 				5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */,
+				5D68EA0525FFAD1600E8169B /* Heap.swift in Sources */,
 				5DF85F3125E1A64E00359227 /* CDWebsite.swift in Sources */,
 				5DF85F2225E1A61900359227 /* CDCover.swift in Sources */,
 				5DC4752625F8C29600412048 /* RedGreenMaper.swift in Sources */,

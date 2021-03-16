@@ -29,15 +29,10 @@ class GameAttributeView: UIControl{
     
     private func commonInit() {
         label.font = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
-        label.lineBreakMode = .byClipping
-        label.lineBreakStrategy = .standard
-        addSubview(label)
         label.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            label.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            
-        ])
+        self.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(label)
+        
     }
     
     
@@ -54,7 +49,12 @@ class GameAttributeView: UIControl{
     }
     
     override func layoutSubviews() {
-        let labelSize = self.label.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        super.layoutSubviews()
+        let w = frame.width
+        let h = frame.height
+        label.frame = CGRect(x: horizontalPadding, y: verticalPadding, width: w - 2*(horizontalPadding), height: h - 2*(verticalPadding))
+        
+        let labelSize = label.intrinsicContentSize
         self.layer.cornerRadius = (labelSize.height + 2 * verticalPadding) / 2
     }
     
@@ -93,15 +93,18 @@ class GameAttributeView: UIControl{
         }
     }
     
-    private func animateClear(){
-        UIView.animate(withDuration: 0.2){
+    func clear(animated: Bool){
+        attrSelected = false
+        
+        let action = {
             self.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.backgroundColor = self.backColor
         }
-    }
-    
-    func clear(){
-        attrSelected = false
-        animateClear()
+        
+        if animated {
+            UIView.animate(withDuration: 0.2) { action() }
+        } else {
+            action()
+        }
     }
 }

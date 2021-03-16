@@ -58,13 +58,10 @@
         "id": 38,
         "name": "Open world"
     },
-    {
-        "id": 39,
-        "name": "Warfare"
-    },
+
     {
         "id": 41,
-        "name": "4X (explore, expand, exploit, and exterminate)"
+        "name": "4X (explore, expand, exploit, exterminate)"
     },
     {
         "id": 34,
@@ -81,5 +78,9 @@
     {
         "id": 44,
         "name": "Romance"
+    },
+    {
+        "id": 39,
+        "name": "Warfare"
     }
 ]

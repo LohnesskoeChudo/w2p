@@ -11,7 +11,7 @@ class LinkedList<T> {
     
     var count: Int = 0
     var head: LinkedListNode<T>?
-    var tail: LinkedListNode<T>?
+    weak var tail: LinkedListNode<T>?
     
     
     init(array: [T]){
@@ -122,18 +122,25 @@ class LinkedList<T> {
             currentNode = currentNode?.nextNode
         }
     }
+    
+    
+    
 }
 
 class LinkedListNode<T> {
     
     var data: T
     var nextNode: LinkedListNode<T>?
-    var previousNode: LinkedListNode<T>?
+    weak var previousNode: LinkedListNode<T>?
     
     init(data: T, nextNode: LinkedListNode<T>? = nil, previousNode: LinkedListNode<T>? = nil) {
         self.data = data
         self.nextNode = nextNode
         self.previousNode = previousNode
+    }
+    
+    deinit {
+        print("deinit ll node")
     }
 }
 

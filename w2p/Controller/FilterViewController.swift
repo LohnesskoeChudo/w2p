@@ -169,6 +169,7 @@ class FilterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Filter"
+        navigationController?.navigationBar.tintColor = ThemeManager.colorForBarButtons(trait: traitCollection)
         setupFlows()
         setupControls()
         setupNavigationBar()
@@ -388,7 +389,7 @@ class FilterViewController: UIViewController {
     
     private func clear(gameAttrs: [GameAttributeView]){
         for attr in gameAttrs{
-            attr.clear()
+            attr.clear(animated: true)
         }
     }
     

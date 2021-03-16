@@ -18,7 +18,7 @@ class AdditionalPlatformsController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     
     @IBAction func editingChanged(_ sender: UITextField) {
-        
+        print("CALLED")
         updateFlow()
     }
     
@@ -83,6 +83,7 @@ class AdditionalPlatformsController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationItem()
         preparePlatformViews()
         updateFlow()
     }
@@ -92,6 +93,32 @@ class AdditionalPlatformsController: UIViewController {
         setupSearchBar()
     }
     
+    private func setupNavigationItem() {
+        navigationItem.title = "All Platforms"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearPlatforms))
+    }
+    
+    @objc private func clearPlatforms() {
+        searchTextField.text = nil
+        searchFilter.platforms = []
+        UIView.animate(withDuration: flow.subviews.isEmpty ? 0 : 0.3) {
+            self.flow.alpha = 0
+        } completion: { _ in
+            self.searchFilter.platforms = []
+            self.updateFlow()
+            self.clearPlatformViews(animated: false)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.flow.alpha = 1
+            })
+        }
+    }
+    
+    private func clearPlatformViews(animated: Bool) {
+        for platformView in platformViews {
+            platformView.clear(animated: animated)
+        }
+    }
+
     private func setupSearchBar(){
         searchTextField.delegate = self
         searchTextFieldBackground.layer.cornerRadius = searchTextFieldBackground.frame.height / 2

@@ -116,7 +116,7 @@ extension Game {
             self.cover = Cover(cdCover: cdCover)
         }
         
-        if let cdScreenshots = cdGame.screenshots?.sortedArray(using: []) as? [CDScreenshot]{
+        if let cdScreenshots = cdGame.screenshots?.allObjects as? [CDScreenshot]{
             let screenshots = cdScreenshots.compactMap{Screenshot(cdScreenshot: $0)}
             if !screenshots.isEmpty {
                 self.screenshots = screenshots
@@ -124,7 +124,7 @@ extension Game {
         }
         
         
-        if let artworks = cdGame.artworks?.sortedArray(using: []) as? [CDArtwork]{
+        if let artworks = cdGame.artworks?.allObjects as? [CDArtwork]{
             let artworks = artworks.compactMap{Artwork(cdArtwork: $0)}
             if !artworks.isEmpty {
                 self.artworks = artworks
@@ -139,42 +139,42 @@ extension Game {
             self.collection = GameCollection(cdGameCollection: gameCollection)
         }
         
-        if let videos = cdGame.videos?.sortedArray(using: []) as? [CDVideo]{
+        if let videos = cdGame.videos?.allObjects as? [CDVideo]{
             let videos = videos.compactMap{Video(cdVideo: $0)}
             if !videos.isEmpty {
                 self.videos = videos
             }
         }
         
-        if let websites = cdGame.websites?.sortedArray(using: []) as? [CDWebsite]{
+        if let websites = cdGame.websites?.allObjects as? [CDWebsite]{
             let websites = websites.compactMap{Website(cdWebsite: $0)}
             if !websites.isEmpty {
                 self.websites = websites
             }
         }
         
-        if let genres = cdGame.genres?.sortedArray(using: []) as? [CDGenre] {
+        if let genres = cdGame.genres?.allObjects as? [CDGenre] {
             let genres = genres.compactMap{Genre(cdGenre: $0)}
             if !genres.isEmpty {
                 self.genres = genres
             }
         }
         
-        if let themes = cdGame.themes?.sortedArray(using: []) as? [CDTheme] {
+        if let themes = cdGame.themes?.allObjects as? [CDTheme] {
             let themes = themes.compactMap{Theme(cdTheme: $0)}
             if !themes.isEmpty {
                 self.themes = themes
             }
         }
         
-        if let platforms = cdGame.platforms?.sortedArray(using: []) as? [CDPlatform] {
+        if let platforms = cdGame.platforms?.allObjects as? [CDPlatform] {
             let platforms = platforms.compactMap{Platform(cdPlatform: $0)}
             if !platforms.isEmpty {
                 self.platforms = platforms
             }
         }
         
-        if let companies = cdGame.companies?.sortedArray(using: []) as? [CDCompany] {
+        if let companies = cdGame.companies?.allObjects as? [CDCompany] {
             let companies = companies.compactMap{Company(cdCompany: $0)}
             if !companies.isEmpty {
                 self.involvedCompanies = companies.map{
@@ -185,20 +185,20 @@ extension Game {
             }
         }
         
-        if let ageRatings = cdGame.ageRatings?.sortedArray(using: []) as? [CDAgeRating]{
+        if let ageRatings = cdGame.ageRatings?.allObjects as? [CDAgeRating]{
             let ageRatings = ageRatings.compactMap{AgeRating(cdAgeRating: $0)}
             if !ageRatings.isEmpty {
                 self.ageRatings = ageRatings
             }
         }
-        if let gameModes = cdGame.gameModes?.sortedArray(using: []) as? [CDGameMode] {
+        if let gameModes = cdGame.gameModes?.allObjects as? [CDGameMode] {
             let gameModes = gameModes.compactMap{GameMode(cdGameMode: $0)}
             if !gameModes.isEmpty {
                 self.gameModes = gameModes
             }
         }
         
-        if let gameEngines = cdGame.engines?.sortedArray(using: []) as? [CDGameEngine] {
+        if let gameEngines = cdGame.engines?.allObjects as? [CDGameEngine] {
             let gameEngines = gameEngines.compactMap{GameEngine(cdGameEngine: $0)}
             if !gameEngines.isEmpty {
                 self.gameEngines = gameEngines
