@@ -9,9 +9,12 @@ import UIKit
 class SearchViewController: GameBrowserController{
     
     
+    
+    
     var panGestureRecognizer: UIPanGestureRecognizer!
     override var upperSpacing: CGFloat { searchBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 10 }
-   
+    var initialAnimationExecuted = false
+    
 
     // MARK: - Outlets
     
@@ -39,18 +42,31 @@ class SearchViewController: GameBrowserController{
             self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
 
         } completion:  { _ in
-            self.collectionView.contentOffset = .zero
-            self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
-            self.loadGames(withAnimation: true) { _ in
-                if !self.games.isEmpty {
-                    self.panGestureRecognizer.isEnabled = true
-                    
-                } else {
-                    self.panGestureRecognizer.isEnabled = false
+            
+            var action = {
+                self.collectionView.contentOffset = .zero
+                self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
+                self.loadGames(withAnimation: true) { _ in
+                    if !self.games.isEmpty {
+                        self.panGestureRecognizer.isEnabled = true
+                        
+                    } else {
+                        self.panGestureRecognizer.isEnabled = false
+                    }
+                    self.enableSearchButton()
+                    self.currentOffset += self.gamesPerRequest
                 }
-                self.enableSearchButton()
-                self.currentOffset += self.gamesPerRequest
             }
+            
+            if !self.initialAnimationExecuted {
+                self.finishInitialAnimation() {
+                    action()
+                }
+                self.initialAnimationExecuted = true
+            } else {
+                action()
+            }
+
         }
     }
     
@@ -67,10 +83,23 @@ class SearchViewController: GameBrowserController{
         setupGestureRecognizers()
     }
     
+    var initialCall = true
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupSearchBar()
-        setupButtons()
+        if initialCall {
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if initialCall {
+            
+            prepareForInitialAnimation()
+            performInitialAnimation()
+            initialCall = false
+        }
     }
     
     
@@ -113,9 +142,7 @@ class SearchViewController: GameBrowserController{
         searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-    private func setupButtons(){
-        searchButton.adjustsImageWhenHighlighted = true
-    }
+    
 
     private func setupGestureRecognizers(){
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
@@ -158,6 +185,49 @@ class SearchViewController: GameBrowserController{
                 self.searchBar.alpha = 1
             })
         }
+    }
+    
+    private func prepareForInitialAnimation() {
+        infoContainer.isHidden = false
+        infoContainer.alpha = 1
+        infoLabel.alpha = 0
+        infoLabel.numberOfLines = 0
+        infoLabel.text = "Lets find some cool games!\n\nApply filter and search by any keyword or get a random set of games."
+        infoImageView.image = UIImage(named: "rocket")
+        infoImageView.transform = CGAffineTransform(translationX: 0, y: (self.view.frame.height / 2 + infoImageView.frame.height))
+    }
+    
+
+    
+    func performInitialAnimation(completion: (() -> Void)? = nil) {
+        disableSearchButton()
+        UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut]) {
+            UIView.animate(withDuration: 0.3, delay: 0.7) {
+                self.infoLabel.alpha = 1
+            }
+            self.infoImageView.transform = .identity
+        } completion: { _ in
+            self.enableSearchButton()
+        }
+    }
+    
+    func finishInitialAnimation(completion: (()->Void)? = nil) {
+        UIView.animate(withDuration: 0.45) {
+            self.infoLabel.alpha = 0
+            self.infoImageView.transform = CGAffineTransform(translationX: 0, y: -((self.view.frame.height / 2) + self.infoImageView.frame.height))
+        } completion: { _ in
+            self.resetInfoContainer()
+            completion?()
+        }
+        
+        
+    }
+    
+    private func resetInfoContainer() {
+        infoContainer.isHidden = true
+        infoLabel.alpha = 1
+        infoImageView.alpha = 1
+        infoImageView.transform = .identity
     }
     
 

@@ -957,10 +957,10 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OLl-sg-ZXS">
-                                            <rect key="frame" x="20" y="10" width="254" height="32"/>
+                                            <rect key="frame" x="20" y="10" width="214" height="32"/>
                                             <subviews>
                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Start entering here" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="teO-kj-mPW">
-                                                    <rect key="frame" x="15" y="5" width="224" height="22"/>
+                                                    <rect key="frame" x="15" y="5" width="184" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -977,7 +977,7 @@
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iHY-YJ-6DT">
-                                            <rect key="frame" x="284" y="11" width="30" height="30"/>
+                                            <rect key="frame" x="244" y="11" width="30" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="30" id="AmY-yt-YF6"/>
                                                 <constraint firstAttribute="width" constant="30" id="HZU-vg-PxH"/>
@@ -1005,16 +1005,29 @@
                                                 <segue destination="H4d-CH-gnx" kind="presentation" identifier="filter" id="zS4-PB-yvS"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMA-1I-T1q">
+                                            <rect key="frame" x="284" y="11" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="30" id="IR6-Dg-9wl"/>
+                                                <constraint firstAttribute="height" constant="30" id="yU8-LK-QCh"/>
+                                            </constraints>
+                                            <color key="tintColor" systemColor="labelColor"/>
+                                            <state key="normal" title="Button" image="dices">
+                                                <color key="titleColor" systemColor="labelColor"/>
+                                            </state>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="rbZ-u2-ESG" firstAttribute="leading" secondItem="tMA-1I-T1q" secondAttribute="trailing" constant="10" id="8ts-tr-dJu"/>
                                         <constraint firstItem="OLl-sg-ZXS" firstAttribute="top" secondItem="Cw7-Dj-PGq" secondAttribute="top" constant="10" id="E5m-bc-BAG"/>
                                         <constraint firstAttribute="bottom" secondItem="OLl-sg-ZXS" secondAttribute="bottom" constant="10" id="IB8-Lc-XUJ"/>
                                         <constraint firstItem="iHY-YJ-6DT" firstAttribute="centerY" secondItem="OLl-sg-ZXS" secondAttribute="centerY" id="IeJ-Be-I9D"/>
                                         <constraint firstItem="iHY-YJ-6DT" firstAttribute="leading" secondItem="OLl-sg-ZXS" secondAttribute="trailing" constant="10" id="Men-rH-Fr0"/>
                                         <constraint firstItem="rbZ-u2-ESG" firstAttribute="centerY" secondItem="OLl-sg-ZXS" secondAttribute="centerY" id="XEX-z1-hKO"/>
+                                        <constraint firstItem="tMA-1I-T1q" firstAttribute="centerY" secondItem="OLl-sg-ZXS" secondAttribute="centerY" id="kSm-fe-JcO"/>
                                         <constraint firstItem="OLl-sg-ZXS" firstAttribute="leading" secondItem="Cw7-Dj-PGq" secondAttribute="leading" constant="20" id="wad-1u-hMW"/>
                                         <constraint firstAttribute="trailing" secondItem="rbZ-u2-ESG" secondAttribute="trailing" constant="20" id="ysF-fU-PXR"/>
-                                        <constraint firstItem="rbZ-u2-ESG" firstAttribute="leading" secondItem="iHY-YJ-6DT" secondAttribute="trailing" constant="10" id="zus-vj-wyS"/>
+                                        <constraint firstItem="tMA-1I-T1q" firstAttribute="leading" secondItem="iHY-YJ-6DT" secondAttribute="trailing" constant="10" id="zIb-YC-kZl"/>
                                     </constraints>
                                 </view>
                                 <blurEffect style="systemThinMaterial"/>
@@ -1096,14 +1109,14 @@
             <objects>
                 <viewController id="aGj-6w-gCA" customClass="DetailedViewController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ice-Mg-Kz6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="3000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bEe-7w-SIZ">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="2907"/>
                             </imageView>
                             <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d08-pt-uZq">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="2907"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCt-og-zrO">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="2626.6666666666665"/>
@@ -1736,7 +1749,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="643"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="9fu-TD-P6V" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
@@ -1767,7 +1780,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fb5-De-cO8">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="51.333333333333336"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="51.333333333333343"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKa-5k-VWp" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="19.999999999999993" y="10" width="89.333333333333314" height="41.333333333333336"/>
@@ -1809,7 +1822,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="USS-gY-TtJ">
-                                <rect key="frame" x="132" y="253" width="150" height="210"/>
+                                <rect key="frame" x="132" y="260.66666666666669" width="150" height="210"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gamepad" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-9o-WpA">
                                         <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
@@ -1888,10 +1901,11 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="m7g-vP-Cl6"/>
+        <segue reference="Kvh-Bh-DzW"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="chevron.backward" catalog="system" width="96" height="128"/>
+        <image name="dices" width="170.66667175292969" height="170.66667175292969"/>
         <image name="filter" width="170.66667175292969" height="170.66667175292969"/>
         <image name="find" width="170.66667175292969" height="170.66667175292969"/>
         <image name="gamepad" width="166" height="127.66666412353516"/>

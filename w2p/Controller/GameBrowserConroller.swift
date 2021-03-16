@@ -44,6 +44,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             print("ACTION")
              
             if error != nil {
+                self.isLoading = false
                 self.endAnimationsLoading() {
                     self.showInfoMessage(type: .connectionError) {
                         completion?(false)
@@ -181,7 +182,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         labelAnimation.repeatCount = .infinity
         labelAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState]) {
             self.infoContainer.alpha = 1
 
         } completion: { _ in
@@ -198,7 +199,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                 return
             }*/
             
-            UIView.animate(withDuration: 0.3, delay: 0, options: [.allowAnimatedContent, .beginFromCurrentState]) {
+            UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState]) {
                 self.infoContainer.alpha = 0
             } completion: { _ in
                 self.infoLabel.layer.removeAllAnimations()
