@@ -139,9 +139,7 @@ class LinkedListNode<T> {
         self.previousNode = previousNode
     }
     
-    deinit {
-        print("deinit ll node")
-    }
+    
 }
 
 

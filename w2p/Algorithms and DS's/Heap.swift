@@ -5,12 +5,18 @@
 //  Created by vas on 15.03.2021.
 //
 
+
+
 import Foundation
+
+// BinaryHeap without using arrays
+
 class BinaryHeap<Element, Priority> where Priority: Comparable {
     
     typealias BHNode = BinaryHeapNode<Element, Priority>
     
     private var compare: (_ leftItem: Priority,_ rightItem: Priority) -> Bool
+    var isEmpty: Bool { size == 0 }
     
     init(type: HeapKind) {
         switch type {

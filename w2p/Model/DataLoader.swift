@@ -19,7 +19,7 @@ class DataLoader{
             if let capturedData = data{
                 completion(capturedData, nil)
             } else {
-                completion(nil, .requestError)
+                completion(nil, .connectionError)
             }
         }.resume()
     }
@@ -28,6 +28,6 @@ class DataLoader{
 
 
 enum NetworkError {
-    case requestError
+    case connectionError
     case parseError
 }

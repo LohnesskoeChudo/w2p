@@ -23,17 +23,21 @@ class SearchViewController: GameBrowserController{
     // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
+        
+        let gamesWereEmpty = games.isEmpty
+            
+        disableSearchButton()
         games = []
         gamesSource.clear()
         currentOffset = 0
         panGestureRecognizer.isEnabled = false
         
-        UIView.transition(with: collectionView, duration: 0.3, options: .transitionCrossDissolve) {
+        UIView.transition(with: collectionView, duration: gamesWereEmpty ? 0 : 0.3, options: .transitionCrossDissolve) {
 
             let wfInvalidationContext = WFLayoutInvalidationContext()
             wfInvalidationContext.action = .rebuild
             self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
-            
+
         } completion:  { _ in
             self.collectionView.contentOffset = .zero
             self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
@@ -44,8 +48,9 @@ class SearchViewController: GameBrowserController{
                 } else {
                     self.panGestureRecognizer.isEnabled = false
                 }
+                self.enableSearchButton()
+                self.currentOffset += self.gamesPerRequest
             }
-            self.currentOffset += self.gamesPerRequest
         }
     }
     
@@ -83,6 +88,21 @@ class SearchViewController: GameBrowserController{
 
         default:
             return
+        }
+    }
+    
+    private func disableSearchButton() {
+        self.searchButton.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.5, delay: 0, options: .beginFromCurrentState) {
+            self.searchButton.alpha = 0.4
+        }
+    }
+    
+    private func enableSearchButton() {
+        UIView.animate(withDuration: 0.3) {
+            self.searchButton.alpha = 1
+        } completion: { _ in
+            self.searchButton.isUserInteractionEnabled = true
         }
     }
 

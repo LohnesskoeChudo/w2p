@@ -41,38 +41,52 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         let action = {
             (games: [Game]?, error: NetworkError?) in
             
+            print("ACTION")
+             
             if error != nil {
-                self.showConnectionError() {
-                    completion?(false)
-                }
-                return
-            }
-            
-            if let games = games, !games.isEmpty {
-                self.gamesSource.push(array: games)
-                self.endAnimationsLoading(){
-                    
-                    self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
-                        self.currentOffset += self.gamesPerRequest
-                        self.gameApiRequestItem?.offset = self.currentOffset
-                        completion?(true)
-                        self.collectionView.isScrollEnabled = true
-                        self.isLoading = false
+                self.endAnimationsLoading() {
+                    self.showInfoMessage(type: .connectionError) {
+                        completion?(false)
                     }
                 }
                 return
             }
             
-            self.endAnimationsLoading{
-                self.showNoResultMessageIfNeeded(){
-                    completion?(false)
-                    self.isLoading = false
+            if let games = games {
+                if !games.isEmpty {
+                    self.gamesSource.push(array: games)
+                    self.endAnimationsLoading(){
+                        self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
+                            self.currentOffset += self.gamesPerRequest
+                            self.gameApiRequestItem?.offset = self.currentOffset
+                            completion?(true)
+                            self.collectionView.isScrollEnabled = true
+                            self.isLoading = false
+                        }
+                    }
+                } else {
+                    self.endAnimationsLoading{
+                        self.showInfoMessage(type: .noResults){
+                            completion?(false)
+                            self.isLoading = false
+                        }
+                    }
                 }
             }
         }
-        startAnimationLoading(){
-            self.jsonLoader.load(request: request, completion: action)
+        
+        hideInfoMessages() {
+            self.startAnimationLoading(){
+                self.jsonLoader.load(request: request, completion: action)
+            }
         }
+
+            
+    }
+    
+    enum InfoMessage {
+        case connectionError
+        case noResults
     }
     
     private func showConnectionError(completion: (()->Void)? = nil) {
@@ -84,23 +98,56 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
     private func showConnectionErrorIfNoItemsPresented(completion: (() -> Void)? = nil){
-        
+        infoImageView.image = UIImage(named: "connection")
+        infoLabel.text = "No Internet connection"
+        infoContainer.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.infoContainer.alpha = 1
+        } completion: { _ in
+            completion?()
+        }
     }
     
+    // TODO: - implement
     private func showConnectionErrorIfItemsPresented(completion: (() -> Void)? = nil) {
-        
+        completion?()
     }
     
-    private func showInfoMessage(){
-        
+
+    private func showInfoMessage(type: InfoMessage, completion: (() -> Void)? = nil){
+        switch type {
+        case .connectionError:
+            showConnectionError(completion: completion)
+        case .noResults:
+            showNoResultMessageIfNeeded(completion: completion)
+        }
     }
     
     private func showNoResultMessageIfNeeded(completion: (()->Void)? = nil){
-        
+        if games.isEmpty {
+            infoImageView.image = UIImage(named: "noResults")
+            infoLabel.text = "No results"
+            infoContainer.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.infoContainer.alpha = 1
+            } completion: { _ in
+                completion?()
+            }
+        }
     }
+
     
-    private func hideInfoMessages(withAnimation: Bool, completion: (()->Void)? = nil ){
-        
+    private func hideInfoMessages(completion: (()->Void)? = nil ){
+        if !infoContainer.isHidden {
+            UIView.animate(withDuration: 0.3) {
+                self.infoContainer.alpha = 0
+            } completion: { _ in
+                self.infoContainer.isHidden = true
+                completion?()
+            }
+        } else {
+            completion?()
+        }
     }
     
     private func startAnimationLoading(completion: (()->Void)? = nil){
@@ -112,8 +159,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
     private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
+        
+        infoLabel.text = "Loading"
+        infoImageView.image = UIImage(named: "gamepad")
+        infoContainer.alpha = 0
         infoContainer.isHidden = false
-        infoContainer.alpha = 1
         let imageAnimation = CABasicAnimation(keyPath: "transform.rotation")
         imageAnimation.duration = 1
         imageAnimation.fromValue = CGFloat.pi / 4.5
@@ -131,39 +181,29 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         labelAnimation.repeatCount = .infinity
         labelAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
 
-        infoImageView.isHidden = false
-        UIView.animate(withDuration: 0.3){
-            self.infoImageView.alpha = 1
-        } completion: { _ in
-            completion?()
-        }
-        
-        infoLabel.text = "Loading"
-        infoLabel.isHidden = false
-        UIView.animate(withDuration: 0.7){
-            self.infoLabel.alpha = 1
+        UIView.animate(withDuration: 0.3) {
+            self.infoContainer.alpha = 1
+
         } completion: { _ in
             self.infoLabel.layer.add(labelAnimation, forKey: "loading label animation")
+            completion?()
         }
     }
     
     private func endAnimationLoadingWithNoItems(completion: (() -> Void)? = nil){
         DispatchQueue.main.async {
+            /*
             guard !self.infoContainer.isHidden else {
                 completion?()
                 return
-            }
+            }*/
             
             UIView.animate(withDuration: 0.3, delay: 0, options: [.allowAnimatedContent, .beginFromCurrentState]) {
                 self.infoContainer.alpha = 0
             } completion: { _ in
                 self.infoLabel.layer.removeAllAnimations()
                 self.infoImageView.layer.removeAllAnimations()
-                self.infoLabel.alpha = 0
-                self.infoImageView.alpha = 0
                 self.infoContainer.isHidden = true
-                self.infoLabel.isHidden = true
-                self.infoImageView.isHidden = true
                 completion?()
             }
         }
@@ -207,7 +247,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("viewWillTransition")
         (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
         
     }
@@ -244,7 +283,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             wfInvalidationContext.action = .insertion
             wfInvalidationContext.indexPaths = indexPaths
             self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
-            self.collectionView.insertItems(at: indexPaths)
             completion?()
         }
         
@@ -296,7 +334,6 @@ extension GameBrowserController: UICollectionViewDelegate{
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == max(0,games.count - 10){
-            print("WILL DISPLAY AT \(indexPath.item)")
             if !isLoading{
                 if gamesSource.isEmpty {
                     loadGames(withAnimation: true)
@@ -395,4 +432,3 @@ extension GameBrowserController: UICollectionViewDataSource {
         }
     }
 }
-

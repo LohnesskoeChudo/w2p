@@ -23,6 +23,10 @@ class JsonLoader{
                 } else {
                     completion(nil, .parseError)
                 }
+                return
+            }
+            if networkError != nil {
+                 completion(nil, .connectionError)
             }
         }
         dataLoader.load(with: request, completion: parseData)

@@ -9,7 +9,7 @@ import UIKit
 
 class AdditionalPlatformsController: UIViewController {
     
-    var platformViews = [GameAttributeView]()
+    var platformViews = [String: GameAttributeView]()
     var searchFilter: SearchFilter!
     
     @IBOutlet weak var flow: LabelFlowView!
@@ -18,7 +18,6 @@ class AdditionalPlatformsController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     
     @IBAction func editingChanged(_ sender: UITextField) {
-        print("CALLED")
         updateFlow()
     }
     
@@ -35,38 +34,36 @@ class AdditionalPlatformsController: UIViewController {
             platformAttrView.tag = id
             platformAttrView.translatesAutoresizingMaskIntoConstraints = false
             
-            platformViews.append(platformAttrView)
+            platformViews[platformName] = platformAttrView
         }
     }
     
-    private func filterPlatforms(search: String) -> [Platform] {
+    private func filterPlatforms(search: String) -> BinaryHeap<Platform, String.Index> {
         
-        var filteredPlatforms = [Platform]()
+        var filteredPlatforms = BinaryHeap<Platform, String.Index>(type: .min)
         for platform in SearchFilter.allPlatforms {
             if let transformedName = platform.name?.lowercased().replacingOccurrences(of: " ", with: "") {
-                
-                if transformedName.index(of: search) != nil {
-                    filteredPlatforms.append(platform)
+                if let index = transformedName.index(of: search) {
+                    filteredPlatforms.insert(node: .init(data: platform, priority: index))
                 }
             }
         }
+        
         return filteredPlatforms
     }
     
     private func updateFlow() {
         flow.removeAllSubviews()
         
-        var platformNamesToShow: Set<String>
         if let searchStr = searchTextField.text?.lowercased().replacingOccurrences(of: " ", with: "") , !searchStr.isEmpty {
-            
-            platformNamesToShow =  Set(filterPlatforms(search: searchStr).compactMap{$0.name})
+            let filteredPlatforms = filterPlatforms(search: searchStr)
+            while let platform = filteredPlatforms.popTop() {
+                if let name = platform.data.name, let platformView = platformViews[name]{
+                    flow.addSubview(platformView)
+                }
+            }
         } else {
-            platformNamesToShow = Set(SearchFilter.allPlatforms.compactMap{$0.name})
-        }
-        
-        for platformView in platformViews {
-            if let platformName = platformView.label.text, platformNamesToShow.contains(platformName) {
-                
+            for platformView in platformViews.values {
                 flow.addSubview(platformView)
             }
         }
@@ -114,7 +111,7 @@ class AdditionalPlatformsController: UIViewController {
     }
     
     private func clearPlatformViews(animated: Bool) {
-        for platformView in platformViews {
+        for platformView in platformViews.values {
             platformView.clear(animated: animated)
         }
     }

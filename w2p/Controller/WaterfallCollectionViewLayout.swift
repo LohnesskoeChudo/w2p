@@ -83,8 +83,7 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     //MARK: - using binary search to find elements
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         
-        print("in rect", cache.count)
-        
+
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
 
         if cache.count > 0 {
@@ -125,7 +124,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        print("getting attr")
         return cache[indexPath.item]
     }
 
@@ -138,19 +136,19 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         if let context = context as? WFLayoutInvalidationContext {
             if context.action == WFInvalidationAction.insertion {
-                print("INV CONTEXT")
                 if let insertedIPs = context.indexPaths {
                     for insertedItemIP in insertedIPs {
                         layoutItemAt(indexPath: insertedItemIP)
                     }
+                    collectionView?.insertItems(at: insertedIPs)
                 }
             }
             if context.action == WFInvalidationAction.rebuild {
                 cache = []
                 initialLayout()
+                collectionView?.reloadData()
             }
         }
-        print(cache.count)
         super.invalidateLayout(with: context)
     }
     
