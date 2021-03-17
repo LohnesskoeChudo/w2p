@@ -31,6 +31,36 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     @IBOutlet weak var infoImageView: UIImageView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
+    
+    
+
+    
+    func refreshGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil) {
+        
+        let gamesWereEmpty = games.isEmpty
+        
+        isLoading = true
+        games = []
+        gamesSource.clear()
+        currentOffset = 0
+        gameApiRequestItem?.offset = 0
+        
+        UIView.transition(with: collectionView, duration: gamesWereEmpty ? 0 : 0.3, options: .transitionCrossDissolve) {
+            let wfInvalidationContext = WFLayoutInvalidationContext()
+            wfInvalidationContext.action = .rebuild
+            self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
+
+        } completion:  { _ in
+            self.collectionView.contentOffset = .zero
+            self.loadGames(withAnimation: true) { success in
+                self.currentOffset += self.gamesPerRequest
+                completion?(success)
+            }
+        }
+    }
+    
+    
+    
 
     func loadGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil){
         isLoading = true

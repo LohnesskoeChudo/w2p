@@ -318,8 +318,8 @@ class DetailedViewController: UIViewController{
         if let sites = game.websites {
             if !sites.isEmpty {
                 var websiteButtons = [UIView]()
-                for website in sites {
-                    if let button = setupWebsiteButton(website: website) {
+                for (index,website) in sites.enumerated() {
+                    if let button = setupWebsiteButton(website: website, index: index) {
                         websiteButtons.append(button)
                     }
                 }
@@ -334,13 +334,15 @@ class DetailedViewController: UIViewController{
         websitesOpeningButton.superview?.isHidden = true
     }
     
-    private func setupWebsiteButton(website: Website) -> UIView?{
-        guard let siteCategory = website.category, let url = website.url, let websiteName = WebsiteCategory(rawValue: siteCategory)?.name else { return nil }
+    private func setupWebsiteButton(website: Website, index: Int) -> UIView?{
+        guard let siteCategory = website.category, let websiteName = WebsiteCategory(rawValue: siteCategory)?.name else { return nil }
         let button = CustomButton()
+        button.tag = index
         let buttonColorReleased = ThemeManager.colorForWebsite(trait: traitCollection)
         let buttonColorPressed = ThemeManager.darkVersion(of: buttonColorReleased)
         button.setup(colorPressed: buttonColorPressed, colorReleazed: buttonColorReleased)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(websiteButtonPressed(sender:)), for: .touchUpInside)
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = websiteName
@@ -353,6 +355,11 @@ class DetailedViewController: UIViewController{
             label.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -5)
         ])
         return button
+    }
+    
+    @objc private func websiteButtonPressed(sender: CustomButton) {
+        guard let urlStr = game.websites?[sender.tag].url, let url = URL(string: urlStr) else {return}
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
     private func setupWebsitesFlow(with views: [UIView]){

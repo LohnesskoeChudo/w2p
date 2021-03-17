@@ -10,6 +10,8 @@ class SimilarGamesController : GameBrowserController{
     
     var externalGame: Game!
     var category: BrowserGameCategory!
+    var panGestureRecognizer: UIPanGestureRecognizer!
+    
     override var upperSpacing: CGFloat {
         upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
     }
@@ -17,6 +19,19 @@ class SimilarGamesController : GameBrowserController{
     @IBAction func backButtonPressed(_ sender: CustomButton) {
         navigationController?.popViewController(animated: true)
     }
+    @IBAction func refresh(_ sender: CustomButton) {
+        panGestureRecognizer.isEnabled = false
+        super.refreshGames(withAnimation: true) {
+            success in
+            if !self.games.isEmpty {
+                self.panGestureRecognizer.isEnabled = true
+            } else {
+                self.panGestureRecognizer.isEnabled = false
+            }
+        }
+    }
+    
+    
     @IBOutlet weak var upperBar: UIView!
     
     var needToUpdateGames = true
@@ -30,7 +45,7 @@ class SimilarGamesController : GameBrowserController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if needToUpdateGames {
-            loadGames(withAnimation: true)
+            self.refreshGames(withAnimation: false)
             needToUpdateGames = false
         }
     }
@@ -47,17 +62,7 @@ class SimilarGamesController : GameBrowserController{
     }
     
 
-    func loadGames(withAnimation: Bool) {
-        
-        games = []
-        gamesSource.clear()
-        gameApiRequestItem?.offset = 0
-        let wfInvalidationContext = WFLayoutInvalidationContext()
-        wfInvalidationContext.action = .rebuild
-        collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
-        super.loadGames(withAnimation: true)
-    }
-    
+
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -71,9 +76,9 @@ class SimilarGamesController : GameBrowserController{
     }
     
     private func setupGestureRecognizers(){
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
-        panRecognizer.delegate = self
-        collectionView.addGestureRecognizer(panRecognizer)
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
+        panGestureRecognizer.delegate = self
+        collectionView.addGestureRecognizer(panGestureRecognizer)
 
     }
     

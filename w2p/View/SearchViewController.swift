@@ -27,46 +27,31 @@ class SearchViewController: GameBrowserController{
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         
-        let gamesWereEmpty = games.isEmpty
-            
+        if !self.initialAnimationExecuted {
+            self.finishInitialAnimation() {
+                self.refreshGames(withAnimation: true)
+            }
+            self.initialAnimationExecuted = true
+        } else {
+            self.refreshGames(withAnimation: true)
+        }
+
+    }
+    
+    private func refreshGames(withAnimation: Bool) {
         disableSearchButton()
-        games = []
-        gamesSource.clear()
-        currentOffset = 0
         panGestureRecognizer.isEnabled = false
+        self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
         
-        UIView.transition(with: collectionView, duration: gamesWereEmpty ? 0 : 0.3, options: .transitionCrossDissolve) {
+        super.refreshGames(withAnimation: withAnimation) {
+            success in
+            self.enableSearchButton()
+            if !self.games.isEmpty {
+                self.panGestureRecognizer.isEnabled = true
 
-            let wfInvalidationContext = WFLayoutInvalidationContext()
-            wfInvalidationContext.action = .rebuild
-            self.collectionView.collectionViewLayout.invalidateLayout(with: wfInvalidationContext)
-
-        } completion:  { _ in
-            
-            var action = {
-                self.collectionView.contentOffset = .zero
-                self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
-                self.loadGames(withAnimation: true) { _ in
-                    if !self.games.isEmpty {
-                        self.panGestureRecognizer.isEnabled = true
-                        
-                    } else {
-                        self.panGestureRecognizer.isEnabled = false
-                    }
-                    self.enableSearchButton()
-                    self.currentOffset += self.gamesPerRequest
-                }
-            }
-            
-            if !self.initialAnimationExecuted {
-                self.finishInitialAnimation() {
-                    action()
-                }
-                self.initialAnimationExecuted = true
             } else {
-                action()
+                self.panGestureRecognizer.isEnabled = false
             }
-
         }
     }
     

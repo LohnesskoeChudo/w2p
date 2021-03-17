@@ -1109,14 +1109,14 @@
             <objects>
                 <viewController id="aGj-6w-gCA" customClass="DetailedViewController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ice-Mg-Kz6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="3000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bEe-7w-SIZ">
-                                <rect key="frame" x="0.0" y="44" width="414" height="2907"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
                             </imageView>
                             <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d08-pt-uZq">
-                                <rect key="frame" x="0.0" y="44" width="414" height="2907"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="2980"/>
                                 <subviews>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cCt-og-zrO">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="2626.6666666666665"/>
@@ -1751,7 +1751,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
-                                <rect key="frame" x="0.0" y="44" width="414" height="643"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="9fu-TD-P6V" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
@@ -1782,7 +1782,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fb5-De-cO8">
-                                <rect key="frame" x="0.0" y="44" width="414" height="51.333333333333343"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="51.333333333333336"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jKa-5k-VWp" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="19.999999999999993" y="10" width="89.333333333333314" height="41.333333333333336"/>
@@ -1815,16 +1815,39 @@
                                             <action selector="backButtonPressed:" destination="w68-TY-0eO" eventType="touchUpInside" id="YuQ-rr-7SF"/>
                                         </connections>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sGq-jD-nVO" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
+                                        <rect key="frame" x="352.66666666666669" y="10" width="41.333333333333314" height="41.333333333333336"/>
+                                        <subviews>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.clockwise" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mcp-de-gyy">
+                                                <rect key="frame" x="6.9999999999999982" y="6.3333333333333321" width="27.333333333333329" height="27.000000000000011"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="mcp-de-gyy" secondAttribute="bottom" constant="7" id="B7k-7V-peL"/>
+                                            <constraint firstItem="mcp-de-gyy" firstAttribute="top" secondItem="sGq-jD-nVO" secondAttribute="top" constant="7" id="Ceq-bh-K2m"/>
+                                            <constraint firstAttribute="trailing" secondItem="mcp-de-gyy" secondAttribute="trailing" constant="7" id="afI-y5-AIC"/>
+                                            <constraint firstAttribute="width" secondItem="sGq-jD-nVO" secondAttribute="height" id="c5Z-9A-z1p"/>
+                                            <constraint firstItem="mcp-de-gyy" firstAttribute="leading" secondItem="sGq-jD-nVO" secondAttribute="leading" constant="7" id="dny-Lr-pac"/>
+                                        </constraints>
+                                        <connections>
+                                            <action selector="refresh:" destination="w68-TY-0eO" eventType="touchUpInside" id="Mfm-tt-K7Z"/>
+                                        </connections>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="jKa-5k-VWp" secondAttribute="bottom" id="9p2-cr-YqV"/>
+                                    <constraint firstItem="sGq-jD-nVO" firstAttribute="height" secondItem="jKa-5k-VWp" secondAttribute="height" id="D91-c8-iNA"/>
+                                    <constraint firstAttribute="trailing" secondItem="sGq-jD-nVO" secondAttribute="trailing" constant="20" id="ISw-uZ-WxB"/>
                                     <constraint firstItem="jKa-5k-VWp" firstAttribute="leading" secondItem="Fb5-De-cO8" secondAttribute="leading" constant="20" id="PbB-AW-Uew"/>
                                     <constraint firstItem="jKa-5k-VWp" firstAttribute="top" secondItem="Fb5-De-cO8" secondAttribute="top" constant="10" id="Uly-zQ-IcJ"/>
+                                    <constraint firstItem="sGq-jD-nVO" firstAttribute="centerY" secondItem="jKa-5k-VWp" secondAttribute="centerY" id="kb5-6v-W0O"/>
                                 </constraints>
                             </view>
                             <view hidden="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="USS-gY-TtJ">
-                                <rect key="frame" x="132" y="260.66666666666669" width="150" height="210"/>
+                                <rect key="frame" x="132" y="253" width="150" height="210"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gamepad" translatesAutoresizingMaskIntoConstraints="NO" id="nq7-9o-WpA">
                                         <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
@@ -1880,7 +1903,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1iG-72-T7r" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="984" y="416"/>
+            <point key="canvasLocation" x="982.60869565217399" y="415.76086956521743"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4c2-c9-q3V">
@@ -1903,9 +1926,10 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Kvh-Bh-DzW"/>
+        <segue reference="m7g-vP-Cl6"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
         <image name="chevron.backward" catalog="system" width="96" height="128"/>
         <image name="dices" width="170.66667175292969" height="170.66667175292969"/>
         <image name="filter" width="170.66667175292969" height="170.66667175292969"/>
