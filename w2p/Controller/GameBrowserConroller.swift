@@ -90,6 +90,13 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         case noResults
     }
     
+    func resetInfoContainer() {
+        infoContainer.alpha = 0
+        infoLabel.alpha = 1
+        infoImageView.alpha = 1
+        infoImageView.transform = .identity
+    }
+    
     private func showConnectionError(completion: (()->Void)? = nil) {
         if self.games.isEmpty {
             showConnectionErrorIfNoItemsPresented(completion: completion)
@@ -152,6 +159,8 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
     private func startAnimationLoading(completion: (()->Void)? = nil){
+        infoLabel.alpha = 1
+        infoImageView.alpha = 1
         if games.isEmpty {
             startAnimationLoadingWithNoItems(completion: completion)
         } else {

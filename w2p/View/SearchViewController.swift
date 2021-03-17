@@ -216,20 +216,14 @@ class SearchViewController: GameBrowserController{
             self.infoLabel.alpha = 0
             self.infoImageView.transform = CGAffineTransform(translationX: 0, y: -((self.view.frame.height / 2) + self.infoImageView.frame.height))
         } completion: { _ in
-            self.resetInfoContainer()
+            super.resetInfoContainer()
             completion?()
         }
         
         
     }
     
-    private func resetInfoContainer() {
-        infoContainer.isHidden = true
-        infoLabel.alpha = 1
-        infoImageView.alpha = 1
-        infoImageView.transform = .identity
-    }
-    
+   
 
 }
 
