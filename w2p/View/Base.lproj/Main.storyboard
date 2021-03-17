@@ -1747,7 +1747,7 @@
             <objects>
                 <viewController id="w68-TY-0eO" customClass="SimilarGamesController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mDX-aO-Nod">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
@@ -1897,6 +1897,7 @@
                         <outlet property="infoContainer" destination="USS-gY-TtJ" id="ufo-FF-eiL"/>
                         <outlet property="infoImageView" destination="nq7-9o-WpA" id="Ka2-9Z-uxV"/>
                         <outlet property="infoLabel" destination="XSu-kf-9bA" id="Jlg-wZ-o0r"/>
+                        <outlet property="refreshButton" destination="sGq-jD-nVO" id="HkJ-Oa-AYB"/>
                         <outlet property="upperBar" destination="Fb5-De-cO8" id="qHJ-XW-52f"/>
                         <segue destination="aGj-6w-gCA" kind="show" identifier="detailed" id="m7g-vP-Cl6"/>
                     </connections>

@@ -20,6 +20,11 @@ class SimilarGamesController : GameBrowserController{
         navigationController?.popViewController(animated: true)
     }
     @IBAction func refresh(_ sender: CustomButton) {
+        self.refreshGames(withAnimation: true)
+    }
+    
+    private func refreshGames(withAnimation: Bool) {
+        self.disableRefreshButton()
         panGestureRecognizer.isEnabled = false
         super.refreshGames(withAnimation: true) {
             success in
@@ -28,9 +33,26 @@ class SimilarGamesController : GameBrowserController{
             } else {
                 self.panGestureRecognizer.isEnabled = false
             }
+            self.enableRefreshButton()
         }
     }
     
+    @IBOutlet weak var refreshButton: CustomButton!
+    
+    private func disableRefreshButton() {
+        refreshButton.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.3) {
+            self.refreshButton.alpha = 0.5
+        }
+    }
+    
+    private func enableRefreshButton() {
+        UIView.animate(withDuration: 0.3) {
+            self.refreshButton.alpha = 1
+        } completion: { _ in
+            self.refreshButton.isUserInteractionEnabled = true
+        }
+    }
     
     @IBOutlet weak var upperBar: UIView!
     
