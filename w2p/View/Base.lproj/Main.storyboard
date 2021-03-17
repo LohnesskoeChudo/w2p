@@ -1243,7 +1243,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="trailing" secondItem="Opu-TM-4Vo" secondAttribute="trailing" constant="20" symbolic="YES" id="10f-GN-Sh0"/>
                                                             <constraint firstItem="Opu-TM-4Vo" firstAttribute="top" secondItem="8WP-wm-uaB" secondAttribute="top" constant="20" symbolic="YES" id="2F0-dq-ZaX"/>
-                                                            <constraint firstAttribute="bottom" secondItem="Opu-TM-4Vo" secondAttribute="bottom" constant="20" symbolic="YES" id="Jjp-17-aKF"/>
+                                                            <constraint firstAttribute="bottom" secondItem="Opu-TM-4Vo" secondAttribute="bottom" constant="20" id="Jjp-17-aKF"/>
                                                             <constraint firstItem="Opu-TM-4Vo" firstAttribute="leading" secondItem="8WP-wm-uaB" secondAttribute="leading" constant="20" symbolic="YES" id="qYt-hD-CCU"/>
                                                         </constraints>
                                                     </view>
@@ -1709,6 +1709,7 @@
                         <outlet property="collectionGamesButton" destination="cai-HL-YMf" id="Sio-3B-ohy"/>
                         <outlet property="companyContainer" destination="OWl-FX-tPG" id="ZNj-4a-Mxi"/>
                         <outlet property="companyLabel" destination="c4E-Kl-AyK" id="CEf-wg-rgG"/>
+                        <outlet property="coverBottomSpacing" destination="Olk-OW-oc0" id="fJ3-2v-36M"/>
                         <outlet property="coverHeightConstraint" destination="AyR-4q-rg4" id="zoU-jU-a1K"/>
                         <outlet property="coverView" destination="1LI-xH-4sd" id="ORB-g8-0f6"/>
                         <outlet property="coverWidthConstraint" destination="Yyl-pu-D1d" id="MtG-rY-Znd"/>
@@ -1723,6 +1724,7 @@
                         <outlet property="mediaCounterBackground" destination="MUo-Dm-8nY" id="bKh-Us-y3w"/>
                         <outlet property="mediaCounterLabel" destination="XWe-cd-y9P" id="TcC-1C-QvE"/>
                         <outlet property="nameLabel" destination="Opu-TM-4Vo" id="B5c-uT-59m"/>
+                        <outlet property="nameLabelTopSpacing" destination="2F0-dq-ZaX" id="onp-xm-6gr"/>
                         <outlet property="ratingVIew" destination="Q3s-D1-2ea" id="mNL-nF-B4w"/>
                         <outlet property="screenshotCollectionViewHeight" destination="sas-kn-aLK" id="KC8-nP-vrF"/>
                         <outlet property="scrollView" destination="d08-pt-uZq" id="J7w-Fy-OX9"/>

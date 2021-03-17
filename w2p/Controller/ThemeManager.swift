@@ -148,6 +148,15 @@ class ThemeManager {
             return #colorLiteral(red: 0.2558123305, green: 0.4377940459, blue: 0.6294416244, alpha: 1)
         }
     }
+    
+    static func colorForWebsite(trait: UITraitCollection) -> UIColor {
+        switch trait.userInterfaceStyle {
+        case .dark:
+            return #colorLiteral(red: 0.5076142132, green: 0.1377298433, blue: 0.2437737922, alpha: 1)
+        default:
+            return #colorLiteral(red: 1, green: 0.4878630806, blue: 0.534561437, alpha: 1)
+        }
+    }
 
     private static func uiStyleForCurrentAppearanceMode() -> UIUserInterfaceStyle{
         if GlobalSettings.shared.darkMode {
@@ -160,6 +169,8 @@ class ThemeManager {
     static func updateUIAppearance() {
         window?.overrideUserInterfaceStyle = uiStyleForCurrentAppearanceMode()
     }
+    
+    
 
 }
 

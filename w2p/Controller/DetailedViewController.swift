@@ -55,8 +55,15 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var coverView: UIImageView!
     @IBOutlet weak var blurredBackground: UIImageView!
+    
+    
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var nameLabelTopSpacing: NSLayoutConstraint!
+    @IBOutlet weak var coverBottomSpacing: NSLayoutConstraint!
+    
+    
     @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var mediaContainer: UIView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -329,19 +336,23 @@ class DetailedViewController: UIViewController{
     
     private func setupWebsiteButton(website: Website) -> UIView?{
         guard let siteCategory = website.category, let url = website.url, let websiteName = WebsiteCategory(rawValue: siteCategory)?.name else { return nil }
-        let commonButton = CustomButton()
-        commonButton.translatesAutoresizingMaskIntoConstraints = false
+        let button = CustomButton()
+        let buttonColorReleased = ThemeManager.colorForWebsite(trait: traitCollection)
+        let buttonColorPressed = ThemeManager.darkVersion(of: buttonColorReleased)
+        button.setup(colorPressed: buttonColorPressed, colorReleazed: buttonColorReleased)
+        button.translatesAutoresizingMaskIntoConstraints = false
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = websiteName
-        commonButton.addSubview(label)
+        label.font = UIFont.systemFont(ofSize: UIFont.systemFontSize + 3, weight: .semibold)
+        button.addSubview(label)
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: commonButton.leadingAnchor, constant: 10),
-            label.trailingAnchor.constraint(equalTo: commonButton.trailingAnchor, constant: -10),
-            label.topAnchor.constraint(equalTo: commonButton.topAnchor, constant: 5),
-            label.bottomAnchor.constraint(equalTo: commonButton.bottomAnchor, constant: -5)
+            label.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 10),
+            label.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
+            label.topAnchor.constraint(equalTo: button.topAnchor, constant: 5),
+            label.bottomAnchor.constraint(equalTo: button.bottomAnchor, constant: -5)
         ])
-        return commonButton
+        return button
     }
     
     private func setupWebsitesFlow(with views: [UIView]){
@@ -437,9 +448,14 @@ class DetailedViewController: UIViewController{
             platformAttr.setup(text: platform.name ?? "", color: color)
             gameAttrs.append(platformAttr)
         }
-        for attrView in gameAttrs{
-            attrView.translatesAutoresizingMaskIntoConstraints = false
-            attributesFlowView.addSubview(attrView)
+        
+        if gameAttrs.isEmpty {
+            attributesContainer.isHidden = true
+        } else {
+            for attrView in gameAttrs{
+                attrView.translatesAutoresizingMaskIntoConstraints = false
+                attributesFlowView.addSubview(attrView)
+            }
         }
     }
    
@@ -449,34 +465,76 @@ class DetailedViewController: UIViewController{
     
     
     private func setupCover(){
-        guard let cover = game.cover else { return }
+        guard let cover = game.cover else {
+            setDefaultAppearance()
+            coverHeightConstraint.constant = 0
+            coverBottomSpacing.constant = 0
+            nameLabelTopSpacing.constant = 0
+            return
+        }
+        
         let viewWidth = view.bounds.width
-        DispatchQueue.global(qos: .userInteractive).async{
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
-                data, error in
-                if let data = data, let image = UIImage(data: data){
-                    let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
-                    let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth / 2, image: blurred)
-                    let resizedImage = ImageResizer.resizeImageToFit(width: viewWidth, image: image)
-                        
+        loadCover(cover: cover) {
+            image in
+            guard let image = image else {
+                self.setDefaultAppearance()
+                return
+            }
+            
+            let resized = ImageResizer.resizeImageToFit(width: viewWidth, image: image)
+            let resizedBlurred = self.imageBlurrer.blurImage(with: image, radius: 30)
+            
+            
+            //let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
+            //let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth / 2, image: blurred)
+
+            DispatchQueue.main.async {
+                UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
+                    self.coverView.image = resized
+                }
+                
+                UIView.transition(with: self.blurredBackground, duration: 0.6, options: [.transitionCrossDissolve, .curveEaseOut]){
+                    self.blurredBackground.image = resizedBlurred
+                }
+                
+                if self.isMediaSectionAvailable {
+                    self.blurredMediaBackground.image = resizedBlurred
+                }
+            }
+        }
+    }
+    
+    private func setDefaultAppearance() {
+        if isMediaSectionAvailable {
+            DispatchQueue.main.async {
+                let width = self.view.frame.width / 2
+                DispatchQueue.global(qos: .userInteractive).async{
+                    let backgroundImage = UIImage(named: "mediaBackgound")!
+                    let resized = ImageResizer.resizeImageToFit(width: width, image: backgroundImage)
+                    let blurred = self.imageBlurrer.blurImage(with: resized, radius: 10)
                     DispatchQueue.main.async {
-                        UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
-                            
-                            self.coverView.image = resizedImage
-                        }
-                        
-                        UIView.transition(with: self.blurredBackground, duration: 0.2, options: .transitionCrossDissolve){
-                            self.blurredBackground.image = resizedBlurred
-                        }
-                        
-                        if self.isMediaSectionAvailable {
-                            self.blurredMediaBackground.image = resizedBlurred
-                        }
+                        self.blurredMediaBackground.image = blurred
                     }
                 }
             }
         }
     }
+    
+    private func loadCover(cover: Cover, completion: ((UIImage?) -> Void)? = nil) {
+        DispatchQueue.global(qos: .userInteractive).async{
+            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
+                data, error in
+                if let data = data {
+                    completion?(UIImage(data: data))
+                } else {
+                    completion?(nil)
+                }
+            }
+        }
+    }
+    
+    
+
     
     private func setupPlaceholderBlurredBackgroundForMediaSectionIfNeeded() {
         
@@ -487,15 +545,21 @@ class DetailedViewController: UIViewController{
     private func layoutCover(size: CGSize){
         
         let heightPercentage: CGFloat = 0.58
+        
+            let padding:CGFloat = 20
 
         guard let aspect = game.cover?.aspect else {return}
         if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
+            
             coverHeightConstraint.constant = size.height * heightPercentage
             coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (size.height * heightPercentage)
             
         } else {
-            coverWidthConstraint.constant = size.width
-            coverHeightConstraint.constant = size.width * CGFloat(aspect)
+            print("CAAALED")
+            let width = size.width - (2 * padding)
+            
+            coverWidthConstraint.constant = width
+            coverHeightConstraint.constant = width * CGFloat(aspect)
         }
     }
     
