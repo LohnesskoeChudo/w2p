@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDGameCollection: NSManagedObject {
+public class CDGameCollection: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, collection: GameCollection, generatorGame: CDGame){
             

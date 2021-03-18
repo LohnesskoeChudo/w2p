@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDArtwork: NSManagedObject {
+public class CDArtwork: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, artwork: Artwork){
             
@@ -24,6 +24,11 @@ class CDArtwork: NSManagedObject {
         if let isAnimated = artwork.animated { self.animated = isAnimated }
         self.url = url
         
+        let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: context)!
+        let imageData = CDImageData(entity: imageDataEntity, insertInto: context)
+        imageData.id = self.id
+        imageData.typeId = Int64(StaticMedia.artwork.rawValue)
+        self.imageData = imageData
     }
     
 }

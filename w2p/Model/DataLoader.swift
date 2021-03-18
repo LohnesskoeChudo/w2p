@@ -9,11 +9,15 @@ class DataLoader{
         sessionConfiguration.httpMaximumConnectionsPerHost = 10
         sessionConfiguration.timeoutIntervalForRequest = 3
         sessionConfiguration.timeoutIntervalForResource = 3
+        sessionConfiguration.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        sessionConfiguration.urlCache = nil
+        
         urlSession = URLSession(configuration: sessionConfiguration)
     }
     
     func load(with request: URLRequest, completion: @escaping (Data?, NetworkError?) -> Void){
-        URLSession.shared.dataTask(with: request){
+        urlSession
+            .dataTask(with: request){
             data, response, error in
 
             if let capturedData = data{

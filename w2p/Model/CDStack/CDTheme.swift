@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDTheme: NSManagedObject{
+public class CDTheme: NSManagedObject{
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, theme: Theme){
         guard let id = theme.id else { return nil }

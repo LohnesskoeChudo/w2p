@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDGenre: NSManagedObject{
+public class CDGenre: NSManagedObject{
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, genre: Genre){
         guard let id = genre.id else { return nil }

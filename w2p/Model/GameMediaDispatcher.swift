@@ -9,50 +9,7 @@ import Foundation
 class GameMediaDispatcher{
     
     private let dataLoader = DataLoader()
-    
-    
-    func fetchCoverDataWith(cover: Cover, cache: Bool, completion: @escaping (Data?, FetchingError?) -> Void){
-        
-        /*
-        if let coverRequest = RequestFormer.shared.formRequestForCover(for: game, sizeKey: .S264X374) {
-            loadStaticMediaFromInet(request: coverRequest){
-                data, error in
-                if let data = data {
-                    completion(data, nil)
-                } else {
-                    completion(nil, error)
-                }
-            }
-        }
-        */
-
-        guard let id = cover.id else {
-            completion(nil, .noCoverId)
-            return
-        }
-        CacheManager.shared.loadCover(with: id){
-            data in
-            if let data = data {
-                completion(data, nil)
-            } else {
-                guard let coverRequest = RequestFormer.shared.formRequestForCover(with: cover, sizeKey: .S264X374) else {
-                    completion(nil, .canNotFormRequest)
-                    return
-                }
-                self.loadStaticMediaFromInet(request: coverRequest){
-                    data, error in
-                    if let data = data {
-                        if cache{
-                            CacheManager.shared.save(coverData: data, with: cover)
-                        }
-                        completion(data, nil)
-                    } else {
-                        completion(nil, error)
-                    }
-                }
-            }
-        }
-    }
+    private let jsonLoader = JsonLoader()
     
     private func loadStaticMediaFromInet(request: URLRequest, completion: @escaping (Data?, FetchingError?) -> Void) {
         dataLoader.load(with: request){
@@ -65,13 +22,22 @@ class GameMediaDispatcher{
         }
     }
     
-    func fetchStaticMedia(with media: MediaDownloadable, gameId: Int, cache: Bool = true, completion: @escaping (Data?, FetchingError?) -> Void) {
+    func fetchStaticMedia(with media: MediaDownloadable, cache: Bool = true, completion: @escaping (Data?, FetchingError?) -> Void) {
         CacheManager.shared.loadStaticMedia(with: media){
             data in
             if let data = data {
                 completion(data, nil)
             } else {
-                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: .S889X500) else {
+                
+                let sizeKey: GameImageSizeKey
+                
+                if (media as? Cover) != nil {
+                    sizeKey = .S264X374
+                } else {
+                    sizeKey = .S889X500
+                }
+                
+                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
                     completion(nil, .canNotFormRequest)
                     return
                 }
@@ -79,7 +45,7 @@ class GameMediaDispatcher{
                     data, error in
                     if let data = data {
                         if cache{
-                            CacheManager.shared.saveStaticMedia(data: data, media: media, gameId: gameId)
+                            CacheManager.shared.saveStaticMedia(data: data, media: media)
                         }
                         completion(data, nil)
                     } else {
@@ -95,8 +61,8 @@ class GameMediaDispatcher{
         CacheManager.shared.loadFavoriteGames(completion: completion)
     }
     
-    func save(game: Game) {
-        CacheManager.shared.save(game: game)
+    func save(game: Game, completion: ((_ success: Bool) -> Void)? = nil) {
+        CacheManager.shared.save(game: game, completion: completion)
     }
     
     func loadGame(with id: Int, completion: @escaping (Game?, FetchingError?) -> Void) {
@@ -105,13 +71,28 @@ class GameMediaDispatcher{
     
     
     func clearImageCache(completion: ((_ success: Bool) -> Void)? = nil) {
-        
+        CacheManager.shared.clearAllStaticMediaData(completion: completion)
     }
     
     func clearFavorites(completion: ((_ success: Bool) -> Void)? = nil) {
         CacheManager.shared.clearFavorites(completion: completion)
     }
     
+    func updateGame(id: Int, completion: ((_ success: Bool) -> Void)? = nil){
+        guard let requestApiItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: [id]) else {
+            completion?(false)
+            return
+        }
+        let request = RequestFormer.shared.formRequest(with: requestApiItem)
+        jsonLoader.load(request: request){
+            (games: [Game]?, error: NetworkError?) in
+            if let game = games?.first {
+                self.save(game: game,completion: completion)
+            } else {
+                completion?(false)
+            }
+        }
+    }
 }
 
 enum FetchingError: Error{

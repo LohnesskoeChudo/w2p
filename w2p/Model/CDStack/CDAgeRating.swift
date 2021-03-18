@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDAgeRating: NSManagedObject {
+public class CDAgeRating: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, ageRating: AgeRating){
         

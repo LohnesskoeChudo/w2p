@@ -445,7 +445,7 @@ extension GameBrowserController: UICollectionViewDataSource {
         cell.isLoading = true
         let id = game.id ?? -1
         DispatchQueue.global().async {
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true){
+            self.mediaDispatcher.fetchStaticMedia(with: cover){
                 data, error in
                 if let data = data {
                     if let image = UIImage(data: data){

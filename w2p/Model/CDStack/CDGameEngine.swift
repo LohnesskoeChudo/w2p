@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDGameEngine: NSManagedObject {
+public class CDGameEngine: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, gameEngine: GameEngine){
         guard let id = gameEngine.id else { return nil }

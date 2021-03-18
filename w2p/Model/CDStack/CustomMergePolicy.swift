@@ -10,6 +10,8 @@ import CoreData
 class CustomMergePolicy: NSMergePolicy {
     
     
+    //let relationKeysToIgnore: Set<String> = ["imageData"]
+    
     override func resolve(constraintConflicts list: [NSConstraintConflict]) throws {
         
         
@@ -28,6 +30,9 @@ class CustomMergePolicy: NSMergePolicy {
                 }
                 
                 for key in conflictingObject.entity.relationshipsByName.keys {
+                    
+     //               if relationKeysToIgnore.contains(key) { continue }
+                    
                     let dbValue = conflict.databaseObject?.value(forKey: key)
                     if conflictingObject.value(forKey: key) == nil {
                         conflictingObject.setValue(dbValue, forKey: key)

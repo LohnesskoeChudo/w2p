@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDVideo: NSManagedObject {
+public class CDVideo: NSManagedObject {
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, video: Video){
         
         guard let id = video.id else { return nil }

@@ -184,6 +184,19 @@ class FavoritesViewController: UIViewController{
     private func setupTableView(){
         tableView.dataSource = self
     }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "favoritesToDetailed":
+            let destination = segue.destination as! DetailedViewController
+            let game = sender as! Game
+            destination.shouldUpdate = true
+            destination.game = game
+        default:
+            return
+        }
+    }
 }
 
 extension FavoritesViewController: UITableViewDataSource{
@@ -205,6 +218,9 @@ extension FavoritesViewController: UITableViewDataSource{
         cell.label.text = game.name
         cell.id = game.id ?? 0
         cell.setupRatingView(with: game.totalRating)
+        cell.setActionToControl { [weak self] in
+            self?.performSegue(withIdentifier: "favoritesToDetailed", sender: game)
+        }
         loadImage(for: cell, game: game)
     }
     
@@ -213,7 +229,7 @@ extension FavoritesViewController: UITableViewDataSource{
         let id = cell.id
         
         DispatchQueue.global(qos: .userInitiated).async {
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
+            self.mediaDispatcher.fetchStaticMedia(with: cover) {
                 data, error in
                 if let data = data {
                     if let image = UIImage(data: data) {

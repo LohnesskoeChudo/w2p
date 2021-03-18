@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDGame: NSManagedObject{
+public class CDGame: NSManagedObject{
     
     
     convenience init(context: NSManagedObjectContext, entity: NSEntityDescription, game: Game){
@@ -15,6 +15,8 @@ class CDGame: NSManagedObject{
         self.init(entity: entity, insertInto: context)
             
         cacheDate = Date()
+        
+        print(game.id!)
         
         if let id = game.id{ self.id = Int64(id) }
         if let name = game.name { self.name = name }

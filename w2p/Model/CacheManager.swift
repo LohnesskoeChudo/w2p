@@ -31,35 +31,32 @@ class CacheManager{
         }
         self.container = container
         self.moc = container.viewContext
-        self.moc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        //self.moc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        self.moc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+        self.moc.automaticallyMergesChangesFromParent = true
+
         privateMoc = container.newBackgroundContext()
-        privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        //privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        
+        self.privateMoc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+
     }
     
-    func save(coverData: Data, with cover: Cover){
-        
-        let coverDataSize = Double(coverData.count)
-        
-        privateMoc.perform {
-            let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
-            if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
-                cdCover.image = coverData
-                if let _ = try? self.privateMoc.save() {
-                    self.imagesCacheSize.mutate(block: {$0 += coverDataSize})
-                    self.saveCacheSize()
-                } else {
-                    print("Failed to save cover for coverId: \(cover.id ?? -1)")
+    func printGameCount() {
+        self.privateMoc.perform {
+            let fetchreq = NSFetchRequest<CDGame>(entityName: "CDGame")
+            if let res = try? self.privateMoc.fetch(fetchreq) {
+                print("-----------------")
+                for k in res {
+                    print(k.id)
                 }
-                
+                print("-----------------")
             }
         }
-    }
 
-    
-    func clearAllImages() {
-        
     }
     
+
     func clearFavorites (completion: ((_ success: Bool) -> Void)? = nil) {
         privateMoc.perform {
             let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
@@ -78,15 +75,15 @@ class CacheManager{
     }
     
     
-    func loadCover(with coverId: Int, completion: @escaping (Data?) -> Void){
+    func loadCoverData(with coverId: Int, completion: @escaping (Data?) -> Void){
         privateMoc.perform {
-            let fetchRequest = NSFetchRequest<CDCover>(entityName: "CDCover")
-            let propertiesToFetch: [NSString] = ["image"]
+            let fetchRequest = NSFetchRequest<CDImageData>(entityName: "CDImageData")
+            let propertiesToFetch: [NSString] = ["data"]
             fetchRequest.propertiesToFetch = propertiesToFetch
             fetchRequest.fetchLimit = 1
-            fetchRequest.predicate = NSPredicate(format: "id == %d", coverId)
-            if let fetchedGameItems = try? self.privateMoc.fetch(fetchRequest), let firstGameItem = fetchedGameItems.first{
-                if let imageData = firstGameItem.image{
+            fetchRequest.predicate = NSPredicate(format: "(id == %d) AND (typeId == \(StaticMedia.cover.rawValue))", coverId)
+            if let fetchedData = try? self.privateMoc.fetch(fetchRequest).first {
+                if let imageData = fetchedData.data{
                     completion(imageData)
                 } else {
                     completion(nil)
@@ -99,40 +96,45 @@ class CacheManager{
     
     func loadStaticMedia(with media: MediaDownloadable, completion: @escaping (Data?) -> Void){
         
-        var id: Int
-        var fetchRequest: NSFetchRequest<NSFetchRequestResult>
-        
-        if let screenshot = media as? Screenshot, let screenshotId = screenshot.id {
-            id = screenshotId
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDScreenshot")
-        } else if let artwork = media as? Artwork, let artworkId = artwork.id {
-            id = artworkId
-            fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDArtwork")
-        } else {
+        guard let id = media.id else {
+            completion(nil)
             return
         }
         
-        let propertiesToFetch: [NSString] = ["image"]
-        fetchRequest.propertiesToFetch = propertiesToFetch
-        fetchRequest.fetchLimit = 1
-        fetchRequest.predicate = NSPredicate(format: "id == %d", id)
-        if let media = try? self.privateMoc.fetch(fetchRequest){
-            if let mediaItem = media.first as? CDScreenshot{
-                completion(mediaItem.image)
-            } else if let mediaItem = media.first as? CDArtwork {
-                completion(mediaItem.image)
+        self.privateMoc.perform {
+            let fetchRequest = NSFetchRequest<CDImageData>(entityName: "CDImageData")
+            let propertiesToFetch: [NSString] = ["data"]
+            fetchRequest.propertiesToFetch = propertiesToFetch
+            fetchRequest.fetchLimit = 1
+            
+            let typeId: Int
+            
+            if let _ = media as? Cover {
+                typeId = StaticMedia.cover.rawValue
+            } else if let _ = media as? Screenshot {
+                typeId = StaticMedia.screenshot.rawValue
+            } else if let _ = media as? Artwork {
+                typeId = StaticMedia.artwork.rawValue
+            } else {
+                completion(nil)
+                return
+            }
+            fetchRequest.predicate = NSPredicate(format: "(id == %d) AND (typeId == \(typeId))", id)
+            
+            if let cdImageData = try? self.privateMoc.fetch(fetchRequest).first {
+                if let data = cdImageData.data{
+                    completion(data)
+                } else {
+                    completion(nil)
+                }
             } else {
                 completion(nil)
             }
-        } else {
-            completion(nil)
         }
     }
     
-    func saveStaticMedia(data: Data, media: MediaDownloadable, gameId: Int) {
-        
+    func saveStaticMedia(data: Data, media: MediaDownloadable) {
         let dataSize = Double(data.count)
-        
         let succesAction = { (_ success: Bool) -> Void in
             if success {
                 self.imagesCacheSize.mutate(block: {$0 += dataSize})
@@ -142,9 +144,10 @@ class CacheManager{
         
         if let screenshot = media as? Screenshot {
             saveScreenshot(data: data, with: screenshot, competion: succesAction)
-            
         } else if let artwork = media as? Artwork {
             saveArtwork(data: data, with: artwork, completion: succesAction)
+        } else if let cover = media as? Cover {
+            saveCover(coverData: data, with: cover, completion: succesAction)
         }
     }
     
@@ -168,29 +171,62 @@ class CacheManager{
             let _ = CDGame(context: self.privateMoc, entity: entity, game: game)
             if let _ = try? self.privateMoc.save() {
                 completion?(true)
+                self.printGameCount()
             } else {
                 completion?(false)
+                self.printGameCount()
             }
         }
     }
     
     func loadGame(with id: Int, completion: @escaping (Game?, FetchingError?) -> Void){
-        let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
-        fetchRequest.fetchLimit = 1
-        fetchRequest.predicate = NSPredicate(format: "id == %d", id)
-        if let cdGame = try? self.privateMoc.fetch(fetchRequest).first {
-            let game = Game(cdGame: cdGame)
-            completion(game, nil)
-        } else {
-            completion(nil, .noItemInDb)
+        privateMoc.perform {
+            let fetchRequest = NSFetchRequest<CDGame>(entityName: "CDGame")
+            
+            fetchRequest.fetchLimit = 1
+            fetchRequest.predicate = NSPredicate(format: "id == %d", id)
+            if let cdGame = try? self.privateMoc.fetch(fetchRequest).first {
+                let game = Game(cdGame: cdGame)
+                completion(game, nil)
+            } else {
+                completion(nil, .noItemInDb)
+            }
         }
     }
+
     
-    private func saveScreenshot(data: Data, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
+    func saveCover(coverData: Data, with cover: Cover, completion: ((_ success: Bool) -> Void)? = nil){
+        
+        privateMoc.perform {
+            let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
+            if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
+                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+                cdImageData.data = coverData
+                cdImageData.id = cdCover.id
+                cdImageData.typeId = Int64(StaticMedia.cover.rawValue)
+                cdCover.imageData = cdImageData
+                if let _ = try? self.privateMoc.save() {
+                    completion?(true)
+                } else {
+                    completion?(false)
+                }
+                
+            }
+        }
+    }
+
+    
+    func saveScreenshot(data: Data, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: self.privateMoc)!
             if let cdScreenshot = CDScreenshot(context: self.privateMoc, entity: screenshotEntity, screenshot: screenshot) {
-                cdScreenshot.image = data
+                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+                cdImageData.id = cdScreenshot.id
+                cdImageData.typeId = Int64(StaticMedia.screenshot.rawValue)
+                cdImageData.data = data
+                cdScreenshot.imageData = cdImageData
                 if let _ = try? self.privateMoc.save() {
                     competion(true)
                 } else {
@@ -201,11 +237,18 @@ class CacheManager{
     }
     
 
-    private func saveArtwork(data: Data, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
+    func saveArtwork(data: Data, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: self.privateMoc)!
             if let cdArtwork = CDArtwork(context: self.privateMoc, entity: artworkEntity, artwork: artwork) {
-                cdArtwork.image = data
+                
+                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+                cdImageData.id = cdArtwork.id
+                cdImageData.typeId = Int64(StaticMedia.artwork.rawValue)
+                cdImageData.data = data
+                cdArtwork.imageData = cdImageData
+                
                 if let _ = try? self.privateMoc.save() {
                     completion(true)
                 } else {
@@ -214,4 +257,26 @@ class CacheManager{
             }
         }
     }
+    
+    func clearAllStaticMediaData(completion: ((_ success: Bool) -> Void)? = nil) {
+        print("Called")
+        privateMoc.perform {
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDImageData")
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            if let _ = try? self.container.persistentStoreCoordinator.execute(deleteRequest, with: self.privateMoc) {
+                completion?(true)
+                print("Success")
+            } else {
+                completion?(false)
+                print("Failure")
+            }
+        }
+
+    }
+}
+
+enum StaticMedia: Int {
+    case cover = 1
+    case artwork = 2
+    case screenshot = 3
 }

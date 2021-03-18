@@ -6,7 +6,7 @@
 //
 import CoreData
 
-class CDCompany: NSManagedObject {
+public class CDCompany: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, company: Company){
         

@@ -101,7 +101,7 @@ class DetailedViewController: UIViewController{
             dispatchGroup.enter()
             DispatchQueue.global(qos: .userInteractive).async {
                 if let cover = self.game.cover {
-                    self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true, completion: {
+                    self.mediaDispatcher.fetchStaticMedia(with: cover, completion: {
                         data, error in
                         if let data = data , let image = UIImage(data: data){
                             activityItems.append(image)
@@ -169,7 +169,19 @@ class DetailedViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if shouldUpdate {
+            //updateGame()
+        }
+        print(game.cover)
         setupUI()
+        
+    }
+    
+    private func updateGame() {
+        guard let id = game.id else { return }
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 2) {
+            self.mediaDispatcher.updateGame(id: id)
+        }
     }
     
     private func setupUI(){
@@ -529,7 +541,7 @@ class DetailedViewController: UIViewController{
     
     private func loadCover(cover: Cover, completion: ((UIImage?) -> Void)? = nil) {
         DispatchQueue.global(qos: .userInteractive).async{
-            self.mediaDispatcher.fetchCoverDataWith(cover: cover, cache: true) {
+            self.mediaDispatcher.fetchStaticMedia(with: cover) {
                 data, error in
                 if let data = data {
                     completion?(UIImage(data: data))
@@ -626,7 +638,7 @@ extension DetailedViewController: UICollectionViewDataSource{
         
         let id = cell.id
         let width = mediaCollectionView.frame.width
-        mediaDispatcher.fetchStaticMedia(with: staticMedia, gameId: game.id ?? -1) {
+        mediaDispatcher.fetchStaticMedia(with: staticMedia) {
             (data: Data?, error: FetchingError?) in
             if let data = data{
                 DispatchQueue.global(qos: .userInteractive).async{

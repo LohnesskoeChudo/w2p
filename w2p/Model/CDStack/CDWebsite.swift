@@ -7,7 +7,7 @@
 
 import CoreData
 
-class CDWebsite: NSManagedObject {
+public class CDWebsite: NSManagedObject {
     
     convenience init?(context: NSManagedObjectContext, entity: NSEntityDescription, website: Website){
             
