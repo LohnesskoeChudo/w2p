@@ -84,7 +84,7 @@ public class CDGame: NSManagedObject{
         
         let franchiseEntity = NSEntityDescription.entity(forEntityName: "CDFranchise", in: context)!
         if let franchise = game.franchise{ self.franchise = CDFranchise(context: context, entity: franchiseEntity, franchise: franchise, generatorGame: self)}
-        
+
         let gameModeEntity = NSEntityDescription.entity(forEntityName: "CDGameMode", in: context)!
         if let gameModes = game.gameModes{ self.gameModes = NSSet(array: gameModes.compactMap{CDGameMode(context: context, entity: gameModeEntity, gameMode: $0)})}
         

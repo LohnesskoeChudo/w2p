@@ -177,6 +177,7 @@ class DetailedViewController: UIViewController{
         
     }
     
+    // set favorites
     private func updateGame() {
         guard let id = game.id else { return }
         DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 2) {

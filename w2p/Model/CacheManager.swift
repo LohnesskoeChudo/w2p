@@ -31,14 +31,12 @@ class CacheManager{
         }
         self.container = container
         self.moc = container.viewContext
-        //self.moc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-        self.moc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-        self.moc.automaticallyMergesChangesFromParent = true
+        self.moc.mergePolicy = CustomMergePolicy(merge: .overwriteMergePolicyType)
+        
 
         privateMoc = container.newBackgroundContext()
-        //privateMoc.mergePolicy = CustomMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        privateMoc.mergePolicy = CustomMergePolicy(merge: .overwriteMergePolicyType)
         
-        self.privateMoc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
 
     }
     
@@ -171,10 +169,8 @@ class CacheManager{
             let _ = CDGame(context: self.privateMoc, entity: entity, game: game)
             if let _ = try? self.privateMoc.save() {
                 completion?(true)
-                self.printGameCount()
             } else {
                 completion?(false)
-                self.printGameCount()
             }
         }
     }
@@ -198,40 +194,40 @@ class CacheManager{
     func saveCover(coverData: Data, with cover: Cover, completion: ((_ success: Bool) -> Void)? = nil){
         
         privateMoc.perform {
-            let coverEntity = NSEntityDescription.entity(forEntityName: "CDCover", in: self.privateMoc)!
-            if let cdCover = CDCover(context: self.privateMoc, entity: coverEntity, cover: cover) {
-                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
-                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
-                cdImageData.data = coverData
-                cdImageData.id = cdCover.id
-                cdImageData.typeId = Int64(StaticMedia.cover.rawValue)
-                cdCover.imageData = cdImageData
-                if let _ = try? self.privateMoc.save() {
-                    completion?(true)
-                } else {
-                    completion?(false)
-                }
-                
+            guard let coverId = cover.id else {
+                completion?(false)
+                return
             }
+            let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+            let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+            cdImageData.data = coverData
+            cdImageData.id = Int64(coverId)
+            cdImageData.typeId = Int64(StaticMedia.cover.rawValue)
+            if let _ = try? self.privateMoc.save() {
+                completion?(true)
+            } else {
+                completion?(false)
+            }
+                
         }
     }
 
     
     func saveScreenshot(data: Data, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
-            let screenshotEntity = NSEntityDescription.entity(forEntityName: "CDScreenshot", in: self.privateMoc)!
-            if let cdScreenshot = CDScreenshot(context: self.privateMoc, entity: screenshotEntity, screenshot: screenshot) {
-                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
-                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
-                cdImageData.id = cdScreenshot.id
-                cdImageData.typeId = Int64(StaticMedia.screenshot.rawValue)
-                cdImageData.data = data
-                cdScreenshot.imageData = cdImageData
-                if let _ = try? self.privateMoc.save() {
-                    competion(true)
-                } else {
-                    competion(false)
-                }
+            guard let screenshotId = screenshot.id else {
+                competion(false)
+                return
+            }
+            let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+            let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+            cdImageData.id = Int64(screenshotId)
+            cdImageData.typeId = Int64(StaticMedia.screenshot.rawValue)
+            cdImageData.data = data
+            if let _ = try? self.privateMoc.save() {
+                competion(true)
+            } else {
+                competion(false)
             }
         }
     }
@@ -239,21 +235,20 @@ class CacheManager{
 
     func saveArtwork(data: Data, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
-            let artworkEntity = NSEntityDescription.entity(forEntityName: "CDArtwork", in: self.privateMoc)!
-            if let cdArtwork = CDArtwork(context: self.privateMoc, entity: artworkEntity, artwork: artwork) {
-                
-                let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
-                let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
-                cdImageData.id = cdArtwork.id
-                cdImageData.typeId = Int64(StaticMedia.artwork.rawValue)
-                cdImageData.data = data
-                cdArtwork.imageData = cdImageData
-                
-                if let _ = try? self.privateMoc.save() {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
+            guard let artworkId = artwork.id else {
+                completion(false)
+                return
+            }
+            let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: self.privateMoc)!
+            let cdImageData = CDImageData(entity: imageDataEntity, insertInto: self.privateMoc)
+            cdImageData.id = Int64(artworkId)
+            cdImageData.typeId = Int64(StaticMedia.artwork.rawValue)
+            cdImageData.data = data
+
+            if let _ = try? self.privateMoc.save() {
+                completion(true)
+            } else {
+                completion(false)
             }
         }
     }

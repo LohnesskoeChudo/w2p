@@ -14,7 +14,6 @@
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGame" inverseName="artworks" inverseEntity="CDGame"/>
-        <relationship name="imageData" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDImageData" inverseName="artwork" inverseEntity="CDImageData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -38,7 +37,6 @@
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGame" inverseName="cover" inverseEntity="CDGame"/>
-        <relationship name="imageData" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDImageData" inverseName="cover" inverseEntity="CDImageData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -132,9 +130,6 @@
         <attribute name="data" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <attribute name="typeId" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
-        <relationship name="artwork" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDArtwork" inverseName="imageData" inverseEntity="CDArtwork"/>
-        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCover" inverseName="imageData" inverseEntity="CDCover"/>
-        <relationship name="screenshot" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDScreenshot" inverseName="imageData" inverseEntity="CDScreenshot"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -159,7 +154,6 @@
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="width" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDGame" inverseName="screenshots" inverseEntity="CDGame"/>
-        <relationship name="imageData" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDImageData" inverseName="screenshot" inverseEntity="CDImageData"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
@@ -200,18 +194,18 @@
     </entity>
     <elements>
         <element name="CDAgeRating" positionX="10" positionY="147" width="128" height="118"/>
-        <element name="CDArtwork" positionX="160" positionY="29" width="128" height="148"/>
+        <element name="CDArtwork" positionX="160" positionY="29" width="128" height="133"/>
         <element name="CDCompany" positionX="-34" positionY="13" width="128" height="88"/>
-        <element name="CDCover" positionX="304" positionY="327" width="128" height="148"/>
+        <element name="CDCover" positionX="304" positionY="327" width="128" height="133"/>
         <element name="CDFranchise" positionX="-32" positionY="361" width="128" height="103"/>
         <element name="CDGame" positionX="-574" positionY="4" width="128" height="418"/>
         <element name="CDGameCollection" positionX="-338" positionY="-215" width="128" height="88"/>
         <element name="CDGameEngine" positionX="156" positionY="190" width="128" height="88"/>
         <element name="CDGameMode" positionX="141" positionY="-226" width="128" height="88"/>
         <element name="CDGenre" positionX="-65" positionY="-125" width="128" height="88"/>
-        <element name="CDImageData" positionX="-378" positionY="-162" width="128" height="133"/>
+        <element name="CDImageData" positionX="-378" positionY="-162" width="128" height="88"/>
         <element name="CDPlatform" positionX="-9" positionY="-308" width="128" height="88"/>
-        <element name="CDScreenshot" positionX="306" positionY="153" width="128" height="148"/>
+        <element name="CDScreenshot" positionX="306" positionY="153" width="128" height="133"/>
         <element name="CDTheme" positionX="-273" positionY="5" width="128" height="88"/>
         <element name="CDVideo" positionX="300" positionY="27" width="128" height="103"/>
         <element name="CDWebsite" positionX="179" positionY="-132" width="128" height="103"/>

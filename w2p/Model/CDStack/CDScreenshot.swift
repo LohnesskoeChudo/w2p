@@ -23,12 +23,6 @@ public class CDScreenshot: NSManagedObject {
         self.url = url
         if let isAnimated = screenshot.animated { self.animated = isAnimated }
         
-        let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: context)!
-        let imageData = CDImageData(entity: imageDataEntity, insertInto: context)
-        imageData.id = self.id
-        imageData.typeId = Int64(StaticMedia.screenshot.rawValue)
-        self.imageData = imageData
-        
     }
     
 }

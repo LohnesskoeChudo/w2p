@@ -22,13 +22,6 @@ public class CDCover: NSManagedObject {
         self.height = Int64(height)
         self.width = Int64(width)
         if let isAnimated = cover.animated { self.animated  = isAnimated }
-        
-        let imageDataEntity = NSEntityDescription.entity(forEntityName: "CDImageData", in: context)!
-        let imageData = CDImageData(entity: imageDataEntity, insertInto: context)
-        imageData.id = self.id
-        imageData.typeId = Int64(StaticMedia.cover.rawValue)
-        self.imageData = imageData
-
     }
     
 }
