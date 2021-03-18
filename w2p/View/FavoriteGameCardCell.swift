@@ -15,21 +15,21 @@ class FavoriteGameCardCell: UITableViewCell{
     
     @IBOutlet weak var ratingView: CircularRatingView!
     
-    
-    
-    @IBOutlet weak var genreAttributeVIew: GameAttributeView!
-    
+    var isLoading = false
+
     override func awakeFromNib() {
         setupAppearance()
         setupControl()
     }
     
+
     @IBOutlet weak var label: UILabel!
 
     @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var control: CellControlView!
     @IBOutlet weak var gameImageView: UIImageView!
+    @IBOutlet weak var imageViewContainer: UIView!
     
     private func setupAppearance(){
         self.clipsToBounds = false
@@ -44,14 +44,30 @@ class FavoriteGameCardCell: UITableViewCell{
             control.layer.shadowOpacity = 0
         }
         gameImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        imageViewContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         gameImageView.layer.cornerRadius = 16
+        imageViewContainer.layer.cornerRadius = 16
         
         imageWidthConstraint.constant = Self.imageWidth
         imageHeightConstraint.constant = Self.imageHeight
     }
     
     
+    func startContentLoadingAnimation(){
+        let animation = CABasicAnimation(keyPath: "backgroundColor")
+        
+        animation.fromValue = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.toValue = ThemeManager.firstColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.duration = 1
+        animation.autoreverses = true
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.repeatCount = .infinity
+        imageViewContainer.layer.add(animation, forKey: "image loading animation")
+    }
     
+    func endContentLoadingAnimation(){
+        imageViewContainer.layer.removeAllAnimations()
+    }
     
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -79,6 +95,8 @@ class FavoriteGameCardCell: UITableViewCell{
     override func prepareForReuse() {
         gameImageView.image = nil
         label.text = nil
+        gameImageView.alpha = 0
+        isLoading = false
         id = 0
         ratingView.isHidden = false
     }

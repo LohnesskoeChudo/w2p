@@ -28,30 +28,36 @@ class GameMediaDispatcher{
             if let data = data {
                 completion(data, nil)
             } else {
-                
-                let sizeKey: GameImageSizeKey
-                
-                if (media as? Cover) != nil {
-                    sizeKey = .S264X374
+                if cache {
+                    self.bringStaticMediaToCache(media: media, completion: completion)
                 } else {
-                    sizeKey = .S889X500
+                    completion(nil, .noItemInDb)
                 }
-                
-                guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
-                    completion(nil, .canNotFormRequest)
-                    return
-                }
-                self.loadStaticMediaFromInet(request: staticMediaRequest){
-                    data, error in
-                    if let data = data {
-                        if cache{
-                            CacheManager.shared.saveStaticMedia(data: data, media: media)
-                        }
-                        completion(data, nil)
-                    } else {
-                        completion(nil, error)
-                    }
-                }
+            }
+        }
+    }
+    
+    
+    func bringStaticMediaToCache(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+        let sizeKey: GameImageSizeKey
+        
+        if (media as? Cover) != nil {
+            sizeKey = .S264X374
+        } else {
+            sizeKey = .S889X500
+        }
+        
+        guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
+            completion?(nil, .canNotFormRequest)
+            return
+        }
+        self.loadStaticMediaFromInet(request: staticMediaRequest){
+            data, error in
+            if let data = data {
+                CacheManager.shared.saveStaticMedia(data: data, media: media)
+                completion?(data, nil)
+            } else {
+                completion?(nil, error)
             }
         }
     }

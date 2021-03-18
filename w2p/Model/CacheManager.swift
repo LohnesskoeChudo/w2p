@@ -31,11 +31,11 @@ class CacheManager{
         }
         self.container = container
         self.moc = container.viewContext
-        self.moc.mergePolicy = CustomMergePolicy(merge: .overwriteMergePolicyType)
+        self.moc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         
 
         privateMoc = container.newBackgroundContext()
-        privateMoc.mergePolicy = CustomMergePolicy(merge: .overwriteMergePolicyType)
+        privateMoc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         
 
     }

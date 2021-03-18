@@ -337,6 +337,13 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             }
         }
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
+            print("tc did changed")
+            updateAnimations()
+        }
+    }
 
     //MARK: - LayoutDelegate
 
@@ -392,6 +399,8 @@ extension GameBrowserController: UICollectionViewDelegate{
         return footer
                 
     }
+    
+    
     
     
     

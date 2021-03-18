@@ -247,6 +247,7 @@ class DetailedViewController: UIViewController{
     
    
     override func viewWillAppear(_ animated: Bool) {
+        startLoadingStaticMedia()
         layoutCover(size: view.frame.size)
         layoutMedia(newWidth: view.frame.width)
         setupGameMetadata() {
@@ -254,6 +255,28 @@ class DetailedViewController: UIViewController{
             if success {
                 self.updateFavoritesButton(animated: true)
             }
+        }
+    }
+    
+    private func startLoadingStaticMedia() {
+        
+        var staticMedia = [MediaDownloadable]()
+        if let screenshots = game.screenshots {
+            for screenshot in screenshots {
+                staticMedia.append(screenshot)
+            }
+        }
+        if let artworks = game.artworks {
+            for artwork in artworks {
+                staticMedia.append(artwork)
+            }
+        }
+        var step: Double = 0
+        for media in staticMedia {
+            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + step) {
+                self.mediaDispatcher.bringStaticMediaToCache(media: media)
+            }
+            step += 0.3
         }
     }
     

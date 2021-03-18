@@ -36,8 +36,19 @@ class FavoritesViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateAnimations), name: UIApplication.didBecomeActiveNotification, object: nil)
         setupTableView()
         setupAppearance()
+    }
+    
+    @objc func updateAnimations() {
+        for cell in tableView.visibleCells{
+            let gameCell = cell as! FavoriteGameCardCell
+            if gameCell.isLoading {
+                gameCell.startContentLoadingAnimation()
+            }
+        }
     }
     
     private func setupAppearance(){
@@ -227,7 +238,8 @@ extension FavoritesViewController: UITableViewDataSource{
     private func loadImage(for cell: FavoriteGameCardCell, game: Game){
         guard let cover = game.cover else { return }
         let id = cell.id
-        
+        cell.isLoading = true
+        cell.startContentLoadingAnimation()
         DispatchQueue.global(qos: .userInitiated).async {
             self.mediaDispatcher.fetchStaticMedia(with: cover) {
                 data, error in
@@ -236,11 +248,12 @@ extension FavoritesViewController: UITableViewDataSource{
                         let resizedImage = ImageResizer.resizeImageToFit(width: FavoriteGameCardCell.imageWidth, image: image)
                         DispatchQueue.main.async {
                             if id != cell.id {return}
-                            UIView.transition(with: cell.gameImageView, duration: 0.1, options: .transitionCrossDissolve) {
-                                
-                                
-                                cell.gameImageView.image = resizedImage
-                                
+                            cell.gameImageView.image = resizedImage
+                            UIView.animate(withDuration: 0.3) {
+                                cell.gameImageView.alpha = 1
+                            } completion: { _ in
+                                cell.isLoading = false
+                                cell.endContentLoadingAnimation()
                             }
                         }
                     }

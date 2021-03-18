@@ -118,7 +118,7 @@ class ThemeManager {
         case .dark:
             return #colorLiteral(red: 0.1549214784, green: 0.1549214784, blue: 0.1549214784, alpha: 1)
         default:
-            return #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            return #colorLiteral(red: 0.9340101522, green: 0.9340101522, blue: 0.9340101522, alpha: 1)
         }
     }
     
@@ -127,7 +127,7 @@ class ThemeManager {
         case .dark:
             return #colorLiteral(red: 0.08629441624, green: 0.08629441624, blue: 0.08629441624, alpha: 1)
         default:
-            return #colorLiteral(red: 0.7208121827, green: 0.7208121827, blue: 0.7208121827, alpha: 1)
+            return #colorLiteral(red: 0.8207532772, green: 0.8288795473, blue: 0.8288795473, alpha: 1)
         }
     }
     
