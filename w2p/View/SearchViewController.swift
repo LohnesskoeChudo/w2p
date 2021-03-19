@@ -55,6 +55,7 @@ class SearchViewController: GameBrowserController{
         }
     }
     
+    
     @IBAction func filterTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
     }

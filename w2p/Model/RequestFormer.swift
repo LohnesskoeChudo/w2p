@@ -32,6 +32,9 @@ class RequestFormer{
         if let fields = gameRequest.fields {
             body += fields
         }
+        if let sort = gameRequest.sorting {
+            body += sort
+        }
         if let search = gameRequest.search {
             body += search
         }
@@ -44,6 +47,9 @@ class RequestFormer{
         if let limit = gameRequest.limitStr {
             body += limit
         }
+        
+        print(body)
+        
         request.httpBody = body.data(using: .utf8)
         return request
     }
@@ -123,6 +129,7 @@ class GameApiRequestItem {
     var filter: String?
     var search: String?
     var fields: String?
+    var sorting: String?
     
     var limit: Int? {
         didSet {
@@ -133,20 +140,28 @@ class GameApiRequestItem {
     }
     var limitStr: String?
     
+    static private func addCommonFilters(to filterStr: String) -> String{
+        return "where \(filterStr) & themes != (42);"
+    }
+    
     static func formRequestItemForSearching(filter: SearchFilter, limit: Int?) -> GameApiRequestItem {
         
         let gameRequestItem = GameApiRequestItem()
             
         gameRequestItem.limit = limit
-        gameRequestItem.filter = formSearchingFilterString(with: filter)
-        gameRequestItem.offset = 0
-        gameRequestItem.fields = basicFields
         if let searchStr = filter.searchString, !searchStr.isEmpty {
             gameRequestItem.search = "search \"\(searchStr)\";"
         }
-        
+        gameRequestItem.offset = 0
+        gameRequestItem.fields = basicFields
+        if let basicFilterStr = formSearchingFilters(with: filter) {
+            let finalFilterStr = addCommonFilters(to: basicFilterStr)
+            gameRequestItem.filter = finalFilterStr
+        }
+        if filter.isDefault {
+            gameRequestItem.sorting = "sort first_release_date desc;"
+        }
         return gameRequestItem
-
     }
     
     static func formRequestItemForSpecificGames(gamesIds: [Int]) -> GameApiRequestItem?{
@@ -156,6 +171,21 @@ class GameApiRequestItem {
         gameRequestItem.fields = basicFields
         gameRequestItem.limit = 500
         gameRequestItem.filter = "where id = \(gamesIds.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
+        return gameRequestItem
+    }
+    
+    static func formRequestItemForNewGames(alreadyReleased: Bool) -> GameApiRequestItem {
+        let gameRequestItem = GameApiRequestItem()
+        gameRequestItem.offset = 0
+        gameRequestItem.limit = 500
+        gameRequestItem.fields = basicFields
+        let dateOperator = alreadyReleased ? "<=" : ">="
+        
+        let filter = addCommonFilters(to: "(cover != null & first_release_date \(dateOperator) \(Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970)))")
+        
+        gameRequestItem.filter = filter
+        gameRequestItem.sorting = "sort hypes desc; sort first_release_date asc;"
+        
         return gameRequestItem
     }
     
@@ -201,7 +231,11 @@ class GameApiRequestItem {
     
     
     
-    static private func formSearchingFilterString(with filter: SearchFilter) -> String?{
+    static private func formSearchingFilters(with filter: SearchFilter) -> String?{
+        
+        if filter.isDefault {
+            return "(cover != null & first_release_date <= \(Int(Date.init(timeIntervalSinceNow: 0).timeIntervalSince1970)))"
+        }
         
         var filterComponents = [String]()
         
@@ -230,9 +264,15 @@ class GameApiRequestItem {
         if let releaseLowerBound = filter.releaseDateLowerBound{
             filterComponents.append("first_release_date >= \(Int(releaseLowerBound.timeIntervalSince1970))")
         }
+        
+        if filter.excludeEmptyGames == true {
+            filterComponents.append("(cover != null | summary != null | storyline != null)")
+        }
+        
+        
 
         if !filterComponents.isEmpty {
-             return "where \(filterComponents.joined(separator: "&"));"
+             return "(\(filterComponents.joined(separator: "&")))"
         }
         
         return nil

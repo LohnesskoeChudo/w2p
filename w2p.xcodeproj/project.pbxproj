@@ -44,6 +44,7 @@
 		5DB9E67825F000EA003BF705 /* GameBrowserConroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB9E67725F000EA003BF705 /* GameBrowserConroller.swift */; };
 		5DBC88C125E4E6A30048985E /* Collection+Identifiable+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBC88C025E4E6A30048985E /* Collection+Identifiable+Int.swift */; };
 		5DBDC79925E2BAA6003AA46F /* GameAttributeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */; };
+		5DC029702604D46F00E4C134 /* NewGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC0296F2604D46F00E4C134 /* NewGamesController.swift */; };
 		5DC4751825F8B4C700412048 /* CircularRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751725F8B4C700412048 /* CircularRatingView.swift */; };
 		5DC4751F25F8BBFE00412048 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751E25F8BBFE00412048 /* CGRect+.swift */; };
 		5DC4752625F8C29600412048 /* RedGreenMaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752525F8C29600412048 /* RedGreenMaper.swift */; };
@@ -132,6 +133,7 @@
 		5DB9E67725F000EA003BF705 /* GameBrowserConroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBrowserConroller.swift; sourceTree = "<group>"; };
 		5DBC88C025E4E6A30048985E /* Collection+Identifiable+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+Identifiable+Int.swift"; sourceTree = "<group>"; };
 		5DBDC79825E2BAA6003AA46F /* GameAttributeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameAttributeView.swift; sourceTree = "<group>"; };
+		5DC0296F2604D46F00E4C134 /* NewGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGamesController.swift; sourceTree = "<group>"; };
 		5DC4751725F8B4C700412048 /* CircularRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularRatingView.swift; sourceTree = "<group>"; };
 		5DC4751E25F8BBFE00412048 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		5DC4752525F8C29600412048 /* RedGreenMaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedGreenMaper.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				5D530F2725D8140E00DF5621 /* TabBarController.swift */,
 				5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */,
 				5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */,
+				5DC0296F2604D46F00E4C134 /* NewGamesController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				5DF307BF25E027B10052433C /* ImageBlurrer.swift in Sources */,
 				5DA4786D25FBDD5800FE19CE /* GameBrowserFooter.swift in Sources */,
 				5DDAFB8D25F0C76400315340 /* Array+.swift in Sources */,
+				5DC029702604D46F00E4C134 /* NewGamesController.swift in Sources */,
 				5DF85F3425E1A65800359227 /* CDArtwork.swift in Sources */,
 				5D530F2125D8080100DF5621 /* SearchFilter.swift in Sources */,
 				5D59BBF125F7D20F0073FFD1 /* GlobalSettings.swift in Sources */,

@@ -25,6 +25,8 @@ class SearchFilter{
     
     var excludeWithoutDescription: Bool = true
     var excludeWithoutCover: Bool = true
+    
+    var excludeEmptyGames: Bool = true
 
     static var allGenres: [Genre] = {
         loadAllGameAttributes(resourceName: "genres") ?? []
@@ -51,6 +53,10 @@ class SearchFilter{
             }
         }
         return nil
+    }
+    
+    var isDefault: Bool {
+        return true
     }
     
     func resetToDefault(){

@@ -7,7 +7,7 @@ class DataLoader{
     init() {
         let sessionConfiguration = URLSessionConfiguration.default
         sessionConfiguration.httpMaximumConnectionsPerHost = 10
-        sessionConfiguration.timeoutIntervalForRequest = 5
+        sessionConfiguration.timeoutIntervalForRequest = 15
         sessionConfiguration.timeoutIntervalForResource = 5
         sessionConfiguration.requestCachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         sessionConfiguration.urlCache = nil
