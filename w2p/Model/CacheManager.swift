@@ -21,6 +21,10 @@ class CacheManager{
         UserDefaults.standard.setValue(imagesCacheSize.value, forKey: UserDefaults.keyForCachedImagesSize)
     }
     
+    func clearCacheSize() {
+        imagesCacheSize.mutate{$0 = 0}
+    }
+    
     private init(){
         let container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores{
@@ -37,7 +41,9 @@ class CacheManager{
         privateMoc = container.newBackgroundContext()
         privateMoc.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
         
-
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: "cacheCleared"), object: nil, queue: nil) { [weak self] _ in
+            self?.clearCacheSize()
+        }
     }
     
     func printGameCount() {

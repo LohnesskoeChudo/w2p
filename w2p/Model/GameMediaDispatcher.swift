@@ -10,35 +10,25 @@ class GameMediaDispatcher{
     
     private let dataLoader = DataLoader()
     private let jsonLoader = JsonLoader()
+
     
-    private func loadStaticMediaFromInet(request: URLRequest, completion: @escaping (Data?, FetchingError?) -> Void) {
-        dataLoader.load(with: request){
-            data, error in
-            if let data = data {
-                completion(data, nil)
-            } else {
-                completion(nil, .connectionError)
-            }
-        }
-    }
-    
-    func fetchStaticMedia(with media: MediaDownloadable, cache: Bool = true, completion: @escaping (Data?, FetchingError?) -> Void) {
+    func fetchStaticMedia(with media: MediaDownloadable, cache: Bool = true, completion: ((Data?, FetchingError?) -> Void)? = nil) {
         CacheManager.shared.loadStaticMedia(with: media){
             data in
             if let data = data {
-                completion(data, nil)
+                completion?(data, nil)
             } else {
                 if cache {
                     self.bringStaticMediaToCache(media: media, completion: completion)
                 } else {
-                    completion(nil, .noItemInDb)
+                    self.loadStaticMediaFromInet(media: media, completion: completion)
                 }
             }
         }
     }
     
-    
-    func bringStaticMediaToCache(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+    private func loadStaticMediaFromInet(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+        
         let sizeKey: GameImageSizeKey
         
         if (media as? Cover) != nil {
@@ -51,7 +41,20 @@ class GameMediaDispatcher{
             completion?(nil, .canNotFormRequest)
             return
         }
-        self.loadStaticMediaFromInet(request: staticMediaRequest){
+        
+        dataLoader.load(with: staticMediaRequest){
+            data, error in
+            if let data = data {
+                completion?(data, nil)
+            } else {
+                completion?(nil, .connectionError)
+            }
+        }
+    }
+    
+
+    func bringStaticMediaToCache(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+        self.loadStaticMediaFromInet(media: media){
             data, error in
             if let data = data {
                 CacheManager.shared.saveStaticMedia(data: data, media: media)

@@ -91,6 +91,7 @@ class SettingsViewController: UIViewController{
         let confirmAction = UIAlertAction(title: "Delete", style: .destructive) {
             _ in
             self.mediaDispatcher.clearFavorites()
+            
         }
         avc.addAction(confirmAction)
         present(avc, animated: true, completion: nil)
@@ -102,7 +103,14 @@ class SettingsViewController: UIViewController{
         avc.addAction(cancelAction)
         let confirmAction = UIAlertAction(title: "Delete", style: .destructive) {
             _ in
-            self.mediaDispatcher.clearImageCache()
+            self.mediaDispatcher.clearImageCache() {
+                _ in
+                UserDefaults.standard.setValue(0, forKey: UserDefaults.keyForCachedImagesSize)
+                DispatchQueue.main.async {
+                    self.cacheImagesSizeLabel.text = "0.0 Mb"
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "cacheCleared"), object: nil)
+                }
+            }
         }
         avc.addAction(confirmAction)
         present(avc, animated: true, completion: nil)

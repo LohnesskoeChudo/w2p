@@ -30,6 +30,7 @@ public class CDGame: NSManagedObject{
             self.inFavorites = inFavorites
         }
         
+
         let companyEntity = NSEntityDescription.entity(forEntityName: "CDCompany", in: context)!
         if let involvedCompanies = game.involvedCompanies {
             var cdCompanies = [CDCompany?]()
@@ -113,6 +114,11 @@ extension Game {
         self.inFavorites = cdGame.inFavorites
         self.category = Int(cdGame.category)
         self.totalRating = cdGame.totalRating
+            
+        
+        if let similarGamesIds = (cdGame.similarGames?.allObjects as? [CDGame])?.compactMap({Int($0.id)}) {
+            self.similarGames = similarGamesIds
+        }
         
         if let cdCover = cdGame.cover {
             self.cover = Cover(cdCover: cdCover)

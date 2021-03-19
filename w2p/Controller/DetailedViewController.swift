@@ -63,6 +63,7 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var nameLabelTopSpacing: NSLayoutConstraint!
     @IBOutlet weak var coverBottomSpacing: NSLayoutConstraint!
     
+    @IBOutlet weak var coverContainer: UIView!
     
     @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var mediaContainer: UIView!
@@ -166,15 +167,26 @@ class DetailedViewController: UIViewController{
             return
         }
     }
+   
     
+    // MARK: -IMPLEMENT
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
+            if self?.isLoading == true {
+                self?.updateAnimations()
+            }
+        }
         if shouldUpdate {
             //updateGame()
         }
         print(game.cover)
         setupUI()
         
+    }
+    
+    private func updateAnimations() {
+        addBlinkAnimationTo(layer: coverContainer.layer)
     }
     
     // set favorites
@@ -184,6 +196,7 @@ class DetailedViewController: UIViewController{
             self.mediaDispatcher.updateGame(id: id)
         }
     }
+    ///////////////////////////
     
     private func setupUI(){
         updateFavoritesButton(animated: false)
@@ -247,6 +260,9 @@ class DetailedViewController: UIViewController{
     
    
     override func viewWillAppear(_ animated: Bool) {
+        if isLoading {
+            updateAnimations()
+        }
         startLoadingStaticMedia()
         layoutCover(size: view.frame.size)
         layoutMedia(newWidth: view.frame.width)
@@ -274,7 +290,7 @@ class DetailedViewController: UIViewController{
         var step: Double = 0
         for media in staticMedia {
             DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + step) {
-                self.mediaDispatcher.bringStaticMediaToCache(media: media)
+                self.mediaDispatcher.fetchStaticMedia(with: media)
             }
             step += 0.3
         }
@@ -506,34 +522,53 @@ class DetailedViewController: UIViewController{
         setupGameAttributesViews()
     }
     
+    var isLoading = false
     
+    private func addBlinkAnimationTo(layer: CALayer) {
+        
+        let animation = CABasicAnimation(keyPath: "backgroundColor")
+        animation.fromValue = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.toValue = ThemeManager.firstColorForImagePlaceholder(trait: traitCollection).cgColor
+        animation.duration = 1
+        animation.autoreverses = true
+        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        animation.repeatCount = .infinity
+        layer.add(animation, forKey: "image loading animation")
+    }
+    
+
     private func setupCover(){
+        self.coverView.contentMode = .scaleAspectFit
+        setDefaultMediaAppearance()
         guard let cover = game.cover else {
-            setDefaultAppearance()
             coverHeightConstraint.constant = 0
             coverBottomSpacing.constant = 0
             nameLabelTopSpacing.constant = 0
             return
         }
         
+        isLoading = true
+        addBlinkAnimationTo(layer: coverContainer.layer)
+        
         let viewWidth = view.bounds.width
         loadCover(cover: cover) {
             image in
             guard let image = image else {
-                self.setDefaultAppearance()
+                self.setDefaultCoverAppearance() {
+                    self.coverContainer.layer.removeAllAnimations()
+                }
+                self.isLoading = false
                 return
             }
             
             let resized = ImageResizer.resizeImageToFit(width: viewWidth, image: image)
             let resizedBlurred = self.imageBlurrer.blurImage(with: image, radius: 30)
             
-            
-            //let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
-            //let resizedBlurred = ImageResizer.resizeImageToFit(width: viewWidth / 2, image: blurred)
-
             DispatchQueue.main.async {
                 UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
                     self.coverView.image = resized
+                } completion: { _ in
+                    self.coverContainer.layer.removeAllAnimations()
                 }
                 
                 UIView.transition(with: self.blurredBackground, duration: 0.6, options: [.transitionCrossDissolve, .curveEaseOut]){
@@ -547,21 +582,45 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setDefaultAppearance() {
+    private func setDefaultMediaAppearance(completion: (() -> Void)? = nil) {
         if isMediaSectionAvailable {
             DispatchQueue.main.async {
                 let width = self.view.frame.width / 2
                 DispatchQueue.global(qos: .userInteractive).async{
-                    let backgroundImage = UIImage(named: "mediaBackgound")!
+                    let backgroundImage = UIImage(named: "mediaBackground")!
                     let resized = ImageResizer.resizeImageToFit(width: width, image: backgroundImage)
                     let blurred = self.imageBlurrer.blurImage(with: resized, radius: 10)
                     DispatchQueue.main.async {
-                        self.blurredMediaBackground.image = blurred
+                        
+                        DispatchQueue.main.async {
+                            UIView.transition(with: self.blurredMediaBackground, duration: 0.3, options: .transitionCrossDissolve) {
+                                
+                                self.blurredMediaBackground.image = blurred
+                                
+                            } completion: { _ in
+                                completion?()
+                            }
+                        }
                     }
                 }
             }
+            return
+        } else {
+            completion?()
         }
     }
+    
+    private func setDefaultCoverAppearance(completion: (() -> Void)? = nil) {
+        DispatchQueue.main.async {
+            self.coverView.contentMode = .scaleToFill
+            UIView.transition(with: self.coverView, duration: 0.3, options: .transitionCrossDissolve) {
+                self.coverView.image = UIImage(named: "mediaBackground")
+            } completion: { _ in
+                completion?()
+            }
+        }
+    }
+
     
     private func loadCover(cover: Cover, completion: ((UIImage?) -> Void)? = nil) {
         DispatchQueue.global(qos: .userInteractive).async{
