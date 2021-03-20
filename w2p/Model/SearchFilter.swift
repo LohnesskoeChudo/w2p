@@ -56,7 +56,7 @@ class SearchFilter{
     }
     
     var isDefault: Bool {
-        if !(searchString?.isEmpty != true) {
+        if searchString != nil, !searchString!.isEmpty {
             print(searchString)
             print(1)
             return false

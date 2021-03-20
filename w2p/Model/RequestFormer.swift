@@ -254,12 +254,13 @@ class GameApiRequestItem {
                 genresCombinations += combinations(collection: genres, k: 4) ?? []
             } else if genres.count > 2 {
                 genresCombinations += combinations(collection: genres, k: 3) ?? []
+                genresCombinations += combinations(collection: genres, k: 2) ?? []
             } else {
                 genresCombinations += combinations(collection: genres, k: genres.count) ?? []
             }
             var temp = [String]()
             for genreCombination in genresCombinations {
-                temp.append("genres = \(genreCombination.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
+                temp.append("genres = \(genreCombination.toIdArrayString(firstBracket: "{", secondBracket: "}"))")
             }
             return "(\(temp.joined(separator: "|")))"
         }
