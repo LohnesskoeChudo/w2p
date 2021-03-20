@@ -239,7 +239,15 @@ class GameApiRequestItem {
     }
     
     static private func genresCriteriaForSimilarGame(with game: Game) -> String?{
-        if let genres = game.genres, genres.count != 0{
+        if var genres = game.genres, genres.count != 0{
+            
+            
+            if genres.count > 6 {
+                genres.shuffle()
+                genres = genres.suffix(6)
+            }
+            
+            
             var genresCombinations = [[Genre]]()
             if genres.count > 3 {
                 genresCombinations += combinations(collection: genres, k: 3) ?? []
@@ -251,7 +259,7 @@ class GameApiRequestItem {
             }
             var temp = [String]()
             for genreCombination in genresCombinations {
-                temp.append("genres = \(genreCombination.toIdArrayString(firstBracket: "{", secondBracket: "}"))")
+                temp.append("genres = \(genreCombination.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
             }
             return "(\(temp.joined(separator: "|")))"
         }
@@ -259,7 +267,13 @@ class GameApiRequestItem {
     }
     
     static private func themesCriteriaForSimilarGame(with game: Game) -> String?{
-        if let themes = game.themes, themes.count != 0{
+        if var themes = game.themes, themes.count != 0{
+            
+            if themes.count > 6 {
+                themes.shuffle()
+                themes = themes.suffix(6)
+            }
+            
             var themesCombinations = [[Theme]]()
             if themes.count > 2 {
                 themesCombinations += combinations(collection: themes, k: 2) ?? []
