@@ -159,7 +159,7 @@ class GameApiRequestItem {
             gameRequestItem.filter = finalFilterStr
         }
         if filter.isDefault {
-            gameRequestItem.sorting = "sort first_release_date desc;"
+            gameRequestItem.sorting = "sort total_rating_count desc;"
         }
         return gameRequestItem
     }
@@ -184,29 +184,49 @@ class GameApiRequestItem {
         
         let monthInSeconds = 30 * 24 * 60 * 60
         
-        let alreadyAvailableFilter = "(first_release_date >= \(nowStamp - monthInSeconds) & (first_release_date <= \(nowStamp) | (first_release_date >= \(nowStamp) & status = (3,4))))"
+        var alreadyAvailableFilter = "(first_release_date >= \(nowStamp - monthInSeconds) & (first_release_date <= \(nowStamp) | (first_release_date >= \(nowStamp) & status = (3,4))))"
         
+        alreadyAvailableFilter = "(\(alreadyAvailableFilter) & hypes != null)"
+        
+
         let filter = addCommonFilters(to: alreadyAvailableFilter)
         gameRequestItem.filter = filter
+        
+        gameRequestItem.sorting = "sort hypes desc;"
+        
         return gameRequestItem
     }
     
     static func formRequestItemForSimilarGames(with game: Game) -> GameApiRequestItem? {
         
-        guard let genresCriteria = genresCriteriaForSimilarGame(with: game) else {return nil}
-        
-        let gameRequestItem = GameApiRequestItem()
         var filterComponents = [String]()
-        filterComponents.append(genresCriteria)
-        if let themeCriteria = themesCriteriaForSimilarGame(with: game) {
+        let genresCriteria = genresCriteriaForSimilarGame(with: game)
+        let themeCriteria = themesCriteriaForSimilarGame(with: game)
+        
+        if genresCriteria == nil && game.similarGames == nil {
+            return nil
+        }
+            
+        if let genresCriteria = genresCriteria {
+            filterComponents.append(genresCriteria)
+        }
+        if let themeCriteria = themeCriteria {
             filterComponents.append(themeCriteria)
         }
         
-        gameRequestItem.filter = "where \(filterComponents.joined(separator: "&"));"
+        var filter = ""
+        filter = filterComponents.joined(separator: "&")
+        if let similarGames = game.similarGames {
+            filter = "(\(filter)) | id = \(similarGames.toIdArrayString(firstBracket: "(", secondBracket: ")"))"
+        }
+        
+
+        let gameRequestItem = GameApiRequestItem()
         gameRequestItem.fields = basicFields
         gameRequestItem.limit = 500
         gameRequestItem.offset = 0
-        
+        gameRequestItem.filter = addCommonFilters(to: filter)
+
         return gameRequestItem
     }
     
@@ -217,37 +237,50 @@ class GameApiRequestItem {
             return false
         }
     }
-
+    
     static private func genresCriteriaForSimilarGame(with game: Game) -> String?{
         if let genres = game.genres, genres.count != 0{
-            let genreSets = genres.growingOrderedSubarrays()
-            if genreSets.count == 0 {
-                return nil
+            var genresCombinations = [[Genre]]()
+            if genres.count > 3 {
+                genresCombinations += combinations(collection: genres, k: 3) ?? []
+                genresCombinations += combinations(collection: genres, k: 4) ?? []
+            } else if genres.count > 2 {
+                genresCombinations += combinations(collection: genres, k: 3) ?? []
             } else {
-                return "genres = \(genreSets[min(3,genreSets.count-1)].toIdArrayString(firstBracket: "[", secondBracket: "]"))"
+                genresCombinations += combinations(collection: genres, k: genres.count) ?? []
             }
+            var temp = [String]()
+            for genreCombination in genresCombinations {
+                temp.append("genres = \(genreCombination.toIdArrayString(firstBracket: "{", secondBracket: "}"))")
+            }
+            return "(\(temp.joined(separator: "|")))"
         }
         return nil
     }
     
     static private func themesCriteriaForSimilarGame(with game: Game) -> String?{
         if let themes = game.themes, themes.count != 0{
-            return "themes = \(themes.toIdArrayString(firstBracket: "(", secondBracket: ")"))"
+            var themesCombinations = [[Theme]]()
+            if themes.count > 2 {
+                themesCombinations += combinations(collection: themes, k: 2) ?? []
+            } else {
+                themesCombinations += combinations(collection: themes, k: themes.count) ?? []
+            }
+            var temp = [String]()
+            for themeCombination in themesCombinations {
+                temp.append("themes = \(themeCombination.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
+            }
+            return "(\(temp.joined(separator: "|")))"
         }
         return nil
     }
     
-    
-    
-    
     static private func formSearchingFilters(with filter: SearchFilter) -> String?{
         
         if filter.isDefault {
-            return "(cover != null & first_release_date <= \(Int(Date.init(timeIntervalSinceNow: 0).timeIntervalSince1970)))"
+            return "(cover != null & total_rating_count != null)"
         }
-        
         var filterComponents = [String]()
-        
         if !filter.genres.isEmpty{
             filterComponents.append("genres = \(filter.genres.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
         }
@@ -257,33 +290,24 @@ class GameApiRequestItem {
         if !filter.platforms.isEmpty{
             filterComponents.append("platforms = \(filter.platforms.toIdArrayString(firstBracket: "[", secondBracket: "]"))")
         }
-
         if let aggrRatingUpperBound = filter.ratingUpperBound{
             filterComponents.append("total_rating <= \(aggrRatingUpperBound)")
         }
-        
         if let aggrRatingLowerBound = filter.ratingLowerBound{
             filterComponents.append("total_rating >= \(aggrRatingLowerBound)")
         }
-            
         if let releaseUpperBound = filter.releaseDateUpperBound{
             filterComponents.append("total_rating <= \(Int(releaseUpperBound.timeIntervalSince1970))")
         }
-
         if let releaseLowerBound = filter.releaseDateLowerBound{
             filterComponents.append("first_release_date >= \(Int(releaseLowerBound.timeIntervalSince1970))")
         }
-        
         if filter.excludeEmptyGames == true {
             filterComponents.append("(cover != null | summary != null | storyline != null)")
         }
-        
-        
-
         if !filterComponents.isEmpty {
              return "(\(filterComponents.joined(separator: "&")))"
         }
-        
         return nil
     }
 }

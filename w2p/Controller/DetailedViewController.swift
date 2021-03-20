@@ -436,7 +436,7 @@ class DetailedViewController: UIViewController{
     }
     
     private func setupNavigationButtons(){
-        if game.similarGames != nil{
+        if GameApiRequestItem.similarGamesRequestAvailableFor(game: game) {
             similarGamesButton.textLabel.text = "Similar games"
         } else {
             similarGamesButton.superview?.isHidden = true

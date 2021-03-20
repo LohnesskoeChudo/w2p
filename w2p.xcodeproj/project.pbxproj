@@ -61,6 +61,7 @@
 		5DDA01AE25DAFD7E00FF2C1C /* GameMediaDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01AD25DAFD7E00FF2C1C /* GameMediaDispatcher.swift */; };
 		5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDA01B325DB157400FF2C1C /* BinarySearch.swift */; };
 		5DDAFB8D25F0C76400315340 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDAFB8C25F0C76400315340 /* Array+.swift */; };
+		5DDB3963260628EB00F07882 /* Combinations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDB3962260628EB00F07882 /* Combinations.swift */; };
 		5DDCFB2025F9F0F2001DFAF1 /* LineRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDCFB1F25F9F0F2001DFAF1 /* LineRatingView.swift */; };
 		5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */; };
 		5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */; };
@@ -150,6 +151,7 @@
 		5DDA01AD25DAFD7E00FF2C1C /* GameMediaDispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMediaDispatcher.swift; sourceTree = "<group>"; };
 		5DDA01B325DB157400FF2C1C /* BinarySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinarySearch.swift; sourceTree = "<group>"; };
 		5DDAFB8C25F0C76400315340 /* Array+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+.swift"; sourceTree = "<group>"; };
+		5DDB3962260628EB00F07882 /* Combinations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combinations.swift; sourceTree = "<group>"; };
 		5DDCFB1F25F9F0F2001DFAF1 /* LineRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineRatingView.swift; sourceTree = "<group>"; };
 		5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Boyer-Moore.swift"; sourceTree = "<group>"; };
 		5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleSlider.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				5D33CBF425EE10D000377372 /* LinkedList.swift */,
 				5D68EA0125FFAD0700E8169B /* PriorityQueue.swift */,
 				5D68EA0425FFAD1600E8169B /* Heap.swift */,
+				5DDB3962260628EB00F07882 /* Combinations.swift */,
 				5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */,
 			);
 			path = "Algorithms and DS's";
@@ -478,6 +481,7 @@
 				5D530F2B25D8144000DF5621 /* FavoritesViewController.swift in Sources */,
 				5DF85F4025E1A67F00359227 /* CDFranchise.swift in Sources */,
 				5DF85F2825E1A63700359227 /* CDTheme.swift in Sources */,
+				5DDB3963260628EB00F07882 /* Combinations.swift in Sources */,
 				5D530F3325D828A000DF5621 /* GameCardCell.swift in Sources */,
 				5D530EF925D7E44300DF5621 /* AppDelegate.swift in Sources */,
 				5D0AA4D625DBD90A0026543E /* ImageResizer.swift in Sources */,

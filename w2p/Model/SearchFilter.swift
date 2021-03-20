@@ -56,6 +56,50 @@ class SearchFilter{
     }
     
     var isDefault: Bool {
+        if !(searchString?.isEmpty != true) {
+            print(searchString)
+            print(1)
+            return false
+        }
+        if !genres.isEmpty {
+            
+            print(2)
+            return false
+        }
+        if !themes.isEmpty {
+            
+            print(3)
+            return false
+        }
+        if singleplayer {
+            
+            print(4)
+            return false
+        }
+        if multiplayer {
+            
+            print(5)
+            return false
+        }
+        if ratingUpperBound != nil {
+            
+            print(6)
+            return false
+        }
+        if ratingLowerBound != nil {
+            
+            print(7)
+            return false
+        }
+        if releaseDateUpperBound != nil {
+            
+            print(8)
+            return false
+        }
+        if releaseDateLowerBound != nil {
+            print(999999999)
+            return false
+        }
         return true
     }
     
