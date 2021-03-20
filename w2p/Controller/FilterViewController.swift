@@ -116,14 +116,14 @@ class FilterViewController: UIViewController {
  
     
     
-    @IBOutlet weak var noDescSwitch: UISwitch!
-    @IBOutlet weak var noMediaSwitch: UISwitch!
+    @IBOutlet weak var noEmptyGamesSwitch: UISwitch!
+    @IBOutlet weak var noExtensionsSwitch: UISwitch!
     
-    @IBAction func noDescSwitch(_ sender: UISwitch) {
-        filter.excludeWithoutDescription = sender.isOn
+    @IBAction func noEmptyGamesSwitched(_ sender: UISwitch) {
+        filter.excludeEmptyGames = sender.isOn
     }
-    @IBAction func noMediaSwitch(_ sender: UISwitch) {
-        filter.excludeWithoutCover = sender.isOn
+    @IBAction func noExtensionsSwitched(_ sender: UISwitch) {
+        filter.excludeExtensions = sender.isOn
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -199,8 +199,8 @@ class FilterViewController: UIViewController {
     }
     
     private func updateExcludeUI(animated: Bool){
-        noDescSwitch.setOn(filter.excludeWithoutDescription, animated: animated)
-        noMediaSwitch.setOn(filter.excludeWithoutCover, animated: animated)
+        noEmptyGamesSwitch.setOn(filter.excludeEmptyGames, animated: animated)
+        noExtensionsSwitch.setOn(filter.excludeExtensions, animated: animated)
     }
     
     private func setupRating(){

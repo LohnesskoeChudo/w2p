@@ -23,11 +23,9 @@ class SearchFilter{
     var releaseDateUpperBound: Date?
     var releaseDateLowerBound: Date?
     
-    var excludeWithoutDescription: Bool = true
-    var excludeWithoutCover: Bool = true
-    
     var excludeEmptyGames: Bool = true
-
+    var excludeExtensions: Bool = true
+    
     static var allGenres: [Genre] = {
         loadAllGameAttributes(resourceName: "genres") ?? []
     }()
@@ -57,47 +55,30 @@ class SearchFilter{
     
     var isDefault: Bool {
         if searchString != nil, !searchString!.isEmpty {
-            print(searchString)
-            print(1)
             return false
         }
         if !genres.isEmpty {
-            
-            print(2)
             return false
         }
         if !themes.isEmpty {
-            
-            print(3)
             return false
         }
         if singleplayer {
-            
-            print(4)
             return false
         }
         if multiplayer {
-            
-            print(5)
             return false
         }
         if ratingUpperBound != nil {
-            
-            print(6)
             return false
         }
         if ratingLowerBound != nil {
-            
-            print(7)
             return false
         }
         if releaseDateUpperBound != nil {
-            
-            print(8)
             return false
         }
         if releaseDateLowerBound != nil {
-            print(999999999)
             return false
         }
         return true
@@ -113,8 +94,7 @@ class SearchFilter{
         ratingLowerBound = nil
         releaseDateLowerBound = nil
         releaseDateUpperBound = nil
-        
-        excludeWithoutCover = true
-        excludeWithoutDescription = true
+        excludeExtensions = true
+        excludeEmptyGames = true
     }
 }

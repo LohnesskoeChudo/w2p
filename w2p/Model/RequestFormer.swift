@@ -254,7 +254,7 @@ class GameApiRequestItem {
                 genresCombinations += combinations(collection: genres, k: 4) ?? []
             } else if genres.count > 2 {
                 genresCombinations += combinations(collection: genres, k: 3) ?? []
-                genresCombinations += combinations(collection: genres, k: 2) ?? []
+                
             } else {
                 genresCombinations += combinations(collection: genres, k: genres.count) ?? []
             }
@@ -320,6 +320,10 @@ class GameApiRequestItem {
         if filter.excludeEmptyGames == true {
             filterComponents.append("(cover != null | summary != null | storyline != null)")
         }
+        if filter.excludeExtensions {
+            filterComponents.append("category = ![1,2,5]")
+        }
+        
         if !filterComponents.isEmpty {
              return "(\(filterComponents.joined(separator: "&")))"
         }
