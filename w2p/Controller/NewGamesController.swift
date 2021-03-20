@@ -30,7 +30,7 @@ class NewGamesController: GameBrowserController {
     }
     
     private func setupRequestItem() {
-        gameApiRequestItem = GameApiRequestItem.formRequestItemForNewGames(alreadyReleased: false)
+        gameApiRequestItem = GameApiRequestItem.formRequestItemForNewAvailableGames()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

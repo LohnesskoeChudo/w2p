@@ -174,18 +174,20 @@ class GameApiRequestItem {
         return gameRequestItem
     }
     
-    static func formRequestItemForNewGames(alreadyReleased: Bool) -> GameApiRequestItem {
+    static func formRequestItemForNewAvailableGames() -> GameApiRequestItem {
         let gameRequestItem = GameApiRequestItem()
         gameRequestItem.offset = 0
         gameRequestItem.limit = 500
         gameRequestItem.fields = basicFields
-        let dateOperator = alreadyReleased ? "<=" : ">="
         
-        let filter = addCommonFilters(to: "(cover != null & first_release_date \(dateOperator) \(Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970)))")
+        let nowStamp = Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970)
         
+        let monthInSeconds = 30 * 24 * 60 * 60
+        
+        let alreadyAvailableFilter = "(first_release_date >= \(nowStamp - monthInSeconds) & (first_release_date <= \(nowStamp) | (first_release_date >= \(nowStamp) & status = (3,4))))"
+        
+        let filter = addCommonFilters(to: alreadyAvailableFilter)
         gameRequestItem.filter = filter
-        gameRequestItem.sorting = "sort hypes desc; sort first_release_date asc;"
-        
         return gameRequestItem
     }
     
@@ -206,9 +208,16 @@ class GameApiRequestItem {
         gameRequestItem.offset = 0
         
         return gameRequestItem
-        
     }
     
+    static func similarGamesRequestAvailableFor(game: Game) -> Bool{
+        if formRequestItemForSimilarGames(with: game) != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+
     static private func genresCriteriaForSimilarGame(with game: Game) -> String?{
         if let genres = game.genres, genres.count != 0{
             let genreSets = genres.growingOrderedSubarrays()
