@@ -1,6 +1,0 @@
-framework module Pods_w2p {
-  umbrella header "Pods-w2p-umbrella.h"
-
-  export *
-  module * { export * }
-}

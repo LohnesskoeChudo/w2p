@@ -15,10 +15,25 @@ class GameVideoCompactCell: UICollectionViewCell {
     
     @IBOutlet weak var videoView: YTPlayerView!
     
+    
+    
+    var videoId: String?
+    let playerVars: [AnyHashable: Any] = [
+        "playsinline" : 1,
+        "rel" : 0,
+        "modestbranding" : 1,
+        "fs" : 0,
+        "loop" : 1
+    
+    ]
 
     func setup(videoId: String) {
-        videoView.load(withVideoId: videoId)
-        videoView.delegate = YoutubeViewDelegate()
+        self.videoId = videoId
+        videoView.webView?.configuration
+        videoView.delegate = self
+        videoView.load(withVideoId: videoId, playerVars: playerVars)
+        
+
     }
     
     func startPlaying() {
@@ -26,12 +41,29 @@ class GameVideoCompactCell: UICollectionViewCell {
     }
 }
 
-class YoutubeViewDelegate: NSObject, YTPlayerViewDelegate {
-        
-    yt
-    
-    
-    
-    
-    
+extension GameVideoCompactCell: YTPlayerViewDelegate {
+
+    func playerView(_ playerView: YTPlayerView, didChangeTo state: YTPlayerState) {
+        if state == .ended{
+            if let videoId = videoId {
+                
+                playerView.load(withVideoId: videoId, playerVars: playerVars)
+            }
+        }
+    }
 }
+
+
+extension GameVideoCompactCell: WKUIDelegate {
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        let config = WKWebViewConfiguration()
+        config.allowsAirPlayForMediaPlayback = false
+        config.allowsPictureInPictureMediaPlayback = false
+        let webview = WKWebView(frame: .zero, configuration: config)
+        return webview
+    }
+}
+
+    
+    
+    

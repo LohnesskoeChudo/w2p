@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -47,6 +47,8 @@
 		5DC029702604D46F00E4C134 /* NewGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC0296F2604D46F00E4C134 /* NewGamesController.swift */; };
 		5DC17E912607513500CFAFB8 /* GameVideoCompactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC17E902607513500CFAFB8 /* GameVideoCompactCell.swift */; };
 		5DC17E9726075AC400CFAFB8 /* VideoCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC17E9626075AC400CFAFB8 /* VideoCompactView.swift */; };
+		5DC2C35C2607D90000AEF485 /* XCDYouTubeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5DC2C35B2607D90000AEF485 /* XCDYouTubeKit */; };
+		5DC2C35F2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */; };
 		5DC4751825F8B4C700412048 /* CircularRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751725F8B4C700412048 /* CircularRatingView.swift */; };
 		5DC4751F25F8BBFE00412048 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751E25F8BBFE00412048 /* CGRect+.swift */; };
 		5DC4752625F8C29600412048 /* RedGreenMaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752525F8C29600412048 /* RedGreenMaper.swift */; };
@@ -94,19 +96,15 @@
 		5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3925E1A66600359227 /* CDVideo.swift */; };
 		5DF85F3D25E1A67100359227 /* CDAgeRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3C25E1A67100359227 /* CDAgeRating.swift */; };
 		5DF85F4025E1A67F00359227 /* CDFranchise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3F25E1A67F00359227 /* CDFranchise.swift */; };
-		85D3CC7A17AA4CE844CDF10A /* Pods_w2p.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3479BCC409A5E7EE30C1A12C /* Pods_w2p.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		01CEADC23C9BD2F035D8906C /* Pods-w2p.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-w2p.debug.xcconfig"; path = "Target Support Files/Pods-w2p/Pods-w2p.debug.xcconfig"; sourceTree = "<group>"; };
-		3479BCC409A5E7EE30C1A12C /* Pods_w2p.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_w2p.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D023CDE25E1AFAA003B04CD /* CDGameCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGameCollection.swift; sourceTree = "<group>"; };
 		5D0AA4D525DBD90A0026543E /* ImageResizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResizer.swift; sourceTree = "<group>"; };
 		5D0AA4D825DBE7750026543E /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		5D2C018B25F5FD1B00F17F14 /* CustomMergePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMergePolicy.swift; sourceTree = "<group>"; };
 		5D33CBF125EE0FE300377372 /* FIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FIFO.swift; sourceTree = "<group>"; };
 		5D33CBF425EE10D000377372 /* LinkedList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedList.swift; sourceTree = "<group>"; };
-		5D530EF525D7E44300DF5621 /* w2p.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = w2p.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D530EF825D7E44300DF5621 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D530EFA25D7E44300DF5621 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5D530EFC25D7E44300DF5621 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = ../View/SearchViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +140,7 @@
 		5DC0296F2604D46F00E4C134 /* NewGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGamesController.swift; sourceTree = "<group>"; };
 		5DC17E902607513500CFAFB8 /* GameVideoCompactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameVideoCompactCell.swift; sourceTree = "<group>"; };
 		5DC17E9626075AC400CFAFB8 /* VideoCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompactView.swift; sourceTree = "<group>"; };
+		5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerViewControllerManager.swift; sourceTree = "<group>"; };
 		5DC4751725F8B4C700412048 /* CircularRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularRatingView.swift; sourceTree = "<group>"; };
 		5DC4751E25F8BBFE00412048 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		5DC4752525F8C29600412048 /* RedGreenMaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedGreenMaper.swift; sourceTree = "<group>"; };
@@ -151,6 +150,7 @@
 		5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WFLayoutInvalidationContext.swift; sourceTree = "<group>"; };
 		5DCB518325F38D4700079006 /* CDCompany.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCompany.swift; sourceTree = "<group>"; };
 		5DCB518625F38D7800079006 /* CDGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDGameEngine.swift; sourceTree = "<group>"; };
+		5DCBE8DE2607DCBF00249C75 /* w2p.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = w2p.app; path = "/Users/vas/Desktop/w2p/build/Debug-iphoneos/w2p.app"; sourceTree = "<absolute>"; };
 		5DCCCBB625E90BA4007690B9 /* CellContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CellContentView.xib; sourceTree = "<group>"; };
 		5DCCCBB925E90D4C007690B9 /* CellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellContentView.swift; sourceTree = "<group>"; };
 		5DD5EFF425DCE6F8000513BB /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -189,7 +189,6 @@
 		5DF85F3925E1A66600359227 /* CDVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDVideo.swift; sourceTree = "<group>"; };
 		5DF85F3C25E1A67100359227 /* CDAgeRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDAgeRating.swift; sourceTree = "<group>"; };
 		5DF85F3F25E1A67F00359227 /* CDFranchise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDFranchise.swift; sourceTree = "<group>"; };
-		D1167E672A9574BCDB222EEC /* Pods-w2p.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-w2p.release.xcconfig"; path = "Target Support Files/Pods-w2p/Pods-w2p.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,7 +196,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85D3CC7A17AA4CE844CDF10A /* Pods_w2p.framework in Frameworks */,
+				5DC2C35C2607D90000AEF485 /* XCDYouTubeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,18 +222,7 @@
 			isa = PBXGroup;
 			children = (
 				5D530EF725D7E44300DF5621 /* w2p */,
-				5D530EF625D7E44300DF5621 /* Products */,
-				E19CE4035A4F545FC57FD787 /* Frameworks */,
-				E791F871FB3CBC2A69D91269 /* Pods */,
 			);
-			sourceTree = "<group>";
-		};
-		5D530EF625D7E44300DF5621 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5D530EF525D7E44300DF5621 /* w2p.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		5D530EF725D7E44300DF5621 /* w2p */ = {
@@ -310,6 +298,7 @@
 				5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */,
 				5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */,
 				5DC0296F2604D46F00E4C134 /* NewGamesController.swift */,
+				5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -373,24 +362,6 @@
 			path = CDStack;
 			sourceTree = "<group>";
 		};
-		E19CE4035A4F545FC57FD787 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				3479BCC409A5E7EE30C1A12C /* Pods_w2p.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E791F871FB3CBC2A69D91269 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				01CEADC23C9BD2F035D8906C /* Pods-w2p.debug.xcconfig */,
-				D1167E672A9574BCDB222EEC /* Pods-w2p.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -409,8 +380,11 @@
 			dependencies = (
 			);
 			name = w2p;
+			packageProductDependencies = (
+				5DC2C35B2607D90000AEF485 /* XCDYouTubeKit */,
+			);
 			productName = w2p;
-			productReference = 5D530EF525D7E44300DF5621 /* w2p.app */;
+			productReference = 5DCBE8DE2607DCBF00249C75 /* w2p.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -436,7 +410,10 @@
 				Base,
 			);
 			mainGroup = 5D530EEC25D7E44300DF5621;
-			productRefGroup = 5D530EF625D7E44300DF5621 /* Products */;
+			packageReferences = (
+				5DC2C35A2607D90000AEF485 /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */,
+			);
+			productRefGroup = 5D530EEC25D7E44300DF5621;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -534,6 +511,7 @@
 				5DF85F3425E1A65800359227 /* CDArtwork.swift in Sources */,
 				5D530F2125D8080100DF5621 /* SearchFilter.swift in Sources */,
 				5D59BBF125F7D20F0073FFD1 /* GlobalSettings.swift in Sources */,
+				5DC2C35F2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift in Sources */,
 				5D59BBEE25F768D00073FFD1 /* AnimatedControl.swift in Sources */,
 				5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */,
 				5D530F2825D8140E00DF5621 /* TabBarController.swift in Sources */,
@@ -732,7 +710,6 @@
 		};
 		5D530F0A25D7E44300DF5621 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 01CEADC23C9BD2F035D8906C /* Pods-w2p.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -755,7 +732,6 @@
 		};
 		5D530F0B25D7E44300DF5621 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D1167E672A9574BCDB222EEC /* Pods-w2p.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -798,6 +774,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5DC2C35A2607D90000AEF485 /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/0xced/XCDYouTubeKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.15.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5DC2C35B2607D90000AEF485 /* XCDYouTubeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5DC2C35A2607D90000AEF485 /* XCRemoteSwiftPackageReference "XCDYouTubeKit" */;
+			productName = XCDYouTubeKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		5DD5EFF325DCE6F8000513BB /* Model.xcdatamodeld */ = {
