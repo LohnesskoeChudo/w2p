@@ -7,7 +7,7 @@
 
 import UIKit
 
-class StaticMediaCell: UICollectionViewCell {
+class StaticMediaCompactCell: UICollectionViewCell {
     
     var id: Int?
     

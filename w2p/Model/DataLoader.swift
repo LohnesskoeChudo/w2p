@@ -22,6 +22,7 @@ class DataLoader{
 
             if let capturedData = data{
                 completion(capturedData, nil)
+                print( capturedData.count / (1024))
             } else {
                 completion(nil, .connectionError)
             }

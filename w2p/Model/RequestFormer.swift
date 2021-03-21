@@ -321,7 +321,7 @@ class GameApiRequestItem {
             filterComponents.append("(cover != null | summary != null | storyline != null)")
         }
         if filter.excludeExtensions {
-            filterComponents.append("category = ![1,2,5]")
+            filterComponents.append("category != (1,2,5)")
         }
         
         if !filterComponents.isEmpty {

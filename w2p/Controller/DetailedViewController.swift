@@ -311,7 +311,9 @@ class DetailedViewController: UIViewController{
         mediaCollectionView.dataSource = self
         
         
-
+        if let videos = game.videos {
+            videoMediaContent += videos
+        }
         if let screenshots = game.screenshots {
             staticMediaContent += screenshots
         }
@@ -700,10 +702,10 @@ extension DetailedViewController: UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         
-      //  if indexPath.item >= videoMediaContent.count{
+      if indexPath.item >= videoMediaContent.count{
             
             
-            let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCell
+            let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCompactCell
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
             staticMediaCell.id = staticMedia.id
@@ -711,13 +713,20 @@ extension DetailedViewController: UICollectionViewDataSource{
             return staticMediaCell
             
             
-       // } else {
-            
-        //}
+       } else {
+            let videoMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCompactCell", for: indexPath) as! GameVideoCompactCell
         
+            let video = videoMediaContent[indexPath.item]
+            
+            if let videoId  = video.videoId {
+                videoMediaCell.setup(videoId: videoId)
+            }
+        
+            return videoMediaCell
+       }
     }
     
-    func setStaticContent(staticMedia: MediaDownloadable, cell: StaticMediaCell){
+    func setStaticContent(staticMedia: MediaDownloadable, cell: StaticMediaCompactCell){
         
         let id = cell.id
         let width = mediaCollectionView.frame.width
