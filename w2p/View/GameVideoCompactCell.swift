@@ -12,12 +12,12 @@ import XCDYouTubeKit
 
 
 
-class GameVideoCompactCell: UICollectionViewCell {
+class GameVideoCompactCell: CompactMediaCell {
 
     var videoId: String?
     
     let playerVCManager = AVPlayerViewControllerManager()
-
+        
     func setup(videoId: String) {
         self.videoId = videoId
         if playerVCManager.video == nil {
@@ -54,4 +54,3 @@ class GameVideoCompactCell: UICollectionViewCell {
         print("cell deinit")
     }
 }
-

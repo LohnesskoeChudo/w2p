@@ -172,9 +172,7 @@ class DetailedViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { [weak self] _ in
-            if self?.isLoading == true {
-                self?.updateAnimations()
-            }
+            self?.updateAnimationsIfNeeded()
         }
         if shouldUpdate {
             //updateGame()
@@ -184,8 +182,17 @@ class DetailedViewController: UIViewController{
         
     }
     
-    private func updateAnimations() {
-        addBlinkAnimationTo(layer: coverContainer.layer)
+    
+    
+    private func updateAnimationsIfNeeded() {
+        if isLoading {
+            addBlinkAnimationTo(layer: coverContainer.layer)
+        }
+        for subview in mediaCollectionView.subviews {
+            if let compactCell = subview as? CompactMediaCell {
+                compactCell.updateAnimationIfNeeded()
+            }
+        }
     }
     
     // set favorites
@@ -259,10 +266,8 @@ class DetailedViewController: UIViewController{
     
    
     override func viewWillAppear(_ animated: Bool) {
-        if isLoading {
-            updateAnimations()
-        }
-        startLoadingStaticMedia()
+        updateAnimationsIfNeeded()
+        //startLoadingStaticMedia()
         layoutCover(size: view.frame.size)
         layoutMedia(newWidth: view.frame.width)
         setupGameMetadata() {
@@ -710,7 +715,7 @@ extension DetailedViewController: UICollectionViewDataSource{
             let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCompactCell
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
-            staticMediaCell.id = staticMedia.id
+            staticMediaCell.id = UUID()
             setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
             return staticMediaCell
             
@@ -728,38 +733,36 @@ extension DetailedViewController: UICollectionViewDataSource{
        }
     }
     
-    func setStaticContent(staticMedia: MediaDownloadable, cell: StaticMediaCompactCell){
+    func setStaticContent(staticMedia: MediaDownloadable, cell: CompactMediaCell){
         
         let id = cell.id
         let width = mediaCollectionView.frame.width
-        mediaDispatcher.fetchStaticMedia(with: staticMedia) {
-            (data: Data?, error: FetchingError?) in
-            if let data = data{
-                DispatchQueue.global(qos: .userInteractive).async{
-                    guard let image = UIImage(data: data) else {
-                        
-                        return
-                        
-                    }
-                    
-                    let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
-                    
-                    DispatchQueue.main.async {
-                        if id == cell.id {
-                            UIView.transition(with: cell.staticMediaView, duration: 0.3, options: .transitionCrossDissolve) {
-                                cell.staticMediaView.image = resizedImage
+        cell.isLoading = true
+        cell.startLoadingAnimation(duration: 0.2) {
+            self.mediaDispatcher.fetchStaticMedia(with: staticMedia) {
+                (data: Data?, error: FetchingError?) in
+                if let data = data{
+                    DispatchQueue.global(qos: .userInteractive).async{
+                        guard let image = UIImage(data: data) else { return }
+                        let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
+                        DispatchQueue.main.async {
+                            if id == cell.id {
+                                cell.setupStaticMediaView(image: resizedImage)
                             }
+                            cell.isLoading = false
                         }
                     }
+                } else {
+                    if id == cell.id {
+                        cell.finishShowingInfoContainer(duration: 0.2) {
+                            cell.showConnectionProblemMessage(duration: 0.2)
+                        }
+                    }
+                    cell.isLoading = false
                 }
-            }
-            if let error = error {
             }
         }
     }
-    
-
-
 }
 
 enum BrowserGameCategory {

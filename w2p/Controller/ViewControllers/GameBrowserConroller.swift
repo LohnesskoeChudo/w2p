@@ -198,16 +198,18 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         }
     }
     
+    
+
+    
     private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
         
         infoLabel.text = "Loading"
+        
         infoImageView.image = UIImage(named: "gamepad")
         infoContainer.alpha = 0
         infoContainer.isHidden = false
-        let imageAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        let imageAnimation = GameAnimationSupporter.getRotationAnimation()
         imageAnimation.duration = 1
-        imageAnimation.fromValue = CGFloat.pi / 4.5
-        imageAnimation.toValue = -CGFloat.pi / 4.5
         imageAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         imageAnimation.autoreverses = true
         imageAnimation.repeatCount = .infinity

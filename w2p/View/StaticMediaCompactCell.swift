@@ -7,19 +7,7 @@
 
 import UIKit
 
-class StaticMediaCompactCell: UICollectionViewCell {
-    
-    var id: Int?
-    
-    @IBOutlet weak var staticMediaView: UIImageView!
-    
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        id = nil
-        staticMediaView.image = nil
-    }
-    
+class StaticMediaCompactCell: CompactMediaCell {
     
 
 }

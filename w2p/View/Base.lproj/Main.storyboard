@@ -1464,19 +1464,40 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
+                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GaR-19-04r" userLabel="InfoContainer">
+                                                                                    <rect key="frame" x="74" y="113" width="75" height="75"/>
+                                                                                    <subviews>
+                                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-ly-IPR">
+                                                                                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                                                                                        </imageView>
+                                                                                    </subviews>
+                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="trailing" secondItem="0jg-ly-IPR" secondAttribute="trailing" id="LM3-FP-GY4"/>
+                                                                                        <constraint firstItem="0jg-ly-IPR" firstAttribute="top" secondItem="GaR-19-04r" secondAttribute="top" id="Qeg-8I-67l"/>
+                                                                                        <constraint firstAttribute="width" secondItem="GaR-19-04r" secondAttribute="height" id="ZPQ-hL-93H"/>
+                                                                                        <constraint firstAttribute="bottom" secondItem="0jg-ly-IPR" secondAttribute="bottom" id="n1f-Uw-HlQ"/>
+                                                                                        <constraint firstItem="0jg-ly-IPR" firstAttribute="leading" secondItem="GaR-19-04r" secondAttribute="leading" id="xeA-FN-GuA"/>
+                                                                                    </constraints>
+                                                                                </view>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mFC-EU-Ff4">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                                 </imageView>
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstItem="mFC-EU-Ff4" firstAttribute="top" secondItem="afw-pW-alO" secondAttribute="top" id="0yv-Gl-ZIk"/>
+                                                                                <constraint firstItem="GaR-19-04r" firstAttribute="centerY" secondItem="afw-pW-alO" secondAttribute="centerY" id="ClP-D0-ms3"/>
+                                                                                <constraint firstItem="GaR-19-04r" firstAttribute="centerX" secondItem="afw-pW-alO" secondAttribute="centerX" id="ZQ8-JH-xl4"/>
                                                                                 <constraint firstItem="mFC-EU-Ff4" firstAttribute="leading" secondItem="afw-pW-alO" secondAttribute="leading" id="bCY-Zt-QQv"/>
+                                                                                <constraint firstItem="GaR-19-04r" firstAttribute="height" secondItem="afw-pW-alO" secondAttribute="height" multiplier="0.25" id="iSi-aw-3rw"/>
                                                                                 <constraint firstAttribute="trailing" secondItem="mFC-EU-Ff4" secondAttribute="trailing" id="lEW-F8-NNl"/>
                                                                                 <constraint firstAttribute="bottom" secondItem="mFC-EU-Ff4" secondAttribute="bottom" id="lXh-g6-nSt"/>
                                                                             </constraints>
                                                                         </collectionViewCellContentView>
                                                                         <size key="customSize" width="223" height="301"/>
                                                                         <connections>
+                                                                            <outlet property="infoContainer" destination="GaR-19-04r" id="bMZ-Lf-Fer"/>
+                                                                            <outlet property="infoImageView" destination="0jg-ly-IPR" id="Ltp-Jy-kRr"/>
                                                                             <outlet property="staticMediaView" destination="mFC-EU-Ff4" id="Q4E-72-pYS"/>
                                                                         </connections>
                                                                     </collectionViewCell>
@@ -1486,7 +1507,34 @@
                                                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6u1-iq-8iZ">
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
+                                                                            <subviews>
+                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLL-ZO-rH4" userLabel="InfoContainer">
+                                                                                    <rect key="frame" x="74" y="113" width="75" height="75"/>
+                                                                                    <subviews>
+                                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8wg-jd-GiH">
+                                                                                            <rect key="frame" x="0.0" y="0.0" width="75" height="75"/>
+                                                                                        </imageView>
+                                                                                    </subviews>
+                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstItem="8wg-jd-GiH" firstAttribute="leading" secondItem="fLL-ZO-rH4" secondAttribute="leading" id="Fcv-Pd-L24"/>
+                                                                                        <constraint firstAttribute="trailing" secondItem="8wg-jd-GiH" secondAttribute="trailing" id="Zcu-zZ-ndi"/>
+                                                                                        <constraint firstAttribute="width" secondItem="fLL-ZO-rH4" secondAttribute="height" id="aTU-tY-Ooq"/>
+                                                                                        <constraint firstAttribute="bottom" secondItem="8wg-jd-GiH" secondAttribute="bottom" id="iVK-8k-Pok"/>
+                                                                                        <constraint firstItem="8wg-jd-GiH" firstAttribute="top" secondItem="fLL-ZO-rH4" secondAttribute="top" id="tUI-Vk-eV9"/>
+                                                                                    </constraints>
+                                                                                </view>
+                                                                            </subviews>
+                                                                            <constraints>
+                                                                                <constraint firstItem="fLL-ZO-rH4" firstAttribute="centerY" secondItem="6u1-iq-8iZ" secondAttribute="centerY" id="OgL-63-Ftg"/>
+                                                                                <constraint firstItem="fLL-ZO-rH4" firstAttribute="height" secondItem="6u1-iq-8iZ" secondAttribute="height" multiplier="0.25" id="RTx-0t-Kya"/>
+                                                                                <constraint firstItem="fLL-ZO-rH4" firstAttribute="centerX" secondItem="6u1-iq-8iZ" secondAttribute="centerX" id="ThG-vp-TTt"/>
+                                                                            </constraints>
                                                                         </collectionViewCellContentView>
+                                                                        <connections>
+                                                                            <outlet property="infoContainer" destination="fLL-ZO-rH4" id="rx6-M6-5T2"/>
+                                                                            <outlet property="infoImageView" destination="8wg-jd-GiH" id="u8U-VQ-Qbc"/>
+                                                                        </connections>
                                                                     </collectionViewCell>
                                                                 </cells>
                                                             </collectionView>
@@ -1865,7 +1913,7 @@
             <objects>
                 <viewController id="w68-TY-0eO" customClass="SimilarGamesController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mDX-aO-Nod">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
@@ -2083,7 +2131,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="R7m-Lu-tA0"/>
         <segue reference="m7g-vP-Cl6"/>
     </inferredMetricsTieBreakers>
     <resources>
