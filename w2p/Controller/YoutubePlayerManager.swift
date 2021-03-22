@@ -11,44 +11,12 @@ import MediaPlayer
 import XCDYouTubeKit
 
 
-extension UIViewController {
-    func topMostViewController() -> UIViewController {
-        if self.presentedViewController == nil {
-            return self
-        }
-        if let navigation = self.presentedViewController as? UINavigationController {
-            return navigation.visibleViewController!.topMostViewController()
-        }
-        if let tab = self.presentedViewController as? UITabBarController {
-            if let selectedTab = tab.selectedViewController {
-                return selectedTab.topMostViewController()
-            }
-            return tab.topMostViewController()
-        }
-        return self.presentedViewController!.topMostViewController()
-    }
-}
 
-
-extension UIView {
-    var parentViewController: UIViewController? {
-        var parentResponder: UIResponder? = self
-        while parentResponder != nil {
-            parentResponder = parentResponder!.next
-            if let viewController = parentResponder as? UIViewController {
-                return viewController
-            }
-        }
-        return nil
-    }
-}
-
-
-@objcMembers class AVPlayerViewControllerManager: NSObject {
+@objcMembers class YoutubePlayerManager: NSObject {
     // MARK: - Public
 
 
-    public static let shared = AVPlayerViewControllerManager()
+    public static let shared = YoutubePlayerManager()
     public var lowQualityMode = false
     public dynamic var duration: Float = 0
 
@@ -59,12 +27,10 @@ extension UIView {
                 guard let streamURL = video.streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? video.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue] ?? video.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] else { fatalError("No stream URL") }
 
                 self.player = AVPlayer(url: streamURL)
-                self.controller.player = self.player
                 return
             }
             let streamURL = video.streamURL
             self.player = AVPlayer(url: streamURL!)
-            self.controller.player = self.player
         }
     }
 
@@ -91,14 +57,6 @@ extension UIView {
         }
     }
 
-    public lazy var controller: AVPlayerViewController = {
-        let controller = AVPlayerViewController()
-        if #available(iOS 10.0, *) {
-            controller.updatesNowPlayingInfoCenter = false
-        }
-        return controller
-    }()
-
     override init() {
         super.init()
 
@@ -121,26 +79,6 @@ extension UIView {
                 self.player?.play()
             }
         }
-    }
-
-    public func disconnectPlayer() {
-        self.controller.player = nil
-    }
-
-    public func reconnectPlayer(rootViewController: UIViewController) {
-        let viewController = rootViewController.topMostViewController()
-        guard let playerViewController = viewController as? AVPlayerViewController else {
-            if rootViewController is UINavigationController {
-                guard let vc = (rootViewController as! UINavigationController).visibleViewController else { return }
-                for childVC in vc.children {
-                    guard let playerViewController = childVC as? AVPlayerViewController else { continue }
-                    playerViewController.player = self.player
-                    break
-                }
-            }
-            return
-        }
-        playerViewController.player = self.player
     }
 
     // MARK: Private

@@ -1487,7 +1487,7 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
-                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i0d-vT-KXh" customClass="YTPlayerView">
+                                                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i0d-vT-KXh" customClass="VideoCompactView" customModule="w2p" customModuleProvider="target">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                                 </view>
@@ -1500,7 +1500,7 @@
                                                                             </constraints>
                                                                         </collectionViewCellContentView>
                                                                         <connections>
-                                                                            <outlet property="videoView" destination="i0d-vT-KXh" id="HJE-CC-3yu"/>
+                                                                            <outlet property="videoView" destination="i0d-vT-KXh" id="fbK-u8-hmB"/>
                                                                         </connections>
                                                                     </collectionViewCell>
                                                                 </cells>
@@ -1893,7 +1893,7 @@
             <objects>
                 <viewController id="w68-TY-0eO" customClass="SimilarGamesController" customModule="w2p" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mDX-aO-Nod">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="716"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
@@ -2111,6 +2111,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="R7m-Lu-tA0"/>
         <segue reference="m7g-vP-Cl6"/>
     </inferredMetricsTieBreakers>
     <resources>
