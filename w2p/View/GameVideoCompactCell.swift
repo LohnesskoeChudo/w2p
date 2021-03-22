@@ -7,39 +7,51 @@
 
 import UIKit
 import AVFoundation
+import AVKit
 import XCDYouTubeKit
 
 
 
 class GameVideoCompactCell: UICollectionViewCell {
 
-    
-    @IBOutlet weak var videoView: VideoCompactView!
-
-    
-    private var player: AVPlayer? {
-        get {
-            videoView.player
-        }
-        set {
-            videoView.player = newValue
-        }
-    }
-    
     var videoId: String?
+    
+    let playerVCManager = AVPlayerViewControllerManager()
 
     func setup(videoId: String) {
         self.videoId = videoId
-        XCDYouTubeClient.default().getVideoWithIdentifier(videoId) { [self]
-            (video: XCDYouTubeVideo?, error: Error?) in
-            YoutubePlayerManager.shared.video = video
-            self.player = YoutubePlayerManager.shared.player
-            self.player?.play()
+        if playerVCManager.video == nil {
+            XCDYouTubeClient.default().getVideoWithIdentifier(videoId) { [weak self]
+                (video: XCDYouTubeVideo?, error: Error?) in
+                if let video = video{
+                    self?.setupChildPlayerVCifNeeded()
+                    self?.playerVCManager.video = video
+                }
+            }
         }
     }
     
-    func startPlaying() {
-        
+    func pauseVideo() {
+        playerVCManager.player?.pause()
+    }
+    
+    private func setupChildPlayerVCifNeeded() {
+        if playerVCManager.controller == nil {
+            guard let parentVC = parentViewController else {return}
+            let playerVC = AVPlayerViewController()
+            playerVCManager.controller = playerVC
+            parentVC.addChild(playerVC)
+            playerVC.didMove(toParent: parentVC)
+            if let view = playerVC.view {
+                view.translatesAutoresizingMaskIntoConstraints = false
+                contentView.addSubview(view)
+                view.fixIn(view: contentView)
+            }
+        }
+    }
+    
+    deinit {
+        print("cell deinit")
     }
 }
 

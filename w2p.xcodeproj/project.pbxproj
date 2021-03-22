@@ -48,7 +48,7 @@
 		5DC029702604D46F00E4C134 /* NewGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC0296F2604D46F00E4C134 /* NewGamesController.swift */; };
 		5DC17E912607513500CFAFB8 /* GameVideoCompactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC17E902607513500CFAFB8 /* GameVideoCompactCell.swift */; };
 		5DC17E9726075AC400CFAFB8 /* VideoCompactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC17E9626075AC400CFAFB8 /* VideoCompactView.swift */; };
-		5DC2C35F2607DA2F00AEF485 /* YoutubePlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2C35E2607DA2F00AEF485 /* YoutubePlayerManager.swift */; };
+		5DC2C35F2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */; };
 		5DC4751825F8B4C700412048 /* CircularRatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751725F8B4C700412048 /* CircularRatingView.swift */; };
 		5DC4751F25F8BBFE00412048 /* CGRect+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4751E25F8BBFE00412048 /* CGRect+.swift */; };
 		5DC4752625F8C29600412048 /* RedGreenMaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC4752525F8C29600412048 /* RedGreenMaper.swift */; };
@@ -141,7 +141,7 @@
 		5DC0296F2604D46F00E4C134 /* NewGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGamesController.swift; sourceTree = "<group>"; };
 		5DC17E902607513500CFAFB8 /* GameVideoCompactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameVideoCompactCell.swift; sourceTree = "<group>"; };
 		5DC17E9626075AC400CFAFB8 /* VideoCompactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCompactView.swift; sourceTree = "<group>"; };
-		5DC2C35E2607DA2F00AEF485 /* YoutubePlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubePlayerManager.swift; sourceTree = "<group>"; };
+		5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerViewControllerManager.swift; sourceTree = "<group>"; };
 		5DC4751725F8B4C700412048 /* CircularRatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularRatingView.swift; sourceTree = "<group>"; };
 		5DC4751E25F8BBFE00412048 /* CGRect+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+.swift"; sourceTree = "<group>"; };
 		5DC4752525F8C29600412048 /* RedGreenMaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedGreenMaper.swift; sourceTree = "<group>"; };
@@ -203,6 +203,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5D1B0990260868CA008653CE /* Borrowed */ = {
+			isa = PBXGroup;
+			children = (
+				5DC2C35E2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift */,
+				5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */,
+			);
+			path = Borrowed;
+			sourceTree = "<group>";
+		};
 		5D33CBF025EE0FBB00377372 /* Algorithms and DS's */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,7 +222,6 @@
 				5D68EA0125FFAD0700E8169B /* PriorityQueue.swift */,
 				5D68EA0425FFAD1600E8169B /* Heap.swift */,
 				5DDB3962260628EB00F07882 /* Combinations.swift */,
-				5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */,
 			);
 			path = "Algorithms and DS's";
 			sourceTree = "<group>";
@@ -236,6 +244,7 @@
 				5D530F1825D7FC9D00DF5621 /* Controller */,
 				5DDA01B225DB156100FF2C1C /* Util */,
 				5D33CBF025EE0FBB00377372 /* Algorithms and DS's */,
+				5D1B0990260868CA008653CE /* Borrowed */,
 				5D530F0625D7E44300DF5621 /* Info.plist */,
 				5D530F0125D7E44300DF5621 /* Assets.xcassets */,
 			);
@@ -299,7 +308,6 @@
 				5D530F3925D8595200DF5621 /* WaterfallCollectionViewLayout.swift */,
 				5DC811BE25FE638400CE8B24 /* WFLayoutInvalidationContext.swift */,
 				5DC0296F2604D46F00E4C134 /* NewGamesController.swift */,
-				5DC2C35E2607DA2F00AEF485 /* YoutubePlayerManager.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -468,7 +476,7 @@
 				5DF85F3425E1A65800359227 /* CDArtwork.swift in Sources */,
 				5D530F2125D8080100DF5621 /* SearchFilter.swift in Sources */,
 				5D59BBF125F7D20F0073FFD1 /* GlobalSettings.swift in Sources */,
-				5DC2C35F2607DA2F00AEF485 /* YoutubePlayerManager.swift in Sources */,
+				5DC2C35F2607DA2F00AEF485 /* AVPlayerViewControllerManager.swift in Sources */,
 				5D59BBEE25F768D00073FFD1 /* AnimatedControl.swift in Sources */,
 				5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */,
 				5D530F2825D8140E00DF5621 /* TabBarController.swift in Sources */,

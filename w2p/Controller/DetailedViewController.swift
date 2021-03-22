@@ -48,7 +48,6 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var websitesOpeningButton: CategoryShowButton!
     @IBOutlet weak var websitesFlowView: LabelFlowView!
     @IBOutlet weak var favoritesButtonImage: UIImageView!
-    @IBOutlet weak var mediaCounterBackground: UIView!
     @IBOutlet weak var mediaCounterLabel: UILabel!
     @IBOutlet weak var blurredMediaBackground: UIImageView!
     @IBOutlet weak var mediaCollectionView: UICollectionView!
@@ -425,11 +424,7 @@ class DetailedViewController: UIViewController{
     }
     
     private func setupMediaCounter(){
-        mediaCounterBackground.layer.backgroundColor = UIColor.black.withAlphaComponent(0.5).cgColor
-        let height = mediaCounterBackground.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-        mediaCounterBackground.layer.cornerRadius = height / 2
         updateMediaCounter()
-        
     }
     
     private func layoutMedia(newWidth: CGFloat) {
@@ -676,6 +671,7 @@ class DetailedViewController: UIViewController{
         
         
     }
+    
 }
 
 
@@ -686,6 +682,12 @@ extension DetailedViewController: UICollectionViewDelegateFlowLayout{
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         updateMediaCounter()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let videoCell = cell as? GameVideoCompactCell {
+            videoCell.pauseVideo()
+        }
     }
 
 }
@@ -756,10 +758,8 @@ extension DetailedViewController: UICollectionViewDataSource{
         }
     }
     
-    
-    
-    
-    
+
+
 }
 
 enum BrowserGameCategory {

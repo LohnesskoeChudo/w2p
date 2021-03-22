@@ -287,7 +287,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        (collectionView.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
+        (collectionView?.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
         
     }
     
