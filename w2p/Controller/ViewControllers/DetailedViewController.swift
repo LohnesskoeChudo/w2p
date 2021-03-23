@@ -722,13 +722,15 @@ extension DetailedViewController: UICollectionViewDataSource{
             
        } else {
             let videoMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCompactCell", for: indexPath) as! GameVideoCompactCell
-        
+
             let video = videoMediaContent[indexPath.item]
-            
-            if let videoId  = video.videoId {
-                videoMediaCell.setup(videoId: videoId)
+            videoMediaCell.id = UUID()
+            videoMediaCell.videoId = video.videoId
+            if !videoMediaCell.isSetup {
+                videoMediaCell.setup(parentVC: self)
             }
-        
+            videoMediaCell.loadVideo()
+
             return videoMediaCell
        }
     }
@@ -738,28 +740,27 @@ extension DetailedViewController: UICollectionViewDataSource{
         let id = cell.id
         let width = mediaCollectionView.frame.width
         cell.isLoading = true
-        cell.startLoadingAnimation(duration: 0.2) {
-            self.mediaDispatcher.fetchStaticMedia(with: staticMedia) {
-                (data: Data?, error: FetchingError?) in
-                if let data = data{
-                    DispatchQueue.global(qos: .userInteractive).async{
-                        guard let image = UIImage(data: data) else { return }
-                        let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
-                        DispatchQueue.main.async {
-                            if id == cell.id {
-                                cell.setupStaticMediaView(image: resizedImage)
-                            }
-                            cell.isLoading = false
+        cell.startLoadingAnimation()
+        self.mediaDispatcher.fetchStaticMedia(with: staticMedia) {
+            (data: Data?, error: FetchingError?) in
+            if let data = data{
+                DispatchQueue.global(qos: .userInteractive).async{
+                    guard let image = UIImage(data: data) else { return }
+                    let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
+                    DispatchQueue.main.async {
+                        if id == cell.id {
+                            cell.setupStaticMediaView(image: resizedImage)
                         }
+                        cell.isLoading = false
                     }
-                } else {
-                    if id == cell.id {
-                        cell.finishShowingInfoContainer(duration: 0.2) {
-                            cell.showConnectionProblemMessage(duration: 0.2)
-                        }
-                    }
-                    cell.isLoading = false
                 }
+            } else {
+                if id == cell.id {
+                    cell.finishShowingInfoContainer(duration: 0.2) {
+                        cell.showConnectionProblemMessage(duration: 0.2)
+                    }
+                }
+                cell.isLoading = false
             }
         }
     }

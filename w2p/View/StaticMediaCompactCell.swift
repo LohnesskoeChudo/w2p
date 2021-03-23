@@ -9,5 +9,14 @@ import UIKit
 
 class StaticMediaCompactCell: CompactMediaCell {
     
-
+    @IBOutlet weak var mediaView: UIImageView!
+    
+    override var staticMediaView: UIImageView? {
+        get {
+            mediaView
+        }
+        set {
+            fatalError("tried to set outlet")
+        }
+    }
 }

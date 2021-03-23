@@ -32,7 +32,10 @@ class DataLoader{
 
 
 
-enum NetworkError {
+enum NetworkError: Error {
     case connectionError
     case parseError
 }
+
+
+

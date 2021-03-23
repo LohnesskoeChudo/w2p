@@ -9,15 +9,36 @@ import UIKit
 
 class CompactMediaCell: UICollectionViewCell {
     
-    @IBOutlet weak var infoContainer: UIView!
+    @IBOutlet weak var infoContainer: UIControl!
     @IBOutlet weak var infoImageView: UIImageView!
-    @IBOutlet weak var staticMediaView: UIImageView!
+
+    var staticMediaView: UIImageView? {
+        get { fatalError("Need to override staticMediaView") }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        setupControl()
+    }
+    
+    private func setupControl() {
+        infoContainer.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
+    }
     
     var isLoading = false
     var id: UUID?
+    
+    func reload() {
+        fatalError("override reload()")
+    }
 
-    func startLoadingAnimation(duration: Double, completion: (()-> Void)? = nil ) {
+    @objc func touchUp() {
+        reload()
+    }
+
+    func startLoadingAnimation() {
         DispatchQueue.main.async {
+            self.infoContainer.isUserInteractionEnabled = false
             let image = GameAnimationSupporter.getRandomImageForAnimation()
             self.infoImageView.image = image
             
@@ -27,26 +48,27 @@ class CompactMediaCell: UICollectionViewCell {
             animation.repeatCount = .infinity
             animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             
+            self.infoContainer.alpha = 1
+            self.infoImageView.layer.removeAllAnimations()
             self.infoImageView.layer.add(animation, forKey: "mediaCompactCellAnimation")
-            UIView.animate(withDuration: duration, delay: 0, options: .beginFromCurrentState) {
-                self.infoContainer.alpha = 1
-            } completion: { _ in
-                completion?()
-            }
         }
     }
     
     func setupStaticMediaView(image: UIImage, completion: (()->Void)? = nil) {
+        guard let staticMediaView = staticMediaView else {
+            completion?()
+            return
+        }
         UIView.transition(with: staticMediaView, duration: 0.3, options: [.transitionCrossDissolve, .beginFromCurrentState]) {
-            self.staticMediaView.image = image
+            staticMediaView.image = image
         } completion: { _ in
-            self.finishShowingInfoContainer(duration: 0)
             completion?()
         }
     }
 
     func showConnectionProblemMessage(duration: Double, completion: (()->Void)? = nil) {
         DispatchQueue.main.async {
+            self.infoContainer.isUserInteractionEnabled = true
             self.infoImageView.image = UIImage(named: "connection")
             UIView.animate(withDuration: duration,delay: 0, options: .beginFromCurrentState) {
                 self.infoContainer.alpha = 1
@@ -59,7 +81,7 @@ class CompactMediaCell: UICollectionViewCell {
     func updateAnimationIfNeeded() {
         if isLoading {
             infoImageView.layer.removeAllAnimations()
-            startLoadingAnimation(duration: 0)
+            startLoadingAnimation()
         }
     }
     
@@ -78,10 +100,9 @@ class CompactMediaCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         id = nil
-        infoContainer.alpha = 0
         infoImageView.layer.removeAllAnimations()
-        staticMediaView.image = nil
+        infoContainer.alpha = 0
+        staticMediaView?.image = nil
 
     }
-    
 }

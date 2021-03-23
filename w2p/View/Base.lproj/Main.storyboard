@@ -1464,7 +1464,7 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
-                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GaR-19-04r" userLabel="InfoContainer">
+                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GaR-19-04r" userLabel="InfoContainer" customClass="UIControl">
                                                                                     <rect key="frame" x="74" y="113" width="75" height="75"/>
                                                                                     <subviews>
                                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0jg-ly-IPR">
@@ -1498,7 +1498,7 @@
                                                                         <connections>
                                                                             <outlet property="infoContainer" destination="GaR-19-04r" id="bMZ-Lf-Fer"/>
                                                                             <outlet property="infoImageView" destination="0jg-ly-IPR" id="Ltp-Jy-kRr"/>
-                                                                            <outlet property="staticMediaView" destination="mFC-EU-Ff4" id="Q4E-72-pYS"/>
+                                                                            <outlet property="mediaView" destination="mFC-EU-Ff4" id="rqw-Td-sNY"/>
                                                                         </connections>
                                                                     </collectionViewCell>
                                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="videoCompactCell" id="Lcr-Dw-ENe" customClass="GameVideoCompactCell" customModule="w2p" customModuleProvider="target">
@@ -1508,7 +1508,7 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
-                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLL-ZO-rH4" userLabel="InfoContainer">
+                                                                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLL-ZO-rH4" userLabel="InfoContainer" customClass="UIControl">
                                                                                     <rect key="frame" x="74" y="113" width="75" height="75"/>
                                                                                     <subviews>
                                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8wg-jd-GiH">

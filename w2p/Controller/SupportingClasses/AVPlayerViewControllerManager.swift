@@ -1,16 +1,14 @@
 import AVKit
 import Foundation
-import MediaPlayer
 import XCDYouTubeKit
 
 
 class AVPlayerViewControllerManager: NSObject {
 
-    public var lowQualityMode = false
-    public dynamic var duration: Float = 0
-
+    var lowQualityMode = false
+    var imageLoader = ImageLoader()
     
-    public var video: XCDYouTubeVideo? {
+    var video: XCDYouTubeVideo? {
         didSet {
             guard let controller = controller else {fatalError("no controller")}
             guard let video = video else { return }
@@ -28,9 +26,83 @@ class AVPlayerViewControllerManager: NSObject {
             controller.player = self.player
         }
     }
+    
+    var staticMediaContent: UIImageView?
 
     var player: AVPlayer?
-    weak var controller: AVPlayerViewController?
+    
+    
+    weak var controller: AVPlayerViewController? {
+        didSet {
+            guard let controller = controller, let overlay = controller.contentOverlayView else {return}
+            
+            staticMediaContent = UIImageView()
+            staticMediaContent!.translatesAutoresizingMaskIntoConstraints = false
+            overlay.addSubview(staticMediaContent!)
+            staticMediaContent!.fixIn(view: overlay)
+        }
+    }
+    
+    
+    func setupVideoStack(parentVC: UIViewController, fixIn view: UIView) -> UIView? {
+        self.setupControllerIfNeeded(parentController: parentVC, targetView: view)
+        return controller?.view
+    }
+    
+    func loadVideo(id: String, completion: ((_ success: Bool)->Void)? = nil) {
+        XCDYouTubeClient.default().getVideoWithIdentifier(id) {
+            (video: XCDYouTubeVideo?, error: Error?) in
+            if let video = video{
+                self.video = video
+                self.loadThumbnail(completion: completion)
+            } else {
+                completion?(false)
+            }
+        }
+    }
+    
+    
+    private func setupControllerIfNeeded(parentController: UIViewController, targetView: UIView) {
+        if controller == nil {
+            let playerController = AVPlayerViewController()
+            controller = playerController
+            parentController.addChild(playerController)
+            playerController.didMove(toParent: parentController)
+            if let view = playerController.view {
+                view.translatesAutoresizingMaskIntoConstraints = false
+                targetView.addSubview(view)
+                view.fixIn(view: targetView)
+            }
+        }
+    }
+    
+    
+    func loadThumbnail(completion: ((_ success: Bool) -> Void)? = nil) {
+        
+        if let thumbUrls = video?.thumbnailURLs, !thumbUrls.isEmpty {
+            let urlsCount = thumbUrls.count
+            let url = thumbUrls.last!
+            
+            var request = URLRequest(url: url)
+            
+            request.cachePolicy = URLRequest.CachePolicy.returnCacheDataElseLoad
+
+            imageLoader.load(with: request) { image, error in
+                
+                if let image = image {
+                    DispatchQueue.main.async {
+                        self.staticMediaContent?.image = image
+                    }
+                    completion?(true)
+                } else {
+                    completion?(false)
+                }
+            }
+        } else {
+            completion?(false)
+        }
+    }
+    
 
     override init() {
         super.init()

@@ -15,40 +15,71 @@ import XCDYouTubeKit
 class GameVideoCompactCell: CompactMediaCell {
 
     var videoId: String?
-    
     let playerVCManager = AVPlayerViewControllerManager()
-        
-    func setup(videoId: String) {
-        self.videoId = videoId
-        if playerVCManager.video == nil {
-            XCDYouTubeClient.default().getVideoWithIdentifier(videoId) { [weak self]
-                (video: XCDYouTubeVideo?, error: Error?) in
-                if let video = video{
-                    self?.setupChildPlayerVCifNeeded()
-                    self?.playerVCManager.video = video
+    var playerView: UIView?
+    var isSetup = false
+    
+    override var staticMediaView: UIImageView?{
+        get {
+            playerVCManager.staticMediaContent
+        }
+    }
+    
+    func setup(parentVC: UIViewController) {
+        playerView =  playerVCManager.setupVideoStack(parentVC: parentVC, fixIn: contentView)
+        playerView?.alpha = 0
+    }
+    
+    
+    override func reload() {
+        finishShowingInfoContainer(duration: 0.3) {
+            self.loadVideo()
+        }
+    }
+    
+    func loadVideo() {
+        guard let videoId = self.videoId else { return }
+        let initialId = self.id
+        isLoading = true
+        startLoadingAnimation()
+        playerVCManager.loadVideo(id: videoId) { success in
+            DispatchQueue.main.async {
+                if initialId == self.id {
+                    if success {
+                        self.showPlayerView()
+                    } else {
+                        self.finishShowingInfoContainer(duration: 0.3) {
+                            
+
+                            self.showConnectionProblemMessage(duration: 0.3)
+                        }
+                    }
                 }
+                self.isLoading = false
             }
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playerView?.alpha = 0
+        
+    }
+    
+    func showPlayerView() {
+        UIView.animate(withDuration: 0.3) {
+            self.playerView?.alpha = 1
+        } completion: { _ in
+            self.finishShowingInfoContainer(duration: 0)
+        }
+    }
+    
+
     func pauseVideo() {
         playerVCManager.player?.pause()
     }
     
-    private func setupChildPlayerVCifNeeded() {
-        if playerVCManager.controller == nil {
-            guard let parentVC = parentViewController else {return}
-            let playerVC = AVPlayerViewController()
-            playerVCManager.controller = playerVC
-            parentVC.addChild(playerVC)
-            playerVC.didMove(toParent: parentVC)
-            if let view = playerVC.view {
-                view.translatesAutoresizingMaskIntoConstraints = false
-                contentView.addSubview(view)
-                view.fixIn(view: contentView)
-            }
-        }
-    }
+
     
     deinit {
         print("cell deinit")
