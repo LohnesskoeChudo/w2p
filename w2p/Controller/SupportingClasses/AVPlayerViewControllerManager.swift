@@ -6,7 +6,7 @@ import XCDYouTubeKit
 class AVPlayerViewControllerManager: NSObject {
 
     var lowQualityMode = false
-    var imageLoader = ImageLoader()
+    static var imageLoader = ImageLoader()
     
     var video: XCDYouTubeVideo? {
         didSet {
@@ -49,14 +49,19 @@ class AVPlayerViewControllerManager: NSObject {
         return controller?.view
     }
     
-    func loadVideo(id: String, completion: ((_ success: Bool)->Void)? = nil) {
+    func loadVideo(id: String, thumbLoadedCompletion: ((_ success: Bool)->Void)? = nil, videoIsReadyCompletion: ((_ success: Bool)->Void)? = nil) {
         XCDYouTubeClient.default().getVideoWithIdentifier(id) {
             (video: XCDYouTubeVideo?, error: Error?) in
             if let video = video{
                 self.video = video
-                self.loadThumbnail(completion: completion)
+                self.loadThumbnail(completion: thumbLoadedCompletion)
+                
+                
+                
+                
             } else {
-                completion?(false)
+                thumbLoadedCompletion?(false)
+                videoIsReadyCompletion?(false)
             }
         }
     }
@@ -80,14 +85,13 @@ class AVPlayerViewControllerManager: NSObject {
     func loadThumbnail(completion: ((_ success: Bool) -> Void)? = nil) {
         
         if let thumbUrls = video?.thumbnailURLs, !thumbUrls.isEmpty {
-            let urlsCount = thumbUrls.count
             let url = thumbUrls.last!
             
             var request = URLRequest(url: url)
             
-            request.cachePolicy = URLRequest.CachePolicy.returnCacheDataElseLoad
+            //request.cachePolicy = URLRequest.CachePolicy.returnCacheDataElseLoad
 
-            imageLoader.load(with: request) { image, error in
+            Self.imageLoader.load(with: request) { image, error in
                 
                 if let image = image {
                     DispatchQueue.main.async {

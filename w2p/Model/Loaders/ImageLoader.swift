@@ -9,10 +9,7 @@ import UIKit
 
 class ImageLoader {
     
-    
-    
-    private var dataLoader = DataLoader()
-    
+    private var dataLoader = DataLoader(session: URLSession.shared)
     
     func load(with request: URLRequest, completion: @escaping (UIImage?, Error?) -> Void) {
         

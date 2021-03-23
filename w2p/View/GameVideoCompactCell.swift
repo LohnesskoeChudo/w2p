@@ -57,6 +57,8 @@ class GameVideoCompactCell: CompactMediaCell {
                 }
                 self.isLoading = false
             }
+        } videoIsReadyCompletion: { success in
+            
         }
     }
     
