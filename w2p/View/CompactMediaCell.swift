@@ -49,6 +49,7 @@ class CompactMediaCell: UICollectionViewCell {
             animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             
             self.infoContainer.alpha = 1
+            self.infoContainer.layer.removeAllAnimations()
             self.infoImageView.layer.removeAllAnimations()
             self.infoImageView.layer.add(animation, forKey: "mediaCompactCellAnimation")
         }

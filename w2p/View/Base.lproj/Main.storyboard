@@ -1524,16 +1524,25 @@
                                                                                         <constraint firstItem="8wg-jd-GiH" firstAttribute="top" secondItem="fLL-ZO-rH4" secondAttribute="top" id="tUI-Vk-eV9"/>
                                                                                     </constraints>
                                                                                 </view>
+                                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IoG-4K-7kA">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
+                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                </imageView>
                                                                             </subviews>
                                                                             <constraints>
+                                                                                <constraint firstAttribute="bottom" secondItem="IoG-4K-7kA" secondAttribute="bottom" id="1xN-xo-Adg"/>
+                                                                                <constraint firstItem="IoG-4K-7kA" firstAttribute="leading" secondItem="6u1-iq-8iZ" secondAttribute="leading" id="8Fu-zk-I7a"/>
                                                                                 <constraint firstItem="fLL-ZO-rH4" firstAttribute="centerY" secondItem="6u1-iq-8iZ" secondAttribute="centerY" id="OgL-63-Ftg"/>
                                                                                 <constraint firstItem="fLL-ZO-rH4" firstAttribute="height" secondItem="6u1-iq-8iZ" secondAttribute="height" multiplier="0.25" id="RTx-0t-Kya"/>
                                                                                 <constraint firstItem="fLL-ZO-rH4" firstAttribute="centerX" secondItem="6u1-iq-8iZ" secondAttribute="centerX" id="ThG-vp-TTt"/>
+                                                                                <constraint firstAttribute="trailing" secondItem="IoG-4K-7kA" secondAttribute="trailing" id="VFB-1r-4L7"/>
+                                                                                <constraint firstItem="IoG-4K-7kA" firstAttribute="top" secondItem="6u1-iq-8iZ" secondAttribute="top" id="WYO-yW-oTK"/>
                                                                             </constraints>
                                                                         </collectionViewCellContentView>
                                                                         <connections>
                                                                             <outlet property="infoContainer" destination="fLL-ZO-rH4" id="rx6-M6-5T2"/>
                                                                             <outlet property="infoImageView" destination="8wg-jd-GiH" id="u8U-VQ-Qbc"/>
+                                                                            <outlet property="preloadThumb" destination="IoG-4K-7kA" id="7ak-vd-yfq"/>
                                                                         </connections>
                                                                     </collectionViewCell>
                                                                 </cells>

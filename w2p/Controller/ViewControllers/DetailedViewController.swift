@@ -573,7 +573,7 @@ class DetailedViewController: UIViewController{
                     self.coverContainer.layer.removeAllAnimations()
                 }
                 
-                UIView.transition(with: self.blurredBackground, duration: 0.6, options: [.transitionCrossDissolve, .curveEaseOut]){
+                UIView.transition(with: self.blurredBackground, duration: 1, options: [.transitionCrossDissolve, .curveEaseOut]){
                     self.blurredBackground.image = resizedBlurred
                 }
                 
@@ -702,7 +702,7 @@ extension DetailedViewController: UICollectionViewDataSource{
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        staticMediaContent.count + videoMediaContent.count
+        return staticMediaContent.count + videoMediaContent.count
         
     }
     
@@ -723,14 +723,11 @@ extension DetailedViewController: UICollectionViewDataSource{
        } else {
             let videoMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCompactCell", for: indexPath) as! GameVideoCompactCell
 
-            let video = videoMediaContent[indexPath.item]
-            videoMediaCell.id = UUID()
-            videoMediaCell.videoId = video.videoId
-            if !videoMediaCell.isSetup {
-                videoMediaCell.setup(parentVC: self)
+            if let videoId = videoMediaContent[indexPath.item].videoId  {
+                let tuner = GameVideoCellTuner(cell: videoMediaCell, videoId: videoId, parentVC: self)
+                videoMediaCell.tuner = tuner
+                tuner.setup()
             }
-            videoMediaCell.loadVideo()
-
             return videoMediaCell
        }
     }

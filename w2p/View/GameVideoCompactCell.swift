@@ -13,77 +13,85 @@ import XCDYouTubeKit
 
 
 class GameVideoCompactCell: CompactMediaCell {
-
+    
+    
+    
     var videoId: String?
-    let playerVCManager = AVPlayerViewControllerManager()
-    var playerView: UIView?
+    var tuner: GameVideoCellTuner?
     var isSetup = false
     
     override var staticMediaView: UIImageView?{
-        get {
-            playerVCManager.staticMediaContent
+        thumbView
+    }
+    
+    let avPlayerController = AVPlayerViewController()
+    
+    var player: AVPlayer? {
+        avPlayerController.player
+    }
+    
+    
+    @IBOutlet weak var preloadThumb: UIImageView!
+    
+    
+    lazy var thumbView: UIImageView = {
+        guard let overlayView = avPlayerController.contentOverlayView else { fatalError("no overlay view") }
+        let thumbView = UIImageView()
+        thumbView.translatesAutoresizingMaskIntoConstraints = false
+        overlayView.addSubview(thumbView)
+        thumbView.fixIn(view: overlayView)
+        return thumbView
+    }()
+    
+    func setupPlayerController(parentVC: UIViewController) {
+        parentVC.addChild(avPlayerController)
+        avPlayerController.didMove(toParent: parentVC)
+        if let playerControllerView = avPlayerController.view {
+            playerControllerView.translatesAutoresizingMaskIntoConstraints = false
+            contentView.addSubview(playerControllerView)
+            contentView.bringSubviewToFront(playerControllerView)
+            print("player view inserted")
+            playerControllerView.fixIn(view: contentView)
+            playerControllerView.alpha = 0
+        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandler), name: AVAudioSession.interruptionNotification, object:  AVAudioSession.sharedInstance())
+        
+    }
+    
+    @objc func audioInterruptionHandler(notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
+              let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else {
+            return
+        }
+        if type == .began {
+            self.player?.pause()
         }
     }
-    
-    func setup(parentVC: UIViewController) {
-        playerView =  playerVCManager.setupVideoStack(parentVC: parentVC, fixIn: contentView)
-        playerView?.alpha = 0
-    }
-    
-    
+
+    /*
     override func reload() {
         finishShowingInfoContainer(duration: 0.3) {
             self.loadVideo()
         }
     }
-    
-    func loadVideo() {
-        guard let videoId = self.videoId else { return }
-        let initialId = self.id
-        isLoading = true
-        startLoadingAnimation()
-        playerVCManager.loadVideo(id: videoId) { success in
-            DispatchQueue.main.async {
-                if initialId == self.id {
-                    if success {
-                        self.showPlayerView()
-                    } else {
-                        self.finishShowingInfoContainer(duration: 0.3) {
-                            
+    */
 
-                            self.showConnectionProblemMessage(duration: 0.3)
-                        }
-                    }
-                }
-                self.isLoading = false
-            }
-        } videoIsReadyCompletion: { success in
-            
-        }
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
-        playerView?.alpha = 0
+        thumbView.alpha = 0
+        preloadThumb.alpha = 0
         
     }
     
-    func showPlayerView() {
-        UIView.animate(withDuration: 0.3) {
-            self.playerView?.alpha = 1
-        } completion: { _ in
-            self.finishShowingInfoContainer(duration: 0)
-        }
-    }
-    
-
     func pauseVideo() {
-        playerVCManager.player?.pause()
+        player?.pause()
     }
-    
-
     
     deinit {
         print("cell deinit")
+        NotificationCenter.default.removeObserver(self)
     }
 }
