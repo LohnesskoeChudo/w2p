@@ -19,6 +19,8 @@ class GameVideoCompactCell: CompactMediaCell {
     var videoId: String?
     var tuner: GameVideoCellTuner?
     var isSetup = false
+
+    var videoIsReadyObservationToken: NSKeyValueObservation?
     
     override var staticMediaView: UIImageView?{
         thumbView
@@ -46,6 +48,9 @@ class GameVideoCompactCell: CompactMediaCell {
     func setupPlayerController(parentVC: UIViewController) {
         parentVC.addChild(avPlayerController)
         avPlayerController.didMove(toParent: parentVC)
+        
+        avPlayerController.allowsPictureInPicturePlayback = false
+
         if let playerControllerView = avPlayerController.view {
             playerControllerView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(playerControllerView)
@@ -55,10 +60,22 @@ class GameVideoCompactCell: CompactMediaCell {
             playerControllerView.alpha = 0
         }
         
+        
         NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandler), name: AVAudioSession.interruptionNotification, object:  AVAudioSession.sharedInstance())
         
+        videoIsReadyObservationToken = avPlayerController.observe(\.isReadyForDisplay, options: [.new]) { [weak self]
+            
+            avController, change in
+            print("work")
+            
+            if change.newValue == true {
+                print("video is ready")
+            }
+            
+        }
     }
     
+
     @objc func audioInterruptionHandler(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
               let typeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -81,8 +98,9 @@ class GameVideoCompactCell: CompactMediaCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        thumbView.alpha = 0
         preloadThumb.alpha = 0
+        avPlayerController.view.alpha = 0
+       
         
     }
     
@@ -93,5 +111,6 @@ class GameVideoCompactCell: CompactMediaCell {
     deinit {
         print("cell deinit")
         NotificationCenter.default.removeObserver(self)
+        videoIsReadyObservationToken?.invalidate()
     }
 }

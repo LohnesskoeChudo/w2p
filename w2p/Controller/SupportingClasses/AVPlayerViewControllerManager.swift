@@ -3,13 +3,14 @@ import Foundation
 import XCDYouTubeKit
 
 
-class GameVideoCellTuner: NSObject {
+class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
     
     static var imageLoader = ImageLoader()
     
     weak var cell: GameVideoCompactCell?
     var videoId: String
     var video: XCDYouTubeVideo?
+    var player: AVPlayer?
     var initialId: UUID?
 
     init(cell: GameVideoCompactCell, videoId: String, parentVC: UIViewController) {
@@ -20,6 +21,7 @@ class GameVideoCellTuner: NSObject {
         if self.cell?.isSetup == false {
             self.cell?.setupPlayerController(parentVC: parentVC)
             self.cell?.isSetup = true
+            
         }
     }
     
@@ -28,17 +30,14 @@ class GameVideoCellTuner: NSObject {
         getYTvideo(){ success in
             DispatchQueue.global(qos: .userInitiated).async {
                 if success {
-                    guard let video = self.video else { return }
-                    
-                    
+
+                    self.setPlayer()
                     DispatchQueue.main.async {
-                        self.cell?.avPlayerController.player = self.player(for: video)
+                        self.cell?.avPlayerController.player = self.player
                     }
-                    
-                    
+
                     self.loadThumbnail()
-                    
-                    
+
                 } else {
                     
                 }
@@ -82,9 +81,10 @@ class GameVideoCellTuner: NSObject {
                             self.cell?.preloadThumb.alpha = 1
                         } completion: { _ in
                             self.cell?.finishShowingInfoContainer(duration: 0)
+                            
+                            self.cell?.avPlayerController.view.alpha = 1
                         }
                         self.cell?.thumbView.image = image
-                        self.cell?.thumbView.alpha = 1
                     }
                 }
             }
@@ -92,20 +92,29 @@ class GameVideoCellTuner: NSObject {
     }
     
 
-    private func player(for video: XCDYouTubeVideo, lowQualityMode: Bool = false) -> AVPlayer{
-
+    private func setPlayer(lowQualityMode: Bool = false) {
+        
         if lowQualityMode {
-            guard let streamURL = video.streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? video.streamURLs[XCDYouTubeVideoQuality.HD720] ?? video.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue] ?? video.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] else { fatalError("No stream URL") }
-            return AVPlayer(url: streamURL)
+            guard let streamURL = video?.streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? video?.streamURLs[XCDYouTubeVideoQuality.HD720] ?? video?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue] ?? video?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] else { fatalError("No stream URL") }
+           self.player = AVPlayer(url: streamURL)
         } else {
-            let streamURL = video.streamURL
-            return AVPlayer(url: streamURL!)
+            if let streamURL = video?.streamURL {
+                
+                self.player = AVPlayer(url: streamURL)
+            }
         }
+
+    }
+    
+    @objc func videoPrepared() {
+        
     }
     
     deinit {
         print("tuner deinited")
     }
+    
+    
 
 }
 
