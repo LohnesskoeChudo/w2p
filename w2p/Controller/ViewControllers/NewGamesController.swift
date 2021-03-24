@@ -17,7 +17,6 @@ class NewGamesController: GameBrowserController {
     }
     
     var initialLoad = true
-    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

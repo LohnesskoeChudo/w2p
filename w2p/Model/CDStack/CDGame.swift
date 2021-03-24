@@ -16,8 +16,6 @@ public class CDGame: NSManagedObject{
             
         cacheDate = Date()
         
-        print(game.id!)
-        
         if let id = game.id{ self.id = Int64(id) }
         if let name = game.name { self.name = name }
         if let summary = game.summary { self.summary = summary }

@@ -50,7 +50,6 @@ class GameVideoCompactCell: CompactMediaCell {
             playerControllerView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(playerControllerView)
             contentView.bringSubviewToFront(playerControllerView)
-            print("player view inserted")
             playerControllerView.fixIn(view: contentView)
             playerControllerView.alpha = 0
             
@@ -70,7 +69,6 @@ class GameVideoCompactCell: CompactMediaCell {
     }
     
     @objc func playVideo() {
-        print("called")
         player?.play()
     }
 
@@ -85,7 +83,9 @@ class GameVideoCompactCell: CompactMediaCell {
             self.player?.pause()
         }
     }
-
+    
+    
+    //MARK: FIX
     /*
     override func reload() {
         finishShowingInfoContainer(duration: 0.3) {
@@ -107,9 +107,7 @@ class GameVideoCompactCell: CompactMediaCell {
     }
     
     deinit {
-        print("cell deinit")
         NotificationCenter.default.removeObserver(self)
-
     }
 }
 

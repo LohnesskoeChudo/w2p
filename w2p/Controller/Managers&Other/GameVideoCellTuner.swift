@@ -26,9 +26,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
             self.cell?.isSetup = true
             
         }
-        
-
-
     }
     
     func setup() {
@@ -41,7 +38,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
                     DispatchQueue.main.async {
                         self.cell?.avPlayerController.player = self.player
                     }
-
                     self.loadThumbnail()
 
                 } else {
@@ -129,46 +125,13 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         
     }
     
-
     deinit {
-        print("tuner deinited")
         playerIsReadyToken?.invalidate()
         playerIsReadyToken?.invalidate()
     }
-    
-    
-
 }
 
 
-extension UIViewController {
-    func topMostViewController() -> UIViewController {
-        if self.presentedViewController == nil {
-            return self
-        }
-        if let navigation = self.presentedViewController as? UINavigationController {
-            return navigation.visibleViewController!.topMostViewController()
-        }
-        if let tab = self.presentedViewController as? UITabBarController {
-            if let selectedTab = tab.selectedViewController {
-                return selectedTab.topMostViewController()
-            }
-            return tab.topMostViewController()
-        }
-        return self.presentedViewController!.topMostViewController()
-    }
-}
 
 
-extension UIView {
-    var parentViewController: UIViewController? {
-        var parentResponder: UIResponder? = self
-        while parentResponder != nil {
-            parentResponder = parentResponder!.next
-            if let viewController = parentResponder as? UIViewController {
-                return viewController
-            }
-        }
-        return nil
-    }
-}
+

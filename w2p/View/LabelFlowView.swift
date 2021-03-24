@@ -14,8 +14,6 @@ class LabelFlowView: UIView{
     var horizontalSpacing: CGFloat = 10
     var height: CGFloat = 0
     
-    
-    //MARK: called twice
     override func layoutSubviews(){
         super.layoutSubviews()
         flowLayout()

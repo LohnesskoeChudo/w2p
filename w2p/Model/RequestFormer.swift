@@ -48,8 +48,6 @@ class RequestFormer{
             body += limit
         }
         
-        print(body)
-        
         request.httpBody = body.data(using: .utf8)
         return request
     }

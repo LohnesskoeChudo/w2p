@@ -29,12 +29,9 @@ class DetailedViewController: UIViewController{
         }
         return false
     }
-    
-    
-    
+   
     
     @IBOutlet weak var ratingVIew: LineRatingView!
-    
     @IBOutlet weak var firstReleaseContainer: UIView!
     @IBOutlet weak var firstReleaseLabel: UILabel!
     @IBOutlet weak var statusContainer: UIView!
@@ -54,16 +51,11 @@ class DetailedViewController: UIViewController{
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var coverView: UIImageView!
     @IBOutlet weak var blurredBackground: UIImageView!
-    
-    
     @IBOutlet weak var coverWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var coverHeightConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var nameLabelTopSpacing: NSLayoutConstraint!
     @IBOutlet weak var coverBottomSpacing: NSLayoutConstraint!
-    
     @IBOutlet weak var coverContainer: UIView!
-    
     @IBOutlet weak var screenshotCollectionViewHeight: NSLayoutConstraint!
     @IBOutlet weak var mediaContainer: UIView!
     @IBOutlet weak var nameLabel: UILabel!
@@ -77,7 +69,6 @@ class DetailedViewController: UIViewController{
     
     @IBAction func shareButtonTapped(_ sender: CustomButton) {
         performActivity()
-        
     }
     
     private func performActivity(){
@@ -85,7 +76,6 @@ class DetailedViewController: UIViewController{
             let dispatchGroup = DispatchGroup()
             var activityItems = [Any]()
 
-            
             if let websiteStr = self.game.websites?.first?.url, let siteUrl = URL(string: websiteStr) {
                 activityItems.append(siteUrl)
             }
@@ -126,8 +116,6 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    
-    
     @IBAction func similarGamesTapped(_ sender: TransferButton) {
         performSegue(withIdentifier: "browser", sender: BrowserGameCategory.similarGames)
     }
@@ -142,7 +130,6 @@ class DetailedViewController: UIViewController{
     }
 
     @IBAction func toFavoritesTapped(_ sender: CustomButton) {
-
         if game.inFavorites == true {
             game.inFavorites = false
         } else {
@@ -155,7 +142,6 @@ class DetailedViewController: UIViewController{
 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         switch segue.identifier {
         case "browser":
             guard let browserVC = segue.destination as? SimilarGamesController, let gameCategory = sender as? BrowserGameCategory else {return}
@@ -177,12 +163,9 @@ class DetailedViewController: UIViewController{
         if shouldUpdate {
             //updateGame()
         }
-        print(game.cover)
         setupUI()
         
     }
-    
-    
     
     private func updateAnimationsIfNeeded() {
         if isLoading {
@@ -251,7 +234,6 @@ class DetailedViewController: UIViewController{
         DispatchQueue.main.async {
             let action = {
                 self.favoritesButtonImage.tintColor = (self.game.inFavorites ?? false) ? UIColor.yellow : UIColor.gray
-                
             }
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .beginFromCurrentState){
@@ -639,10 +621,8 @@ class DetailedViewController: UIViewController{
     
     
 
-    
+    //TO-DO: Implement
     private func setupPlaceholderBlurredBackgroundForMediaSectionIfNeeded() {
-        
-        
         
     }
     
@@ -659,7 +639,6 @@ class DetailedViewController: UIViewController{
             coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (size.height * heightPercentage)
             
         } else {
-            print("CAAALED")
             let width = size.width - (2 * padding)
             
             coverWidthConstraint.constant = width
@@ -676,7 +655,6 @@ class DetailedViewController: UIViewController{
         
         
     }
-    
 }
 
 
@@ -710,8 +688,6 @@ extension DetailedViewController: UICollectionViewDataSource{
         
         
       if indexPath.item >= videoMediaContent.count{
-            
-            
             let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCompactCell
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]

@@ -39,8 +39,6 @@ class DataLoader{
     }
 }
 
-
-
 enum NetworkError: Error {
     case connectionError
     case parseError

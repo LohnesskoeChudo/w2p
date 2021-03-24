@@ -141,7 +141,6 @@ class SimilarGamesController : GameBrowserController{
     
 }
 
-// MARK: - Delegates
 
 extension SimilarGamesController: UIGestureRecognizerDelegate{
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

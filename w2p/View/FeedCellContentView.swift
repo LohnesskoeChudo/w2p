@@ -13,7 +13,6 @@ class CellContentView: UIView {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var label: UILabel!
     
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -28,6 +27,5 @@ class CellContentView: UIView {
         Bundle.main.loadNibNamed("CellContentView", owner: self, options: nil)
         contentView.fixIn(view: self)
     }
-
 }
     

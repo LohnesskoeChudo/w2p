@@ -13,8 +13,7 @@ class FavoritesViewController: UIViewController{
     var mediaDispatcher = GameMediaDispatcher()
     var games: [Game] = []
     var allFavoriteGames: [Game] = []
-    
-    
+
     
     @IBAction func searchTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()

@@ -7,23 +7,17 @@
 
 import UIKit
 class SearchViewController: GameBrowserController{
-    
-    
-    
-    
+
     var panGestureRecognizer: UIPanGestureRecognizer!
     override var upperSpacing: CGFloat { searchBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 10 }
     var initialAnimationExecuted = false
-    
 
-    // MARK: - Outlets
     
     @IBOutlet weak var searchBar: UIVisualEffectView!
     @IBOutlet weak var searchFieldBackground: UIView!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
     
-    // MARK: - Actions
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         
@@ -88,7 +82,6 @@ class SearchViewController: GameBrowserController{
         }
     }
     
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "filter":
@@ -128,8 +121,6 @@ class SearchViewController: GameBrowserController{
         searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-    
-
     private func setupGestureRecognizers(){
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
         panGestureRecognizer.delegate = self
@@ -184,7 +175,6 @@ class SearchViewController: GameBrowserController{
     }
     
 
-    
     func performInitialAnimation(completion: (() -> Void)? = nil) {
         disableSearchButton()
         UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut]) {
@@ -205,15 +195,10 @@ class SearchViewController: GameBrowserController{
             super.resetInfoContainer()
             completion?()
         }
-        
-        
     }
-    
-   
-
 }
 
-// MARK: - Delegates
+
 
 extension SearchViewController: UITextFieldDelegate{
     

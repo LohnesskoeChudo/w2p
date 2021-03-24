@@ -54,6 +54,4 @@ class AnimatedControl: UIControl {
     func touchDragExit(){
         
     }
-    
-    
 }

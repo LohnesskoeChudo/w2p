@@ -11,7 +11,6 @@ class FilterViewController: UIViewController {
     
     var filter: SearchFilter!
     
-    //flows
     @IBOutlet weak var genreFlow: LabelFlowView!
     @IBOutlet weak var themeFlow: LabelFlowView!
     @IBOutlet weak var platformFlow: LabelFlowView!
@@ -49,16 +48,12 @@ class FilterViewController: UIViewController {
         }
     }
     
-    //rating
     @IBOutlet weak var ratingSwitch: UISwitch!
     @IBAction func switchRatingAction(_ sender: UISwitch) {
         if sender.isOn {
-            
             filter.ratingLowerBound = 1
             filter.ratingUpperBound = 100
-
         } else {
-            
             filter.ratingLowerBound = nil
             filter.ratingUpperBound = nil
         }
@@ -69,11 +64,9 @@ class FilterViewController: UIViewController {
     var ratingSlider: DoubleSlider!
    
     
-    //gameMode
-    
+
     @IBOutlet weak var singleplayerSwitch: UISwitch!
     @IBOutlet weak var multiplayerSwitch: UISwitch!
-    
     @IBAction func singleplayerSwitch(_ sender: UISwitch) {
         filter.singleplayer = sender.isOn
     }
@@ -82,7 +75,6 @@ class FilterViewController: UIViewController {
     }
     
     
-    //release date
     @IBOutlet weak var lowerDateBoundSwitch: UISwitch!
     @IBOutlet weak var upperDateBoundSwitch: UISwitch!
     @IBAction func lowerBoundSwitch(_ sender: UISwitch) {
@@ -113,12 +105,9 @@ class FilterViewController: UIViewController {
         filter.releaseDateUpperBound = sender.date
         dateLowerBound.maximumDate = sender.date
     }
- 
-    
-    
+
     @IBOutlet weak var noEmptyGamesSwitch: UISwitch!
     @IBOutlet weak var noExtensionsSwitch: UISwitch!
-    
     @IBAction func noEmptyGamesSwitched(_ sender: UISwitch) {
         filter.excludeEmptyGames = sender.isOn
     }
@@ -136,12 +125,10 @@ class FilterViewController: UIViewController {
         }
     }
     
-    
     private func show(section: UIView?, subview: UIView, animated: Bool){
-        
         let showSection = {section?.isHidden = false}
         let showSubview = {subview.alpha = 1}
-            
+        
         if animated{
             UIView.animate(withDuration: 0.3) { showSection() }
             UIView.animate(withDuration: 0.15, delay: 0.15) { showSubview() }
@@ -152,7 +139,6 @@ class FilterViewController: UIViewController {
     }
     
     private func hide(section: UIView?, subview: UIView, animated: Bool){
-            
         let hideSection = { section?.isHidden = true }
         let hideSubview = { subview.alpha = 0 }
         
@@ -238,11 +224,9 @@ class FilterViewController: UIViewController {
         
         morePlatformsButton.setTitleColor( ThemeManager.colorForPlainButtons(trait: traitCollection), for: .normal)
         morePlatformsButton.setTitleColor(ThemeManager.colorForPlainButtons(trait: traitCollection).withAlphaComponent(0.5), for: .highlighted)
-
     }
     
     private func updateReleaseDateUI(animated: Bool){
-        
         let minDate = Date(timeIntervalSince1970: 0)
         let maxDate = Date(timeIntervalSince1970: 2147400000)
         
@@ -343,9 +327,7 @@ class FilterViewController: UIViewController {
         platformFlow.alpha = 0
 
     }
-    
-    
-    
+
     @objc func genreTapped(sender: GameAttributeView){
         guard let genre = SearchFilter.allGenres.first(where: {$0.id == sender.tag}) else {return}
         if sender.attrSelected {
@@ -417,13 +399,11 @@ class FilterViewController: UIViewController {
             }
         }
     }
-    
 }
 
 extension FilterViewController: DoubleSliderDelegate{
     
     func sliderValuesChanged(newLowerValue: CGFloat, newUpperValue: CGFloat) {
-        
         ratingLabel.text = "\(Int(newLowerValue)) - \(Int(newUpperValue))"
         filter.ratingUpperBound = Int(newUpperValue)
         filter.ratingLowerBound = Int(newLowerValue)

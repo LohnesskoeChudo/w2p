@@ -12,9 +12,7 @@ class SettingsViewController: UIViewController{
     let mediaDispatcher = GameMediaDispatcher()
     
     @IBOutlet weak var hapticSwitch: UISwitch!
-    
     @IBOutlet weak var darkModeSwitch: UISwitch!
-    
     @IBOutlet weak var cacheImagesSizeLabel: UILabel!
     
     @IBAction func hapticFeedbackSwitched(_ sender: UISwitch) {

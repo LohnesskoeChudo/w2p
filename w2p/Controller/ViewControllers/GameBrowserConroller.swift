@@ -26,19 +26,15 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var gamesPerRequest = 500
     var isLoading = false
 
-    // MARK: - Outets
     @IBOutlet weak var infoContainer: UIView!
     @IBOutlet weak var infoImageView: UIImageView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     
     
-
-    
     func refreshGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil) {
         
         let gamesWereEmpty = games.isEmpty
-        
         isLoading = true
         games = []
         gamesSource.clear()
@@ -71,8 +67,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         let action = {
             (games: [Game]?, error: NetworkError?) in
             
-            print("ACTION")
-             
             if error != nil {
                 self.isLoading = false
                 self.endAnimationsLoading() {
@@ -111,8 +105,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                 self.jsonLoader.load(request: request, completion: action)
             }
         }
-
-            
     }
     
     enum InfoMessage {
@@ -197,10 +189,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             startAnimationLoadingWithItems(completion: completion)
         }
     }
-    
-    
-
-    
+   
     private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
         
         infoLabel.text = "Loading"
@@ -234,6 +223,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     
     private func endAnimationLoadingWithNoItems(completion: (() -> Void)? = nil){
         DispatchQueue.main.async {
+            
             /*
             guard !self.infoContainer.isHidden else {
                 completion?()
@@ -282,15 +272,10 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
             waterfallLayout.delegate = self
         }
-        
-        
     }
     
-
-
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         (collectionView?.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -314,8 +299,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             }
         }
     }
-    
-
 
     private func appendToFeed(newGames: [Game], withAnimation: Bool, completion: (()->Void)? = nil ){
         let indexPaths = (self.games.count..<self.games.count+newGames.count).map{IndexPath(item: $0, section: 0)}
@@ -342,7 +325,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if traitCollection.userInterfaceStyle != previousTraitCollection?.userInterfaceStyle {
-            print("tc did changed")
             updateAnimations()
         }
     }
@@ -376,11 +358,8 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
 }
 
 
-// MARK: - Delegates
 extension GameBrowserController: UICollectionViewDelegate{
-    
 
-    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == max(0,games.count - 10){
             if !isLoading{
@@ -399,15 +378,7 @@ extension GameBrowserController: UICollectionViewDelegate{
         let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) as! GameBrowserFooter
 
         return footer
-                
     }
-    
-    
-    
-    
-    
-
-    
 }
 
 

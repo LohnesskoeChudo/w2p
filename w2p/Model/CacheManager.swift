@@ -46,20 +46,6 @@ class CacheManager{
         }
     }
     
-    func printGameCount() {
-        self.privateMoc.perform {
-            let fetchreq = NSFetchRequest<CDGame>(entityName: "CDGame")
-            if let res = try? self.privateMoc.fetch(fetchreq) {
-                print("-----------------")
-                for k in res {
-                    print(k.id)
-                }
-                print("-----------------")
-            }
-        }
-
-    }
-    
 
     func clearFavorites (completion: ((_ success: Bool) -> Void)? = nil) {
         privateMoc.perform {
@@ -260,16 +246,13 @@ class CacheManager{
     }
     
     func clearAllStaticMediaData(completion: ((_ success: Bool) -> Void)? = nil) {
-        print("Called")
         privateMoc.perform {
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CDImageData")
             let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             if let _ = try? self.container.persistentStoreCoordinator.execute(deleteRequest, with: self.privateMoc) {
                 completion?(true)
-                print("Success")
             } else {
                 completion?(false)
-                print("Failure")
             }
         }
 

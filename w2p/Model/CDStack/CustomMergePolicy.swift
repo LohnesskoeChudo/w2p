@@ -20,7 +20,6 @@ class CustomMergePolicy: NSMergePolicy {
         for conflict in list {
             for conflictingObject in conflict.conflictingObjects {
                 for key in conflictingObject.entity.attributesByName.keys {
-                    print(key)
                     let dbValue = conflict.databaseObject?.value(forKey: key)
                     if conflictingObject.value(forKey: key) == nil {
                         conflictingObject.setValue(dbValue, forKey: key)

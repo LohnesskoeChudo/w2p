@@ -40,7 +40,7 @@ class AdditionalPlatformsController: UIViewController {
     
     private func filterPlatforms(search: String) -> BinaryHeap<Platform, String.Index> {
         
-        var filteredPlatforms = BinaryHeap<Platform, String.Index>(type: .min)
+        let filteredPlatforms = BinaryHeap<Platform, String.Index>(type: .min)
         for platform in SearchFilter.allPlatforms {
             if let transformedName = platform.name?.lowercased().replacingOccurrences(of: " ", with: "") {
                 if let index = transformedName.index(of: search) {
@@ -54,7 +54,6 @@ class AdditionalPlatformsController: UIViewController {
     
     private func updateFlow() {
         flow.removeAllSubviews()
-        
         if let searchStr = searchTextField.text?.lowercased().replacingOccurrences(of: " ", with: "") , !searchStr.isEmpty {
             let filteredPlatforms = filterPlatforms(search: searchStr)
             while let platform = filteredPlatforms.popTop() {
