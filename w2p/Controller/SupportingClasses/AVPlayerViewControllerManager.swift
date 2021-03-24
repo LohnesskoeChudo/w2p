@@ -12,17 +12,23 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
     var video: XCDYouTubeVideo?
     var player: AVPlayer?
     var initialId: UUID?
-
+    var playerIsReadyToken: NSKeyValueObservation?
+    var playerStatusToken: NSKeyValueObservation?
+    
     init(cell: GameVideoCompactCell, videoId: String, parentVC: UIViewController) {
+        self.videoId = videoId
+        super.init()
         cell.id = UUID()
         self.initialId = cell.id
-        self.videoId = videoId
         self.cell = cell
         if self.cell?.isSetup == false {
             self.cell?.setupPlayerController(parentVC: parentVC)
             self.cell?.isSetup = true
             
         }
+        
+
+
     }
     
     func setup() {
@@ -79,10 +85,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
                         UIView.animate(withDuration: 0.3){
                             self.cell?.preloadThumb.image = image
                             self.cell?.preloadThumb.alpha = 1
-                        } completion: { _ in
-                            self.cell?.finishShowingInfoContainer(duration: 0)
-                            
-                            self.cell?.avPlayerController.view.alpha = 1
                         }
                         self.cell?.thumbView.image = image
                     }
@@ -103,15 +105,35 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
                 self.player = AVPlayer(url: streamURL)
             }
         }
+        
+        player?.automaticallyWaitsToMinimizeStalling = false
 
-    }
-    
-    @objc func videoPrepared() {
+        playerStatusToken?.invalidate()
+        playerStatusToken = player?.observe(\.timeControlStatus , options: [.new]) { [weak self]
+            
+            player, _ in
+            if player.timeControlStatus == .playing {
+                self?.cell?.thumbView.image = nil
+            }
+        }
+        
+        playerIsReadyToken?.invalidate()
+        playerIsReadyToken = player?.observe(\.currentItem?.isPlaybackLikelyToKeepUp) { [weak self]
+            avvc , _ in
+            
+            if self?.player?.currentItem?.isPlaybackLikelyToKeepUp == true {
+                self?.cell?.finishShowingInfoContainer(duration: 0.3)
+                self?.cell?.avPlayerController.view.alpha = 1
+            }
+        }
         
     }
     
+
     deinit {
         print("tuner deinited")
+        playerIsReadyToken?.invalidate()
+        playerIsReadyToken?.invalidate()
     }
     
     
@@ -150,5 +172,3 @@ extension UIView {
         return nil
     }
 }
-
-

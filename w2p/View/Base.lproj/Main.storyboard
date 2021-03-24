@@ -1508,6 +1508,10 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <subviews>
+                                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IoG-4K-7kA">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
+                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                </imageView>
                                                                                 <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLL-ZO-rH4" userLabel="InfoContainer" customClass="UIControl">
                                                                                     <rect key="frame" x="74" y="113" width="75" height="75"/>
                                                                                     <subviews>
@@ -1524,10 +1528,6 @@
                                                                                         <constraint firstItem="8wg-jd-GiH" firstAttribute="top" secondItem="fLL-ZO-rH4" secondAttribute="top" id="tUI-Vk-eV9"/>
                                                                                     </constraints>
                                                                                 </view>
-                                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.0" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IoG-4K-7kA">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="301"/>
-                                                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                </imageView>
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="bottom" secondItem="IoG-4K-7kA" secondAttribute="bottom" id="1xN-xo-Adg"/>

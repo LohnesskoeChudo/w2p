@@ -13,15 +13,11 @@ import XCDYouTubeKit
 
 
 class GameVideoCompactCell: CompactMediaCell {
-    
-    
-    
+
     var videoId: String?
     var tuner: GameVideoCellTuner?
     var isSetup = false
 
-    var videoIsReadyObservationToken: NSKeyValueObservation?
-    
     override var staticMediaView: UIImageView?{
         thumbView
     }
@@ -48,7 +44,6 @@ class GameVideoCompactCell: CompactMediaCell {
     func setupPlayerController(parentVC: UIViewController) {
         parentVC.addChild(avPlayerController)
         avPlayerController.didMove(toParent: parentVC)
-        
         avPlayerController.allowsPictureInPicturePlayback = false
 
         if let playerControllerView = avPlayerController.view {
@@ -58,23 +53,26 @@ class GameVideoCompactCell: CompactMediaCell {
             print("player view inserted")
             playerControllerView.fixIn(view: contentView)
             playerControllerView.alpha = 0
+            
+            let tapGR = UITapGestureRecognizer(target: self, action: #selector(playVideo))
+            tapGR.allowedPressTypes = [
+                NSNumber(value: UIPress.PressType.menu.rawValue)
+            ]
+            tapGR.cancelsTouchesInView = false
+            playerControllerView.addGestureRecognizer(tapGR)
+
         }
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandler), name: AVAudioSession.interruptionNotification, object:  AVAudioSession.sharedInstance())
         
-        videoIsReadyObservationToken = avPlayerController.observe(\.isReadyForDisplay, options: [.new]) { [weak self]
-            
-            avController, change in
-            print("work")
-            
-            if change.newValue == true {
-                print("video is ready")
-            }
-            
-        }
+
     }
     
+    @objc func playVideo() {
+        print("called")
+        player?.play()
+    }
 
     @objc func audioInterruptionHandler(notification: NSNotification) {
         guard let userInfo = notification.userInfo,
@@ -111,6 +109,9 @@ class GameVideoCompactCell: CompactMediaCell {
     deinit {
         print("cell deinit")
         NotificationCenter.default.removeObserver(self)
-        videoIsReadyObservationToken?.invalidate()
+
     }
 }
+
+
+
