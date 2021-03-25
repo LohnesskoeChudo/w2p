@@ -248,12 +248,17 @@ class DetailedViewController: UIViewController{
     }
     
     
-   
+    var laidOut = false
     override func viewWillAppear(_ animated: Bool) {
         updateAnimationsIfNeeded()
+        print(view.frame)
         //startLoadingStaticMedia()
-        layoutCover(size: view.frame.size)
-        layoutMedia(newWidth: view.frame.width)
+        if !laidOut {
+            layoutCover(size: view.frame.size)
+            layoutMedia(newWidth: view.frame.width)
+            laidOut = true
+        }
+
         setupGameMetadata() {
             success in
             if success {
