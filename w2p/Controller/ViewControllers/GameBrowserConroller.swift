@@ -371,14 +371,6 @@ extension GameBrowserController: UICollectionViewDelegate{
             }
         }
     }
-    
-
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) as! GameBrowserFooter
-
-        return footer
-    }
 }
 
 
