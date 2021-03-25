@@ -225,6 +225,8 @@ class DetailedViewController: UIViewController{
         }
     }
     
+    
+    
     private func setupUIAfterLoadingGameMetadata() {
         updateFavoritesButton(animated: true)
     }
@@ -282,7 +284,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-
+    /*
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         layoutCover(size: size)
         layoutMedia(newWidth: size.width)
@@ -290,7 +292,7 @@ class DetailedViewController: UIViewController{
             mediaCollectionView.contentOffset.x = 0
         }
     }
-    
+    */
 
     private func setupMedia(){
         mediaCollectionView.delegate = self

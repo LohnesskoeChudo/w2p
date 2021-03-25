@@ -84,22 +84,14 @@ class GameVideoCompactCell: CompactMediaCell {
         }
     }
     
-    
-    //MARK: FIX
-    /*
     override func reload() {
-        finishShowingInfoContainer(duration: 0.3) {
-            self.loadVideo()
-        }
+        tuner?.reload()
     }
-    */
 
     override func prepareForReuse() {
         super.prepareForReuse()
         preloadThumb.alpha = 0
         avPlayerController.view.alpha = 0
-       
-        
     }
     
     func pauseVideo() {

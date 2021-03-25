@@ -6,7 +6,6 @@ import XCDYouTubeKit
 class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
     
     static var imageLoader = ImageLoader()
-    
     weak var cell: GameVideoCompactCell?
     var videoId: String
     var video: XCDYouTubeVideo?
@@ -14,6 +13,7 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
     var initialId: UUID?
     var playerIsReadyToken: NSKeyValueObservation?
     var playerStatusToken: NSKeyValueObservation?
+    var connectionIsLostToken: NSKeyValueObservation?
     
     init(cell: GameVideoCompactCell, videoId: String, parentVC: UIViewController) {
         self.videoId = videoId
@@ -24,41 +24,50 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         if self.cell?.isSetup == false {
             self.cell?.setupPlayerController(parentVC: parentVC)
             self.cell?.isSetup = true
-            
         }
     }
     
     func setup() {
+        cell?.isLoading = true
         cell?.startLoadingAnimation()
         getYTvideo(){ success in
             DispatchQueue.global(qos: .userInitiated).async {
                 if success {
-
                     self.setPlayer()
                     DispatchQueue.main.async {
                         self.cell?.avPlayerController.player = self.player
                     }
                     self.loadThumbnail()
-
                 } else {
-                    
+                    DispatchQueue.main.async {
+                        self.cell?.isLoading = false
+                    }
+                    self.cell?.finishShowingInfoContainer(duration: 0.3) {
+                        self.cell?.showConnectionProblemMessage(duration: 0.3)
+                    }
                 }
             }
         }
     }
     
+    func reload() {
+        self.initialId = UUID()
+        self.cell?.id = self.initialId
+        self.cell?.finishShowingInfoContainer(duration: 0.3) {
+            self.setup()
+        }
+    }
+
     func getYTvideo(completion: ((_ succes: Bool)->Void)? = nil) {
         XCDYouTubeClient.default().getVideoWithIdentifier(videoId) {
             video, error in
             
             DispatchQueue.main.async {
                 guard self.initialId == self.cell?.id else {return}
-                
                 if let video = video {
                     self.video = video
                     completion?(true)
                 } else {
-                    
                     completion?(false)
                 }
             }
@@ -75,14 +84,30 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
 
             Self.imageLoader.load(with: request) { image, error in
                 if let image = image {
+                    
                     DispatchQueue.main.async {
-                        guard self.initialId == self.cell?.id else { return }
-                        
-                        UIView.animate(withDuration: 0.3){
-                            self.cell?.preloadThumb.image = image
-                            self.cell?.preloadThumb.alpha = 1
+                        let cellWidth = self.cell?.frame.width
+
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            
+                            var imageToSet: UIImage?
+                            
+                            if let width = cellWidth {
+                                imageToSet = ImageResizer.resizeImageToFit(width: width, image: image)
+                            } else {
+                                imageToSet = image
+                            }
+                            
+                            DispatchQueue.main.async {
+                                guard self.initialId == self.cell?.id else { return }
+    
+                                UIView.animate(withDuration: 0.3){
+                                    self.cell?.preloadThumb.image = imageToSet
+                                    self.cell?.preloadThumb.alpha = 1
+                                }
+                                self.cell?.thumbView.image = imageToSet
+                            }
                         }
-                        self.cell?.thumbView.image = image
                     }
                 }
             }
@@ -114,20 +139,33 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         }
         
         playerIsReadyToken?.invalidate()
-        playerIsReadyToken = player?.observe(\.currentItem?.isPlaybackLikelyToKeepUp) { [weak self]
+        playerIsReadyToken = player?.observe(\.currentItem?.isPlaybackLikelyToKeepUp, options: [.new]) { [weak self]
             avvc , _ in
             
             if self?.player?.currentItem?.isPlaybackLikelyToKeepUp == true {
-                self?.cell?.finishShowingInfoContainer(duration: 0.3)
-                self?.cell?.avPlayerController.view.alpha = 1
+                self?.cell?.finishShowingInfoContainer(duration: 0.2) {
+                    self?.cell?.avPlayerController.view.alpha = 1
+                }
+                self?.cell?.isLoading = false
             }
         }
         
+        connectionIsLostToken = player?.observe(\.currentItem?.error, options: [.new]) { [weak self]
+            player, _ in
+            
+            self?.cell?.isLoading = false
+            self?.cell?.finishShowingInfoContainer(duration: 0.3) {
+                self?.cell?.showConnectionProblemMessage(duration: 0.3) {
+                }
+            }
+        }
     }
     
     deinit {
         playerIsReadyToken?.invalidate()
-        playerIsReadyToken?.invalidate()
+        playerStatusToken?.invalidate()
+        connectionIsLostToken?.invalidate()
+        
     }
 }
 
