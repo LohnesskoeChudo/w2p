@@ -274,10 +274,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         }
     }
     
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        (collectionView?.collectionViewLayout as? WaterfallCollectionViewLayout)?.invalidateLayout()
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateAnimations()

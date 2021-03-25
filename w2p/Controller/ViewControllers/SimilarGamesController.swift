@@ -64,10 +64,10 @@ class SimilarGamesController : GameBrowserController{
         setupApiRequestItem()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         if needToUpdateGames {
-            self.refreshGames(withAnimation: false)
+            self.refreshGames(withAnimation: true)
             needToUpdateGames = false
         }
     }
