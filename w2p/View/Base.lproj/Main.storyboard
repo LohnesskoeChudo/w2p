@@ -904,7 +904,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Iyc-h2-SVE">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Iyc-h2-SVE">
                                 <rect key="frame" x="0.0" y="44" width="414" height="643"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="CMo-Mj-eA7" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
@@ -1109,12 +1109,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rfk-Qn-r0j">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rfk-Qn-r0j">
                                 <rect key="frame" x="0.0" y="44" width="414" height="643"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="tnp-So-C7X" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="GameCardCell" translatesAutoresizingMaskIntoConstraints="NO" id="BcL-3x-mpc" customClass="GameCardCell" customModule="w2p" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GameCardCell" translatesAutoresizingMaskIntoConstraints="NO" id="BcL-3x-mpc" customClass="GameCardCell" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="60.666666666666664" y="0.0" width="293" height="295"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MVa-TZ-lUq" customClass="CellControlView" customModule="w2p" customModuleProvider="target">
@@ -1141,6 +1141,28 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6AJ-x5-i8R" customClass="CustomButton" customModule="w2p" customModuleProvider="target">
+                                <rect key="frame" x="356" y="64" width="38" height="38"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow.clockwise" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="8eS-c4-vfI">
+                                        <rect key="frame" x="7" y="6.3333333333333304" width="24" height="23.666666666666668"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="CPl-kE-qcR"/>
+                                    <constraint firstItem="8eS-c4-vfI" firstAttribute="leading" secondItem="6AJ-x5-i8R" secondAttribute="leading" constant="7" id="L1W-Ed-Reb"/>
+                                    <constraint firstItem="8eS-c4-vfI" firstAttribute="top" secondItem="6AJ-x5-i8R" secondAttribute="top" constant="7" id="ee5-zE-R6a"/>
+                                    <constraint firstAttribute="width" secondItem="6AJ-x5-i8R" secondAttribute="height" id="toL-dv-kMo"/>
+                                    <constraint firstAttribute="bottom" secondItem="8eS-c4-vfI" secondAttribute="bottom" constant="7" id="vO4-ed-iJ9"/>
+                                    <constraint firstAttribute="trailing" secondItem="8eS-c4-vfI" secondAttribute="trailing" constant="7" id="yqK-4a-HXO"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="refresh:" destination="w68-TY-0eO" eventType="touchUpInside" id="eCf-ed-30h"/>
+                                    <action selector="reloadTapped:" destination="em9-ak-uqi" eventType="touchUpInside" id="jER-Oz-Myy"/>
+                                </connections>
+                            </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cZ0-9r-c9u">
                                 <rect key="frame" x="132" y="260.66666666666669" width="150" height="210"/>
                                 <subviews>
@@ -1177,8 +1199,10 @@
                             <constraint firstItem="cZ0-9r-c9u" firstAttribute="centerY" secondItem="cwF-pc-wKO" secondAttribute="centerY" id="2qQ-sJ-4o9"/>
                             <constraint firstItem="rfk-Qn-r0j" firstAttribute="trailing" secondItem="cwF-pc-wKO" secondAttribute="trailing" id="7zC-Yn-e1e"/>
                             <constraint firstItem="cZ0-9r-c9u" firstAttribute="centerX" secondItem="cwF-pc-wKO" secondAttribute="centerX" id="AWn-cX-eh8"/>
+                            <constraint firstItem="6AJ-x5-i8R" firstAttribute="top" secondItem="cwF-pc-wKO" secondAttribute="top" constant="20" id="Kuh-zI-szL"/>
                             <constraint firstItem="rfk-Qn-r0j" firstAttribute="top" secondItem="cwF-pc-wKO" secondAttribute="top" id="aGG-4D-QPF"/>
                             <constraint firstItem="rfk-Qn-r0j" firstAttribute="leading" secondItem="cwF-pc-wKO" secondAttribute="leading" id="nFC-nY-uXP"/>
+                            <constraint firstItem="cwF-pc-wKO" firstAttribute="trailing" secondItem="6AJ-x5-i8R" secondAttribute="trailing" constant="20" id="tIc-rA-IzF"/>
                             <constraint firstItem="cZ0-9r-c9u" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cwF-pc-wKO" secondAttribute="leading" constant="20" id="tMW-kg-EDj"/>
                             <constraint firstItem="cwF-pc-wKO" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cZ0-9r-c9u" secondAttribute="trailing" constant="20" id="tvC-8A-toA"/>
                         </constraints>
@@ -1189,6 +1213,7 @@
                         <outlet property="infoContainer" destination="cZ0-9r-c9u" id="fqC-n8-rwB"/>
                         <outlet property="infoImageView" destination="nTW-Na-4QH" id="ZrL-jj-Bqn"/>
                         <outlet property="infoLabel" destination="LJN-Tx-rwW" id="Irn-V2-eze"/>
+                        <outlet property="reloadButton" destination="6AJ-x5-i8R" id="Ogr-os-2eZ"/>
                         <segue destination="aGj-6w-gCA" kind="show" identifier="detailed" id="xWW-6W-EV0"/>
                     </connections>
                 </viewController>
@@ -1925,7 +1950,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ETD-OZ-1YL">
                                 <rect key="frame" x="0.0" y="44" width="414" height="643"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="9fu-TD-P6V" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
@@ -2140,7 +2165,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Vqp-zL-EnL"/>
+        <segue reference="xWW-6W-EV0"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.clockwise" catalog="system" width="115" height="128"/>

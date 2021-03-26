@@ -34,16 +34,26 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     
     var xOffset: [CGFloat] = []
     var yOffset: [CGFloat] = []
+    var headerAttrs: UICollectionViewLayoutAttributes?
+    var footerAttrs: UICollectionViewLayoutAttributes?
 
     private func initialLayout(){
-        if !cache.isEmpty {return}
-        guard let collectionView = collectionView , let delegate = delegate else {return}
+        guard let delegate = delegate, let cvWidth = collectionView?.frame.width else {return}
+        cache = []
+        var additionalHeight: CGFloat = 0
+        if let height = delegate.headerHeight {
+            
+            headerAttrs = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: IndexPath(item: 0, section: 0))
+            headerAttrs?.frame = CGRect(x: delegate.spacing, y: delegate.upperSpacing, width: cvWidth - 2 * delegate.spacing , height: height)
+            headerAttrs?.alpha = 1
+            additionalHeight += height
+        }
+        additionalHeight += delegate.upperSpacing
         xOffset = [CGFloat]()
         for columnIndex in 0..<columns{
             xOffset.append((CGFloat(columnIndex) * columnWidth) + delegate.spacing * CGFloat(columnIndex + 1))
         }
-        yOffset = .init(repeating: delegate.upperSpacing, count: columns)
-
+        yOffset = .init(repeating: additionalHeight, count: columns)
     }
     
 
@@ -85,6 +95,10 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         
 
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
+        
+        if let headerAttrs = headerAttrs, headerAttrs.frame.intersects(rect) {
+            visibleLayoutAttributes.append(headerAttrs)
+        }
 
         if cache.count > 0 {
             let indexOfPredecessorOfFirstVisibleItem = customBinarySearch(collection: cache,trueProperty: {
@@ -126,9 +140,53 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.item]
     }
+    
+    override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        if elementKind == UICollectionView.elementKindSectionHeader {
+            return headerAttrs
+        } else if elementKind == UICollectionView.elementKindSectionFooter {
+            return nil
+        }
+        return nil
+    }
 
+    override func initialLayoutAttributesForAppearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        if elementKind == UICollectionView.elementKindSectionHeader {
+            guard let headerAttrs = self.headerAttrs else { return nil }
+            let attrs = UICollectionViewLayoutAttributes()
+            attrs.frame = headerAttrs.frame
+            attrs.alpha = 0
+            return attrs
+        } else if elementKind == UICollectionView.elementKindSectionFooter {
+            //CHECK
+            guard let footerAttrs = self.footerAttrs else { return nil }
+            let attrs = UICollectionViewLayoutAttributes()
+            attrs.frame = footerAttrs.frame
+            attrs.alpha = 0
+            return attrs
+        }
+        return nil
+    }
     
+    override func finalLayoutAttributesForDisappearingSupplementaryElement(ofKind elementKind: String, at elementIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        if elementKind == UICollectionView.elementKindSectionHeader {
+            guard let headerAttrs = self.headerAttrs else { return nil }
+            let attrs = UICollectionViewLayoutAttributes()
+            attrs.frame = headerAttrs.frame
+            attrs.alpha = 0
+            return attrs
+        } else if elementKind == UICollectionView.elementKindSectionFooter {
+            //CHECK
+            guard let footerAttrs = self.footerAttrs else { return nil }
+            let attrs = UICollectionViewLayoutAttributes()
+            attrs.frame = footerAttrs.frame
+            attrs.alpha = 0
+            return attrs
+        }
+        return nil
+    }
     
+
     override class var invalidationContextClass: AnyClass {
         WFLayoutInvalidationContext.self
     }
@@ -144,7 +202,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
                 }
             }
             if context.action == WFInvalidationAction.rebuild {
-                cache = []
                 initialLayout()
                 collectionView?.reloadData()
             }
@@ -179,5 +236,7 @@ protocol WaterfallCollectionViewLayoutDelegate: AnyObject {
     var spacing: CGFloat {get}
     
     var upperSpacing: CGFloat {get}
+    
+    var headerHeight: CGFloat? {get}
     
 }

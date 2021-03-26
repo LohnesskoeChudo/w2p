@@ -8,6 +8,7 @@
 import UIKit
 
 class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDelegate {
+
     
     var gamesSource = FifoQueue<Game>()
     var games = [Game]()
@@ -274,14 +275,15 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     
 
     func setupCollectionView(){
+        collectionView.register(HeaderWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        
+        collectionView.register(FooterWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
         collectionView.delegate = self
         collectionView.dataSource = self
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
             waterfallLayout.delegate = self
         }
-        collectionView.register(HeaderWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        
-        collectionView.register(FooterWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -334,7 +336,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             updateAnimations()
         }
     }
+    
 
+    func setup(header: HeaderWaterfallLayoutView) {}
+    func setup(footer: FooterWaterfallLayoutView) {}
+    
     //MARK: - LayoutDelegate
 
     func heightForCell(at indexPath: IndexPath) -> CGFloat {
@@ -356,9 +362,10 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         0
     }
 
-    var footerHeight: CGFloat {
-        0
+    var headerHeight: CGFloat? {
+        nil
     }
+    
     
     
 }
@@ -385,6 +392,21 @@ extension GameBrowserController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let gameCardCell = cell as? GameCardCell, indexPath.item == 0 {
             gameCardCell.endContentLoadingAnimation()
+        }
+    }
+    
+    
+
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! HeaderWaterfallLayoutView
+            setup(header: header)
+            return header
+        } else {
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath) as! FooterWaterfallLayoutView
+            setup(footer: footer)
+            return footer
         }
     }
     
