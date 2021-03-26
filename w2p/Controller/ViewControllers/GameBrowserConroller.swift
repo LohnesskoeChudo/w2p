@@ -26,7 +26,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var feedStep = 50
     var gamesPerRequest = 500
     var isLoading = false
-    var afterLoadApiItemAction: ((_ item: GameApiRequestItem) -> Void)?
+    var afterLoadApiItemAction: (() -> Void)?
 
     @IBOutlet weak var infoContainer: UIView!
     @IBOutlet weak var infoImageView: UIImageView!
@@ -86,10 +86,12 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                         self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
                             
                             
-                            self.afterLoadApiItemAction?(gameApiRequestItem)
+                            self.afterLoadApiItemAction?()
                             
+                            /*
                             self.currentOffset += self.gamesPerRequest
                             self.gameApiRequestItem?.offset = self.currentOffset
+                            */
                             
                             
                             completion?(true)

@@ -72,6 +72,8 @@
 		5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */; };
 		5DDEC95725E7A39F00D52E86 /* DoubleSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */; };
 		5DE071CF25E91FB300526BE8 /* SimilarGamesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */; };
+		5DE1CA4C260E4EFD00A9A9CE /* GameRandomizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE1CA4B260E4EFD00A9A9CE /* GameRandomizer.swift */; };
+		5DE1CA4F260E61CD00A9A9CE /* GameApiRequestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE1CA4E260E61CD00A9A9CE /* GameApiRequestItem.swift */; };
 		5DE47E1025E63AA900439FB7 /* TransferButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E0F25E63AA900439FB7 /* TransferButton.xib */; };
 		5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE47E1225E63B6F00439FB7 /* TransferButton.swift */; };
 		5DE47E1625E6402B00439FB7 /* genres.json in Resources */ = {isa = PBXBuildFile; fileRef = 5DE47E1525E6402B00439FB7 /* genres.json */; };
@@ -169,6 +171,8 @@
 		5DDCFB2425FA7568001DFAF1 /* Boyer-Moore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Boyer-Moore.swift"; sourceTree = "<group>"; };
 		5DDEC95625E7A39F00D52E86 /* DoubleSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleSlider.swift; sourceTree = "<group>"; };
 		5DE071CE25E91FB300526BE8 /* SimilarGamesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarGamesController.swift; sourceTree = "<group>"; };
+		5DE1CA4B260E4EFD00A9A9CE /* GameRandomizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRandomizer.swift; sourceTree = "<group>"; };
+		5DE1CA4E260E61CD00A9A9CE /* GameApiRequestItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameApiRequestItem.swift; sourceTree = "<group>"; };
 		5DE47E0F25E63AA900439FB7 /* TransferButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TransferButton.xib; sourceTree = "<group>"; };
 		5DE47E1225E63B6F00439FB7 /* TransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferButton.swift; sourceTree = "<group>"; };
 		5DE47E1525E6402B00439FB7 /* genres.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = genres.json; sourceTree = "<group>"; };
@@ -267,7 +271,9 @@
 				5DDA01AD25DAFD7E00FF2C1C /* GameMediaDispatcher.swift */,
 				5DDA01AA25DAFBF300FF2C1C /* CacheManager.swift */,
 				5D530F1D25D8067600DF5621 /* RequestFormer.swift */,
+				5DE1CA4E260E61CD00A9A9CE /* GameApiRequestItem.swift */,
 				5D59BBF025F7D20F0073FFD1 /* GlobalSettings.swift */,
+				5DE1CA4B260E4EFD00A9A9CE /* GameRandomizer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -518,6 +524,7 @@
 				5DDA01B425DB157400FF2C1C /* BinarySearch.swift in Sources */,
 				5D530F2525D80DD500DF5621 /* JsonLoader.swift in Sources */,
 				5DC811B725FE303400CE8B24 /* Atomic.swift in Sources */,
+				5DE1CA4C260E4EFD00A9A9CE /* GameRandomizer.swift in Sources */,
 				5DBC88C125E4E6A30048985E /* Collection+Identifiable+Int.swift in Sources */,
 				5DE9937125E56A08004AB0B1 /* CategoryShowButton.swift in Sources */,
 				5DCCCBBA25E90D4C007690B9 /* FeedCellContentView.swift in Sources */,
@@ -560,6 +567,7 @@
 				5DDA01AE25DAFD7E00FF2C1C /* GameMediaDispatcher.swift in Sources */,
 				5D68EA0225FFAD0700E8169B /* PriorityQueue.swift in Sources */,
 				5D0AA4D925DBE7750026543E /* FilterViewController.swift in Sources */,
+				5DE1CA4F260E61CD00A9A9CE /* GameApiRequestItem.swift in Sources */,
 				5DEE042C260E047A003E8D6E /* FooterWaterfallLayoutView.swift in Sources */,
 				5DCB518725F38D7800079006 /* CDGameEngine.swift in Sources */,
 				5DF85F3725E1A66000359227 /* CDScreenshot.swift in Sources */,

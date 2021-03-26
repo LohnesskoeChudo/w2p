@@ -10,5 +10,7 @@ import Foundation
 extension UserDefaults {
     
     static let keyForCachedImagesSize = "cachedImagesSize"
+    static let keyForTotalGamesAmountInApi = "totalGamesAmountInApi"
+    static let keyForLastTotalGamesApiAmountSavingDate = "totalGamesAmountSavingDate"
     
 }

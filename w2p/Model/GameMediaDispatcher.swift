@@ -12,6 +12,40 @@ class GameMediaDispatcher{
     private let jsonLoader = JsonLoader()
 
     
+    func getTotalAmountOfGames(completion: ((Int) -> Void)? = nil){
+        let secondsSinceLastSaving = CacheManager.shared.secondsSinceLastSavingTotalApiGamesCount
+        if let totalAmount = CacheManager.shared.getTotalApiGamesCount(), let secondsSinceLastSaving = secondsSinceLastSaving, secondsSinceLastSaving < 86400{
+            completion?(totalAmount)
+        } else {
+            loadGameApiTotalCount() {
+                count in
+                if let count = count{
+                    CacheManager.shared.saveTotalApiGamesCount(value: count)
+                    completion?(count)
+                } else {
+                    let defaultApiValue = 138000
+                    completion?(defaultApiValue)
+                }
+            }
+        }
+    }
+    
+    private func loadGameApiTotalCount(completion: ((Int?)->Void)? = nil) {
+        let request = RequestFormer.shared.formRequestForTotalGameCount()
+        jsonLoader.load(request: request) {
+            (response: [String: Int]?, error: Error?) in
+            if let response = response {
+                if let count = response["count"] {
+                    completion?(count)
+                } else {
+                    completion?(nil)
+                }
+            } else {
+                completion?(nil)
+            }
+        }
+    }
+    
     func fetchStaticMedia(with media: MediaDownloadable, cache: Bool = true, completion: ((Data?, FetchingError?) -> Void)? = nil) {
         CacheManager.shared.loadStaticMedia(with: media){
             data in

@@ -255,8 +255,33 @@ class CacheManager{
                 completion?(false)
             }
         }
-
     }
+    
+    
+    func getTotalApiGamesCount() -> Int? {
+        let totalGamesCountInApi = UserDefaults.standard.integer(forKey: UserDefaults.keyForTotalGamesAmountInApi)
+        if totalGamesCountInApi > 0 {
+            return totalGamesCountInApi
+        } else {
+            return nil
+        }
+    }
+    
+    func saveTotalApiGamesCount(value: Int) {
+        UserDefaults.standard.setValue(value, forKey: UserDefaults.keyForTotalGamesAmountInApi)
+        UserDefaults.standard.setValue( Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970), forKey: UserDefaults.keyForLastTotalGamesApiAmountSavingDate)
+    }
+    
+    var secondsSinceLastSavingTotalApiGamesCount: Int? {
+        let lastValue = UserDefaults.standard.integer(forKey: UserDefaults.keyForLastTotalGamesApiAmountSavingDate)
+        if lastValue > 0 {
+            return Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970) - lastValue
+        } else {
+            return nil
+        }
+    }
+    
+    
 }
 
 enum StaticMedia: Int {

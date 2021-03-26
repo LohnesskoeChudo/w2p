@@ -1029,6 +1029,9 @@
                                             <state key="normal" title="Button" image="dices">
                                                 <color key="titleColor" systemColor="labelColor"/>
                                             </state>
+                                            <connections>
+                                                <action selector="randomTapped:" destination="D6J-eg-TMo" eventType="touchUpInside" id="ybX-mu-RBs"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
@@ -1069,6 +1072,7 @@
                         <outlet property="infoContainer" destination="TGU-gR-KSq" id="FpT-jW-p44"/>
                         <outlet property="infoImageView" destination="mXU-2O-HYh" id="3d3-SN-j9H"/>
                         <outlet property="infoLabel" destination="f94-LU-xSn" id="EpP-8U-CbY"/>
+                        <outlet property="randomButton" destination="tMA-1I-T1q" id="Qr2-CA-kUi"/>
                         <outlet property="searchBar" destination="GMJ-nz-UE5" id="o48-zw-ggB"/>
                         <outlet property="searchButton" destination="iHY-YJ-6DT" id="ue5-hv-QjU"/>
                         <outlet property="searchField" destination="teO-kj-mPW" id="3o6-cG-Pp5"/>
@@ -1114,7 +1118,7 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="tnp-So-C7X" customClass="WaterfallCollectionViewLayout" customModule="w2p" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GameCardCell" translatesAutoresizingMaskIntoConstraints="NO" id="BcL-3x-mpc" customClass="GameCardCell" customModule="w2p" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="GameCardCell" translatesAutoresizingMaskIntoConstraints="NO" id="BcL-3x-mpc" customClass="GameCardCell" customModule="w2p" customModuleProvider="target">
                                         <rect key="frame" x="60.666666666666664" y="0.0" width="293" height="295"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MVa-TZ-lUq" customClass="CellControlView" customModule="w2p" customModuleProvider="target">
@@ -2165,7 +2169,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="xWW-6W-EV0"/>
+        <segue reference="Kvh-Bh-DzW"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="arrow.clockwise" catalog="system" width="115" height="128"/>

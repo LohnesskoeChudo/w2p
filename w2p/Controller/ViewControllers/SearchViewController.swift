@@ -11,14 +11,17 @@ class SearchViewController: GameBrowserController{
     var panGestureRecognizer: UIPanGestureRecognizer!
     override var upperSpacing: CGFloat { searchBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 10 }
     var initialAnimationExecuted = false
-
+    var gameRandomizer = GameRandomizer()
     
     @IBOutlet weak var searchBar: UIVisualEffectView!
     @IBOutlet weak var searchFieldBackground: UIView!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var searchField: UITextField!
     
-    @IBAction func searchButtonTapped(_ sender: UIButton) {
+    @IBOutlet weak var randomButton: UIButton!
+    
+    
+    @IBAction private func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         
         
@@ -30,25 +33,66 @@ class SearchViewController: GameBrowserController{
         } else {
             self.searchGames(withAnimation: true)
         }
-
     }
     
-    private func searchGames(withAnimation: Bool) {
-        disableSearchButton()
-        panGestureRecognizer.isEnabled = false
-        self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
-        
-        
-        
-        super.refreshGames(withAnimation: withAnimation) {
-            success in
-            self.enableSearchButton()
+    @IBAction private func randomTapped(_ sender: UIButton) {
+        if !self.initialAnimationExecuted {
+            self.finishInitialAnimation() {
+                self.presentRandomGames()
+            }
+            self.initialAnimationExecuted = true
+        } else {
+            presentRandomGames()
+        }
+    }
+    
+    private func prepareToLoad() {
+        DispatchQueue.main.async {
+            self.disableActionButtons()
+            self.panGestureRecognizer.isEnabled = false
+        }
+    }
+    
+    private func afterLoad() {
+        DispatchQueue.main.async {
+            self.enableActionButtons()
             if !self.games.isEmpty {
                 self.panGestureRecognizer.isEnabled = true
-
+                
             } else {
                 self.panGestureRecognizer.isEnabled = false
             }
+        }
+    }
+    
+    
+    private func presentRandomGames() {
+        prepareToLoad()
+        gameRandomizer.reset()
+        gameApiRequestItem = GameApiRequestItem.formRequestItemForRandomGames()
+        afterLoadApiItemAction = {
+            self.gameRandomizer.updateApiRequestItemWithNewGames(item: self.gameApiRequestItem!)
+        }
+        gameRandomizer.updateApiRequestItemWithNewGames(item: gameApiRequestItem!) {
+            DispatchQueue.main.async {
+                self.refreshGames(withAnimation: true) {
+                    success in
+                    self.afterLoad()
+                }
+            }
+        }
+    }
+    
+    private func searchGames(withAnimation: Bool) {
+        prepareToLoad()
+        self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
+        afterLoadApiItemAction = {
+            self.currentOffset += self.gamesPerRequest
+            self.gameApiRequestItem?.offset = self.currentOffset
+        }
+        super.refreshGames(withAnimation: withAnimation) {
+            success in
+            self.afterLoad()
         }
     }
     
@@ -102,18 +146,22 @@ class SearchViewController: GameBrowserController{
         }
     }
     
-    private func disableSearchButton() {
+    private func disableActionButtons() {
         self.searchButton.isUserInteractionEnabled = false
+        self.randomButton.isUserInteractionEnabled = true
         UIView.animate(withDuration: 0.5, delay: 0, options: .beginFromCurrentState) {
             self.searchButton.alpha = 0.4
+            self.randomButton.alpha = 0.4
         }
     }
     
-    private func enableSearchButton() {
+    private func enableActionButtons() {
         UIView.animate(withDuration: 0.3) {
             self.searchButton.alpha = 1
+            self.randomButton.alpha = 1
         } completion: { _ in
             self.searchButton.isUserInteractionEnabled = true
+            self.randomButton.isUserInteractionEnabled = true
         }
     }
 
@@ -179,14 +227,14 @@ class SearchViewController: GameBrowserController{
     
 
     func performInitialAnimation(completion: (() -> Void)? = nil) {
-        disableSearchButton()
+        disableActionButtons()
         UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut]) {
             UIView.animate(withDuration: 0.3, delay: 0.7) {
                 self.infoLabel.alpha = 1
             }
             self.infoImageView.transform = .identity
         } completion: { _ in
-            self.enableSearchButton()
+            self.enableActionButtons()
         }
     }
     
