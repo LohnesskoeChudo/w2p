@@ -28,6 +28,10 @@ class NewGamesController: GameBrowserController {
         }
     }
     
+    
+   
+    
+    
     private func setupRequestItem() {
         gameApiRequestItem = GameApiRequestItem.formRequestItemForNewAvailableGames()
     }

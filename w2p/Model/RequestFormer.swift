@@ -162,6 +162,7 @@ class GameApiRequestItem {
         return gameRequestItem
     }
     
+
     static func formRequestItemForSpecificGames(gamesIds: [Int]) -> GameApiRequestItem?{
         if gamesIds.count == 0 {return nil}
         let gameRequestItem = GameApiRequestItem()

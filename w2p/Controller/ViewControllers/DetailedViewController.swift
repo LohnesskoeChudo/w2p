@@ -625,8 +625,6 @@ class DetailedViewController: UIViewController{
             }
         }
     }
-    
-    
 
     //TO-DO: Implement
     private func setupPlaceholderBlurredBackgroundForMediaSectionIfNeeded() {
@@ -636,18 +634,26 @@ class DetailedViewController: UIViewController{
     private func layoutCover(size: CGSize){
         
         let heightPercentage: CGFloat = 0.58
-        
-            let padding:CGFloat = 20
-
-        guard let aspect = game.cover?.aspect else {return}
-        if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
             
-            coverHeightConstraint.constant = size.height * heightPercentage
-            coverWidthConstraint.constant = (1 / CGFloat(aspect)) * (size.height * heightPercentage)
+        
+        let padding: CGFloat = 20
+
+        guard let aspect = game.cover?.aspect else { return }
+        if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
+
+            let estimatedHeight = size.height * heightPercentage
+            let estimatedWidth = (1 / CGFloat(aspect)) * estimatedHeight
+            let maxWidth = size.width - 2 * padding
+            coverWidthConstraint.constant = min(estimatedWidth, maxWidth)
+            if estimatedWidth > maxWidth  {
+                coverHeightConstraint.constant = maxWidth * CGFloat(aspect)
+            } else {
+                coverHeightConstraint.constant = estimatedWidth * CGFloat(aspect)
+            }
+            
             
         } else {
             let width = size.width - (2 * padding)
-            
             coverWidthConstraint.constant = width
             coverHeightConstraint.constant = width * CGFloat(aspect)
         }
@@ -656,11 +662,8 @@ class DetailedViewController: UIViewController{
     private func updateMediaCounter(){
         let xOffset = mediaCollectionView.contentOffset.x
         let width = mediaCollectionView.frame.width
-        
         let pageNumber = Int(xOffset / width) + 1
         mediaCounterLabel.text = "\(pageNumber) / \(staticMediaContent.count + videoMediaContent.count)"
-        
-        
     }
 }
 

@@ -54,33 +54,15 @@ class SearchFilter{
     }
     
     var isDefault: Bool {
-        if searchString != nil, !searchString!.isEmpty {
-            return false
-        }
-        if !genres.isEmpty {
-            return false
-        }
-        if !themes.isEmpty {
-            return false
-        }
-        if singleplayer {
-            return false
-        }
-        if multiplayer {
-            return false
-        }
-        if ratingUpperBound != nil {
-            return false
-        }
-        if ratingLowerBound != nil {
-            return false
-        }
-        if releaseDateUpperBound != nil {
-            return false
-        }
-        if releaseDateLowerBound != nil {
-            return false
-        }
+        if searchString != nil, !searchString!.isEmpty { return false }
+        if !genres.isEmpty { return false }
+        if !themes.isEmpty { return false }
+        if singleplayer { return false }
+        if multiplayer { return false }
+        if ratingUpperBound != nil { return false }
+        if ratingLowerBound != nil { return false }
+        if releaseDateUpperBound != nil { return false }
+        if releaseDateLowerBound != nil { return false }
         return true
     }
     

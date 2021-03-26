@@ -25,6 +25,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var feedStep = 50
     var gamesPerRequest = 500
     var isLoading = false
+    var afterLoadApiItemAction: ((_ item: GameApiRequestItem) -> Void)?
 
     @IBOutlet weak var infoContainer: UIView!
     @IBOutlet weak var infoImageView: UIImageView!
@@ -82,8 +83,14 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                     self.gamesSource.push(array: games)
                     self.endAnimationsLoading(){
                         self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
+                            
+                            
+                            self.afterLoadApiItemAction?(gameApiRequestItem)
+                            
                             self.currentOffset += self.gamesPerRequest
                             self.gameApiRequestItem?.offset = self.currentOffset
+                            
+                            
                             completion?(true)
                             self.collectionView.isScrollEnabled = true
                             self.isLoading = false
@@ -266,12 +273,15 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     }
     
 
-    private func setupCollectionView(){
+    func setupCollectionView(){
         collectionView.delegate = self
         collectionView.dataSource = self
         if let waterfallLayout = collectionView.collectionViewLayout as? WaterfallCollectionViewLayout{
             waterfallLayout.delegate = self
         }
+        collectionView.register(HeaderWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        
+        collectionView.register(FooterWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -378,6 +388,7 @@ extension GameBrowserController: UICollectionViewDataSource {
         }
     }
     
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
@@ -394,9 +405,10 @@ extension GameBrowserController: UICollectionViewDataSource {
         setCoverToCardCell(cardCell, game: game)
         cardCell.reusing = true
         return cardCell
-        
-
     }
+    
+    
+    
     
     func configureCell(_ cell: GameCardCell, game: Game){
         cell.id = game.id ?? -1

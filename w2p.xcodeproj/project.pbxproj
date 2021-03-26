@@ -83,6 +83,8 @@
 		5DE9937425E575B9004AB0B1 /* CategoryShowButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5DE9937325E575B9004AB0B1 /* CategoryShowButton.xib */; };
 		5DE9937725E581F7004AB0B1 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE9937625E581F7004AB0B1 /* View+.swift */; };
 		5DEB7B4225EBB19B0087FF67 /* FavoriteGameCardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */; };
+		5DEE0429260E02A5003E8D6E /* HeaderWaterfallLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE0428260E02A5003E8D6E /* HeaderWaterfallLayoutView.swift */; };
+		5DEE042C260E047A003E8D6E /* FooterWaterfallLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DEE042B260E047A003E8D6E /* FooterWaterfallLayoutView.swift */; };
 		5DF307BF25E027B10052433C /* ImageBlurrer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF307BE25E027B10052433C /* ImageBlurrer.swift */; };
 		5DF5BB0825FFCCCD00261502 /* LIFO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF5BB0725FFCCCD00261502 /* LIFO.swift */; };
 		5DF70BD725EF710900B99E31 /* StaticMediaCompactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF70BD625EF710900B99E31 /* StaticMediaCompactCell.swift */; };
@@ -178,6 +180,8 @@
 		5DE9937325E575B9004AB0B1 /* CategoryShowButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoryShowButton.xib; sourceTree = "<group>"; };
 		5DE9937625E581F7004AB0B1 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		5DEB7B4125EBB19B0087FF67 /* FavoriteGameCardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteGameCardCell.swift; sourceTree = "<group>"; };
+		5DEE0428260E02A5003E8D6E /* HeaderWaterfallLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderWaterfallLayoutView.swift; sourceTree = "<group>"; };
+		5DEE042B260E047A003E8D6E /* FooterWaterfallLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterWaterfallLayoutView.swift; sourceTree = "<group>"; };
 		5DF307BE25E027B10052433C /* ImageBlurrer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageBlurrer.swift; sourceTree = "<group>"; };
 		5DF5BB0725FFCCCD00261502 /* LIFO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIFO.swift; sourceTree = "<group>"; };
 		5DF70BD625EF710900B99E31 /* StaticMediaCompactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMediaCompactCell.swift; sourceTree = "<group>"; };
@@ -285,6 +289,8 @@
 				5DC4751725F8B4C700412048 /* CircularRatingView.swift */,
 				5DDCFB1F25F9F0F2001DFAF1 /* LineRatingView.swift */,
 				5DC4752825F8FDE900412048 /* CellControllView.swift */,
+				5DEE0428260E02A5003E8D6E /* HeaderWaterfallLayoutView.swift */,
+				5DEE042B260E047A003E8D6E /* FooterWaterfallLayoutView.swift */,
 				5DCCCBBC25E9143C007690B9 /* Cells */,
 			);
 			path = View;
@@ -534,6 +540,7 @@
 				5D023CDF25E1AFAA003B04CD /* CDGameCollection.swift in Sources */,
 				5DE47E1325E63B6F00439FB7 /* TransferButton.swift in Sources */,
 				5DC4751825F8B4C700412048 /* CircularRatingView.swift in Sources */,
+				5DEE0429260E02A5003E8D6E /* HeaderWaterfallLayoutView.swift in Sources */,
 				5DDCFB2525FA7569001DFAF1 /* Boyer-Moore.swift in Sources */,
 				5DD5EFF525DCE6F8000513BB /* Model.xcdatamodeld in Sources */,
 				5DDCFB2025F9F0F2001DFAF1 /* LineRatingView.swift in Sources */,
@@ -553,6 +560,7 @@
 				5DDA01AE25DAFD7E00FF2C1C /* GameMediaDispatcher.swift in Sources */,
 				5D68EA0225FFAD0700E8169B /* PriorityQueue.swift in Sources */,
 				5D0AA4D925DBE7750026543E /* FilterViewController.swift in Sources */,
+				5DEE042C260E047A003E8D6E /* FooterWaterfallLayoutView.swift in Sources */,
 				5DCB518725F38D7800079006 /* CDGameEngine.swift in Sources */,
 				5DF85F3725E1A66000359227 /* CDScreenshot.swift in Sources */,
 				5D59BBF725F7E2090073FFD1 /* FeedbackManager.swift in Sources */,

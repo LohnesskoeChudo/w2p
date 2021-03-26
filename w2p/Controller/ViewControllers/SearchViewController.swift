@@ -21,21 +21,24 @@ class SearchViewController: GameBrowserController{
     @IBAction func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         
+        
         if !self.initialAnimationExecuted {
             self.finishInitialAnimation() {
-                self.refreshGames(withAnimation: true)
+                self.searchGames(withAnimation: true)
             }
             self.initialAnimationExecuted = true
         } else {
-            self.refreshGames(withAnimation: true)
+            self.searchGames(withAnimation: true)
         }
 
     }
     
-    private func refreshGames(withAnimation: Bool) {
+    private func searchGames(withAnimation: Bool) {
         disableSearchButton()
         panGestureRecognizer.isEnabled = false
         self.gameApiRequestItem = GameApiRequestItem.formRequestItemForSearching(filter: self.searchFilter, limit: 500)
+        
+        
         
         super.refreshGames(withAnimation: withAnimation) {
             success in
