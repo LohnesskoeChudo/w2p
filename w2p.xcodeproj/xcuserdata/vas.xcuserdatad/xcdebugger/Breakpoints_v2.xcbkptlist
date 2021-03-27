@@ -14,8 +14,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "642"
-            endingLineNumber = "642"
+            startingLineNumber = "603"
+            endingLineNumber = "603"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "644"
-            endingLineNumber = "644"
+            startingLineNumber = "605"
+            endingLineNumber = "605"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "645"
-            endingLineNumber = "645"
+            startingLineNumber = "606"
+            endingLineNumber = "606"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "654"
-            endingLineNumber = "654"
+            startingLineNumber = "615"
+            endingLineNumber = "615"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "655"
-            endingLineNumber = "655"
+            startingLineNumber = "616"
+            endingLineNumber = "616"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "657"
-            endingLineNumber = "657"
+            startingLineNumber = "618"
+            endingLineNumber = "618"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "659"
-            endingLineNumber = "659"
+            startingLineNumber = "620"
+            endingLineNumber = "620"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "w2p/Controller/ViewControllers/DetailedViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "658"
-            endingLineNumber = "658"
+            startingLineNumber = "619"
+            endingLineNumber = "619"
             landmarkName = "layoutCover(size:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -142,10 +142,58 @@
             filePath = "w2p/Controller/ViewControllers/GameBrowserConroller.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "398"
-            endingLineNumber = "398"
+            startingLineNumber = "402"
+            endingLineNumber = "402"
             landmarkName = "collectionView(_:didEndDisplaying:forItemAt:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F433FE98-CECD-4C7C-A660-82E7892BFC3B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "w2p/Model/MainModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
+            landmarkName = "GameImageSizeKey"
+            landmarkType = "13">
+            <Locations>
+               <Location
+                  uuid = "F433FE98-CECD-4C7C-A660-82E7892BFC3B - bf5f546b0fff0836"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameImageSizeKey.rawValue.getter : Swift.String"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Model/MainModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "317"
+                  endingLineNumber = "317"
+                  offsetFromSymbolStart = "164">
+               </Location>
+               <Location
+                  uuid = "F433FE98-CECD-4C7C-A660-82E7892BFC3B - 5a9dc907d68e4096"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "w2p.GameImageSizeKey.init(rawValue: Swift.String) -&gt; Swift.Optional&lt;w2p.GameImageSizeKey&gt;"
+                  moduleName = "w2p"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vas/Desktop/w2p/w2p/Model/MainModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "317"
+                  endingLineNumber = "317"
+                  offsetFromSymbolStart = "268">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -23,8 +23,6 @@ class SearchViewController: GameBrowserController{
     
     @IBAction private func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
-        
-        
         if !self.initialAnimationExecuted {
             self.finishInitialAnimation() {
                 self.searchGames(withAnimation: true)
@@ -36,6 +34,7 @@ class SearchViewController: GameBrowserController{
     }
     
     @IBAction private func randomTapped(_ sender: UIButton) {
+        FeedbackManager.generateFeedbackForButtonsTapped()
         if !self.initialAnimationExecuted {
             self.finishInitialAnimation() {
                 self.presentRandomGames()
@@ -247,9 +246,6 @@ class SearchViewController: GameBrowserController{
             completion?()
         }
     }
-    
-    
-    
 }
 
 

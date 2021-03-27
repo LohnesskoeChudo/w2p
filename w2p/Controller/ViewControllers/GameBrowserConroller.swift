@@ -26,7 +26,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var feedStep = 50
     var gamesPerRequest = 500
     var isLoading = false
-    var afterLoadApiItemAction: (() -> Void)?
+    
+    lazy var afterLoadApiItemAction: (() -> Void)? = {
+        self.currentOffset += self.gamesPerRequest
+        self.gameApiRequestItem?.offset = self.currentOffset
+    }
 
     @IBOutlet weak var infoContainer: UIView!
     @IBOutlet weak var infoImageView: UIImageView!
@@ -450,28 +454,17 @@ extension GameBrowserController: UICollectionViewDataSource {
         cell.startContentLoadingAnimation()
         cell.isLoading = true
         let id = game.id ?? -1
-        DispatchQueue.global().async {
-            self.mediaDispatcher.fetchStaticMedia(with: cover){
-                data, error in
-                if let data = data {
-                    if let image = UIImage(data: data){
-                        DispatchQueue.main.async {
-                            let columnWidth = self.columnWidth
-                            DispatchQueue.global().async {
-                                let resizedImage = ImageResizer.resizeImageToFit(width: columnWidth, image: image)
-                                DispatchQueue.main.async{
-                                    if cell.id == id{
-                                        cell.customContent.imageView.image = resizedImage
-                                        cell.isLoading = false
-                                        UIView.animate(withDuration: 0.3) {
-                                            cell.customContent.imageView.alpha = 1
-                                        } completion: { _ in
-                                            cell.endContentLoadingAnimation()
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
+        self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: cover, targetWidth: columnWidth, sizeKey: .S264X374) {
+            image, error in
+            DispatchQueue.main.async{
+                if cell.id == id{
+                    cell.customContent.imageView.image = image
+                    cell.isLoading = false
+                    UIView.animate(withDuration: 0.3) {
+                        cell.customContent.imageView.alpha = 1
+                    } completion: { _ in
+                        cell.endContentLoadingAnimation()
                     }
                 }
             }

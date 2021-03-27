@@ -91,7 +91,7 @@ class DetailedViewController: UIViewController{
             dispatchGroup.enter()
             DispatchQueue.global(qos: .userInteractive).async {
                 if let cover = self.game.cover {
-                    self.mediaDispatcher.fetchStaticMedia(with: cover, completion: {
+                    self.mediaDispatcher.fetchStaticMedia(with: cover, sizeKey: .S569X320, completion: {
                         data, error in
                         if let data = data , let image = UIImage(data: data){
                             activityItems.append(image)
@@ -266,38 +266,6 @@ class DetailedViewController: UIViewController{
             }
         }
     }
-    
-    private func startLoadingStaticMedia() {
-        
-        var staticMedia = [MediaDownloadable]()
-        if let screenshots = game.screenshots {
-            for screenshot in screenshots {
-                staticMedia.append(screenshot)
-            }
-        }
-        if let artworks = game.artworks {
-            for artwork in artworks {
-                staticMedia.append(artwork)
-            }
-        }
-        var step: Double = 0
-        for media in staticMedia {
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + step) {
-                self.mediaDispatcher.fetchStaticMedia(with: media)
-            }
-            step += 0.3
-        }
-    }
-    
-    /*
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        layoutCover(size: size)
-        layoutMedia(newWidth: size.width)
-        if isMediaSectionAvailable {
-            mediaCollectionView.contentOffset.x = 0
-        }
-    }
-    */
 
     private func setupMedia(){
         mediaCollectionView.delegate = self
@@ -541,7 +509,7 @@ class DetailedViewController: UIViewController{
         isLoading = true
         addBlinkAnimationTo(layer: coverContainer.layer)
         
-        let viewWidth = view.bounds.width
+
         loadCover(cover: cover) {
             image in
             guard let image = image else {
@@ -552,22 +520,21 @@ class DetailedViewController: UIViewController{
                 return
             }
             
-            let resized = ImageResizer.resizeImageToFit(width: viewWidth, image: image)
-            let resizedBlurred = self.imageBlurrer.blurImage(with: image, radius: 30)
+            let blurred = self.imageBlurrer.blurImage(with: image, radius: 30)
             
             DispatchQueue.main.async {
                 UIView.transition(with: self.coverView, duration: 0.2, options: .transitionCrossDissolve){
-                    self.coverView.image = resized
+                    self.coverView.image = image
                 } completion: { _ in
                     self.coverContainer.layer.removeAllAnimations()
                 }
                 
                 UIView.transition(with: self.blurredBackground, duration: 1, options: [.transitionCrossDissolve, .curveEaseOut]){
-                    self.blurredBackground.image = resizedBlurred
+                    self.blurredBackground.image = blurred
                 }
                 
                 if self.isMediaSectionAvailable {
-                    self.blurredMediaBackground.image = resizedBlurred
+                    self.blurredMediaBackground.image = blurred
                 }
             }
         }
@@ -612,17 +579,11 @@ class DetailedViewController: UIViewController{
         }
     }
 
-    
     private func loadCover(cover: Cover, completion: ((UIImage?) -> Void)? = nil) {
-        DispatchQueue.global(qos: .userInteractive).async{
-            self.mediaDispatcher.fetchStaticMedia(with: cover) {
-                data, error in
-                if let data = data {
-                    completion?(UIImage(data: data))
-                } else {
-                    completion?(nil)
-                }
-            }
+        let viewWidth = view.bounds.width
+        self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: cover, targetWidth: viewWidth, sizeKey: .S264X374) {
+            image, error in
+            completion?(image)
         }
     }
 
@@ -724,18 +685,16 @@ extension DetailedViewController: UICollectionViewDataSource{
         let width = mediaCollectionView.frame.width
         cell.isLoading = true
         cell.startLoadingAnimation()
-        self.mediaDispatcher.fetchStaticMedia(with: staticMedia) {
-            (data: Data?, error: FetchingError?) in
-            if let data = data{
-                DispatchQueue.global(qos: .userInteractive).async{
-                    guard let image = UIImage(data: data) else { return }
-                    let resizedImage = ImageResizer.resizeImageToFit(width: width, image: image)
-                    DispatchQueue.main.async {
-                        if id == cell.id {
-                            cell.setupStaticMediaView(image: resizedImage)
-                        }
-                        cell.isLoading = false
+        
+        
+        self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: staticMedia, targetWidth: width, sizeKey: .S889X500){
+            image, error in
+            if let image = image {
+                DispatchQueue.main.async {
+                    if id == cell.id {
+                        cell.setupStaticMediaView(image: image)
                     }
+                    cell.isLoading = false
                 }
             } else {
                 if id == cell.id {

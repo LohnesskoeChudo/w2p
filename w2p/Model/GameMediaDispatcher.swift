@@ -5,12 +5,35 @@
 //  Created by vas on 15.02.2021.
 //
 import Foundation
+import UIKit
 
 class GameMediaDispatcher{
     
     private let dataLoader = DataLoader()
     private let jsonLoader = JsonLoader()
 
+
+    func fetchPreparedToSetStaticMedia(with media: MediaDownloadable, targetWidth: CGFloat, sizeKey: GameImageSizeKey, cache: Bool = true, completion: ((UIImage?, Error?) -> Void)? = nil) {
+        
+        fetchStaticMedia(with: media, sizeKey: sizeKey) { data, error in
+            if let data = data {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if let image = UIImage(data: data) {
+                        let resizedImage = ImageResizer.resizeImageToFit(width: targetWidth, image: image)
+                        completion?(resizedImage, nil)
+                    } else {
+                        completion?(nil, ResizingError.canNotResizeImage)
+                    }
+                }
+            } else {
+                completion?(nil, error)
+            }
+        }
+    }
+    
+    enum ResizingError: Error {
+        case canNotResizeImage
+    }
     
     func getTotalAmountOfGames(completion: ((Int) -> Void)? = nil){
         let secondsSinceLastSaving = CacheManager.shared.secondsSinceLastSavingTotalApiGamesCount
@@ -46,31 +69,26 @@ class GameMediaDispatcher{
         }
     }
     
-    func fetchStaticMedia(with media: MediaDownloadable, cache: Bool = true, completion: ((Data?, FetchingError?) -> Void)? = nil) {
-        CacheManager.shared.loadStaticMedia(with: media){
-            data in
-            if let data = data {
-                completion?(data, nil)
-            } else {
-                if cache {
-                    self.bringStaticMediaToCache(media: media, completion: completion)
+    func fetchStaticMedia(with media: MediaDownloadable,  sizeKey: GameImageSizeKey, cache: Bool = true, completion: ((Data?, Error?) -> Void)? = nil) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            CacheManager.shared.loadStaticMedia(with: media, sizeKey: sizeKey){
+                data in
+                if let data = data {
+                    completion?(data, nil)
                 } else {
-                    self.loadStaticMediaFromInet(media: media, completion: completion)
+                    if cache {
+                        self.bringStaticMediaToCache(media: media, sizeKey: sizeKey, completion: completion)
+                    } else {
+                        self.loadStaticMediaFromInet(media: media, sizeKey: sizeKey, completion: completion)
+                    }
                 }
             }
         }
     }
     
-    private func loadStaticMediaFromInet(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
-        
-        let sizeKey: GameImageSizeKey
-        
-        if (media as? Cover) != nil {
-            sizeKey = .S264X374
-        } else {
-            sizeKey = .S889X500
-        }
-        
+    private func loadStaticMediaFromInet(media: MediaDownloadable, sizeKey: GameImageSizeKey, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+
         guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
             completion?(nil, .canNotFormRequest)
             return
@@ -87,11 +105,11 @@ class GameMediaDispatcher{
     }
     
 
-    func bringStaticMediaToCache(media: MediaDownloadable, completion: ((Data?, FetchingError?) -> Void)? = nil) {
-        self.loadStaticMediaFromInet(media: media){
+    func bringStaticMediaToCache(media: MediaDownloadable, sizeKey: GameImageSizeKey, completion: ((Data?, FetchingError?) -> Void)? = nil) {
+        self.loadStaticMediaFromInet(media: media, sizeKey: sizeKey){
             data, error in
             if let data = data {
-                CacheManager.shared.saveStaticMedia(data: data, media: media)
+                CacheManager.shared.saveStaticMedia(data: data, sizeKey: sizeKey, media: media)
                 completion?(data, nil)
             } else {
                 completion?(nil, error)

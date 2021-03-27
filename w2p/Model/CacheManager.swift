@@ -84,18 +84,20 @@ class CacheManager{
         }
     }
     
-    func loadStaticMedia(with media: MediaDownloadable, completion: @escaping (Data?) -> Void){
+    func loadStaticMedia(with media: MediaDownloadable, sizeKey: GameImageSizeKey? ,completion: @escaping (Data?) -> Void){
         
         guard let id = media.id else {
             completion(nil)
             return
         }
         
+        
+        
         self.privateMoc.perform {
             let fetchRequest = NSFetchRequest<CDImageData>(entityName: "CDImageData")
             let propertiesToFetch: [NSString] = ["data"]
             fetchRequest.propertiesToFetch = propertiesToFetch
-            fetchRequest.fetchLimit = 1
+            fetchRequest.fetchLimit = GameImageSizeKey.allCases.count
             
             let typeId: Int
             
@@ -109,21 +111,44 @@ class CacheManager{
                 completion(nil)
                 return
             }
-            fetchRequest.predicate = NSPredicate(format: "(id == %d) AND (typeId == \(typeId))", id)
             
-            if let cdImageData = try? self.privateMoc.fetch(fetchRequest).first {
-                if let data = cdImageData.data{
-                    completion(data)
+
+            if let sizeKey = sizeKey {
+                fetchRequest.predicate = NSPredicate(format: "(id == %d) AND (typeId == %d) AND (sizeKey == %s)", id, typeId, sizeKey.rawValue)
+                fetchRequest.fetchLimit = 1
+            } else {
+                fetchRequest.predicate = NSPredicate(format: "(id == %@) AND (typeId == %@)", id, typeId)
+            }
+            
+
+            if let result = try? self.privateMoc.fetch(fetchRequest), !result.isEmpty {
+                
+                if result.count == 1 {
+                    completion(result.first?.data)
                 } else {
-                    completion(nil)
+                    
+                    var cdImageDataToReturn = result.first!
+                    
+                    for cdImageData in result {
+                        
+                        guard let sizeStr = cdImageData.sizeKey, let sizeKey = GameImageSizeKey(rawValue: sizeStr) else { continue }
+                        guard let sizeStrDataToReturn = cdImageDataToReturn.sizeKey, let sizeKeyDataToReturn = GameImageSizeKey(rawValue: sizeStrDataToReturn) else { continue }
+                        
+                        if sizeKey.measure > sizeKeyDataToReturn.measure {
+                            cdImageDataToReturn = cdImageData
+                        }
+                       
+                    }
+                    completion(cdImageDataToReturn.data)
                 }
+                
             } else {
                 completion(nil)
             }
         }
     }
     
-    func saveStaticMedia(data: Data, media: MediaDownloadable) {
+    func saveStaticMedia(data: Data, sizeKey: GameImageSizeKey, media: MediaDownloadable) {
         let dataSize = Double(data.count)
         let succesAction = { (_ success: Bool) -> Void in
             if success {
@@ -133,11 +158,11 @@ class CacheManager{
         }
         
         if let screenshot = media as? Screenshot {
-            saveScreenshot(data: data, with: screenshot, competion: succesAction)
+            saveScreenshot(data: data, sizeKey: sizeKey.rawValue, with: screenshot, competion: succesAction)
         } else if let artwork = media as? Artwork {
-            saveArtwork(data: data, with: artwork, completion: succesAction)
+            saveArtwork(data: data, sizeKey: sizeKey.rawValue, with: artwork, completion: succesAction)
         } else if let cover = media as? Cover {
-            saveCover(coverData: data, with: cover, completion: succesAction)
+            saveCover(coverData: data, sizeKey: sizeKey.rawValue, with: cover, completion: succesAction)
         }
     }
     
@@ -183,7 +208,7 @@ class CacheManager{
     }
 
     
-    func saveCover(coverData: Data, with cover: Cover, completion: ((_ success: Bool) -> Void)? = nil){
+    private func saveCover(coverData: Data, sizeKey: String, with cover: Cover, completion: ((_ success: Bool) -> Void)? = nil){
         
         privateMoc.perform {
             guard let coverId = cover.id else {
@@ -195,6 +220,7 @@ class CacheManager{
             cdImageData.data = coverData
             cdImageData.id = Int64(coverId)
             cdImageData.typeId = Int64(StaticMedia.cover.rawValue)
+            cdImageData.sizeKey = sizeKey
             if let _ = try? self.privateMoc.save() {
                 completion?(true)
             } else {
@@ -205,7 +231,7 @@ class CacheManager{
     }
 
     
-    func saveScreenshot(data: Data, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
+    private func saveScreenshot(data: Data, sizeKey: String, with screenshot: Screenshot, competion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             guard let screenshotId = screenshot.id else {
                 competion(false)
@@ -216,6 +242,7 @@ class CacheManager{
             cdImageData.id = Int64(screenshotId)
             cdImageData.typeId = Int64(StaticMedia.screenshot.rawValue)
             cdImageData.data = data
+            cdImageData.sizeKey = sizeKey
             if let _ = try? self.privateMoc.save() {
                 competion(true)
             } else {
@@ -225,7 +252,7 @@ class CacheManager{
     }
     
 
-    func saveArtwork(data: Data, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
+    private func saveArtwork(data: Data, sizeKey: String, with artwork: Artwork, completion: @escaping (_ success: Bool) -> Void) {
         privateMoc.perform {
             guard let artworkId = artwork.id else {
                 completion(false)
@@ -236,6 +263,7 @@ class CacheManager{
             cdImageData.id = Int64(artworkId)
             cdImageData.typeId = Int64(StaticMedia.artwork.rawValue)
             cdImageData.data = data
+            cdImageData.sizeKey = sizeKey
 
             if let _ = try? self.privateMoc.save() {
                 completion(true)

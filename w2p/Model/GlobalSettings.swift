@@ -38,8 +38,5 @@ class GlobalSettings: Codable {
     private init() {
         
     }
-    
 
-
-    
 }

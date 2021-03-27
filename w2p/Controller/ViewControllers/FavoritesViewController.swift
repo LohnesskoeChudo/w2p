@@ -239,23 +239,18 @@ extension FavoritesViewController: UITableViewDataSource{
         let id = cell.id
         cell.isLoading = true
         cell.startContentLoadingAnimation()
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.mediaDispatcher.fetchStaticMedia(with: cover) {
-                data, error in
-                if let data = data {
-                    if let image = UIImage(data: data) {
-                        let resizedImage = ImageResizer.resizeImageToFit(width: FavoriteGameCardCell.imageWidth, image: image)
-                        DispatchQueue.main.async {
-                            if id != cell.id {return}
-                            cell.gameImageView.image = resizedImage
-                            UIView.animate(withDuration: 0.3) {
-                                cell.gameImageView.alpha = 1
-                            } completion: { _ in
-                                cell.isLoading = false
-                                cell.endContentLoadingAnimation()
-                            }
-                        }
-                    }
+        
+        
+        self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: cover, targetWidth: FavoriteGameCardCell.imageWidth, sizeKey: .S264X374) {
+            image, error in
+            DispatchQueue.main.async {
+                if id != cell.id {return}
+                cell.gameImageView.image = image
+                UIView.animate(withDuration: 0.3) {
+                    cell.gameImageView.alpha = 1
+                } completion: { _ in
+                    cell.isLoading = false
+                    cell.endContentLoadingAnimation()
                 }
             }
         }

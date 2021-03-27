@@ -129,11 +129,13 @@
     <entity name="CDImageData" representedClassName=".CDImageData" syncable="YES" codeGenerationType="category">
         <attribute name="data" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
+        <attribute name="sizeKey" optional="YES" attributeType="String"/>
         <attribute name="typeId" optional="YES" attributeType="Integer 64" usesScalarValueType="YES"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="id"/>
                 <constraint value="typeId"/>
+                <constraint value="sizeKey"/>
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
@@ -203,7 +205,7 @@
         <element name="CDGameEngine" positionX="156" positionY="190" width="128" height="88"/>
         <element name="CDGameMode" positionX="141" positionY="-226" width="128" height="88"/>
         <element name="CDGenre" positionX="-65" positionY="-125" width="128" height="88"/>
-        <element name="CDImageData" positionX="-378" positionY="-162" width="128" height="88"/>
+        <element name="CDImageData" positionX="-378" positionY="-162" width="128" height="103"/>
         <element name="CDPlatform" positionX="-9" positionY="-308" width="128" height="88"/>
         <element name="CDScreenshot" positionX="306" positionY="153" width="128" height="133"/>
         <element name="CDTheme" positionX="-273" positionY="5" width="128" height="88"/>

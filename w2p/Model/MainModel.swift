@@ -310,7 +310,8 @@ enum WebsiteCategory: Int{
     }
 }
 
-enum GameImageSizeKey: String{
+enum GameImageSizeKey: String , CaseIterable{
+
     case S90X128 = "cover_small",
          S569X320 = "screenshot_med",
          S264X374 = "cover_big",
@@ -321,6 +322,33 @@ enum GameImageSizeKey: String{
          S35X35 = "micro",
          S1280X720 = "720p",
          S1920X1080 = "1080p"
+    
+    var measure: Int {
+        switch self {
+        case .S35X35:
+            return 10
+        case .S90X90:
+            return 20
+        case .S90X128:
+            return 30
+        case .S284X160:
+            return 40
+        case .S264X374:
+            return 50
+        case .S569X320:
+            return 60
+        case .S889X500:
+            return 70
+        case .Ss1280X720:
+            return 80
+        case .S1280X720:
+            return 90
+        case .S1920X1080:
+            return 100
+        }
+    }
+    
+    
 }
 
 protocol MediaDownloadable {

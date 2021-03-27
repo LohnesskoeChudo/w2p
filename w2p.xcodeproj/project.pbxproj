@@ -102,6 +102,8 @@
 		5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3925E1A66600359227 /* CDVideo.swift */; };
 		5DF85F3D25E1A67100359227 /* CDAgeRating.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3C25E1A67100359227 /* CDAgeRating.swift */; };
 		5DF85F4025E1A67F00359227 /* CDFranchise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF85F3F25E1A67F00359227 /* CDFranchise.swift */; };
+		5DFE535B260F057D00AEDD2D /* StaticMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFE535A260F057D00AEDD2D /* StaticMediaViewController.swift */; };
+		5DFE535E260F06A000AEDD2D /* StaticMediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFE535D260F06A000AEDD2D /* StaticMediaCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -201,6 +203,8 @@
 		5DF85F3925E1A66600359227 /* CDVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDVideo.swift; sourceTree = "<group>"; };
 		5DF85F3C25E1A67100359227 /* CDAgeRating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDAgeRating.swift; sourceTree = "<group>"; };
 		5DF85F3F25E1A67F00359227 /* CDFranchise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDFranchise.swift; sourceTree = "<group>"; };
+		5DFE535A260F057D00AEDD2D /* StaticMediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMediaViewController.swift; sourceTree = "<group>"; };
+		5DFE535D260F06A000AEDD2D /* StaticMediaCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMediaCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -317,6 +321,7 @@
 				5D8F7B712609095C00CF4255 /* CompactMediaCell.swift */,
 				5DF70BD625EF710900B99E31 /* StaticMediaCompactCell.swift */,
 				5DC17E902607513500CFAFB8 /* GameVideoCompactCell.swift */,
+				5DFE535D260F06A000AEDD2D /* StaticMediaCell.swift */,
 			);
 			name = MediaCells;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				5D530F2725D8140E00DF5621 /* TabBarController.swift */,
 				5DB9E67725F000EA003BF705 /* GameBrowserConroller.swift */,
 				5DC0296F2604D46F00E4C134 /* NewGamesController.swift */,
+				5DFE535A260F057D00AEDD2D /* StaticMediaViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -534,9 +540,11 @@
 				5DF85F3425E1A65800359227 /* CDArtwork.swift in Sources */,
 				5D530F2125D8080100DF5621 /* SearchFilter.swift in Sources */,
 				5D59BBF125F7D20F0073FFD1 /* GlobalSettings.swift in Sources */,
+				5DFE535B260F057D00AEDD2D /* StaticMediaViewController.swift in Sources */,
 				5DC2C35F2607DA2F00AEF485 /* GameVideoCellTuner.swift in Sources */,
 				5D59BBEE25F768D00073FFD1 /* AnimatedControl.swift in Sources */,
 				5DF85F3A25E1A66600359227 /* CDVideo.swift in Sources */,
+				5DFE535E260F06A000AEDD2D /* StaticMediaCell.swift in Sources */,
 				5D530F2825D8140E00DF5621 /* TabBarController.swift in Sources */,
 				5DA1154C25FF5D1C00BF2C29 /* AdditionalPlatformsController.swift in Sources */,
 				5DF85F2E25E1A64700359227 /* CDGameMode.swift in Sources */,
