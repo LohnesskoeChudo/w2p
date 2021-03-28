@@ -148,6 +148,13 @@ class DetailedViewController: UIViewController{
 
             browserVC.externalGame = game
             browserVC.category = gameCategory
+        case "staticMedia":
+            guard let staticMediaVc = segue.destination as? StaticMediaViewController, let currentPageNumber = sender as? Int else { return }
+            
+            let currentPageOfStaticMedia = currentPageNumber - videoMediaContent.count
+            staticMediaVc.hidesBottomBarWhenPushed = true
+            staticMediaVc.currentPage = currentPageOfStaticMedia
+            staticMediaVc.staticMedia = staticMediaContent
         default:
             return
         }
@@ -172,7 +179,7 @@ class DetailedViewController: UIViewController{
             addBlinkAnimationTo(layer: coverContainer.layer)
         }
         for subview in mediaCollectionView.subviews {
-            if let compactCell = subview as? CompactMediaCell {
+            if let compactCell = subview as? GameMediaCell {
                 compactCell.updateAnimationIfNeeded()
             }
         }
@@ -548,16 +555,14 @@ class DetailedViewController: UIViewController{
                     let backgroundImage = UIImage(named: "mediaBackground")!
                     let resized = ImageResizer.resizeImageToFit(width: width, image: backgroundImage)
                     let blurred = self.imageBlurrer.blurImage(with: resized, radius: 10)
+
                     DispatchQueue.main.async {
-                        
-                        DispatchQueue.main.async {
-                            UIView.transition(with: self.blurredMediaBackground, duration: 0.3, options: .transitionCrossDissolve) {
-                                
-                                self.blurredMediaBackground.image = blurred
-                                
-                            } completion: { _ in
-                                completion?()
-                            }
+                        UIView.transition(with: self.blurredMediaBackground, duration: 0.3, options: .transitionCrossDissolve) {
+
+                            self.blurredMediaBackground.image = blurred
+
+                        } completion: { _ in
+                            completion?()
                         }
                     }
                 }
@@ -621,10 +626,15 @@ class DetailedViewController: UIViewController{
     }
     
     private func updateMediaCounter(){
+        let pageNumber = getMediaPageNumber()
+        mediaCounterLabel.text = "\(pageNumber) / \(staticMediaContent.count + videoMediaContent.count)"
+    }
+    
+    func getMediaPageNumber() -> Int {
         let xOffset = mediaCollectionView.contentOffset.x
         let width = mediaCollectionView.frame.width
         let pageNumber = Int(xOffset / width) + 1
-        mediaCounterLabel.text = "\(pageNumber) / \(staticMediaContent.count + videoMediaContent.count)"
+        return pageNumber
     }
 }
 
@@ -663,6 +673,14 @@ extension DetailedViewController: UICollectionViewDataSource{
             
             let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
             staticMediaCell.id = UUID()
+            staticMediaCell.tapAction = { [weak self] in
+                
+                if let pageNumber = self?.getMediaPageNumber() {
+                    self?.performSegue(withIdentifier: "staticMedia", sender: pageNumber)
+                }
+                
+                
+            }
             setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
             return staticMediaCell
             
@@ -679,18 +697,19 @@ extension DetailedViewController: UICollectionViewDataSource{
        }
     }
     
-    func setStaticContent(staticMedia: MediaDownloadable, cell: CompactMediaCell){
+    func setStaticContent(staticMedia: MediaDownloadable, cell: GameMediaCell){
         
         let id = cell.id
         let width = mediaCollectionView.frame.width
         cell.isLoading = true
         cell.startLoadingAnimation()
         
-        
+        print(id)
         self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: staticMedia, targetWidth: width, sizeKey: .S889X500){
             image, error in
             if let image = image {
                 DispatchQueue.main.async {
+                    print(cell.id)
                     if id == cell.id {
                         cell.setupStaticMediaView(image: image)
                     }

@@ -7,16 +7,24 @@
 
 import UIKit
 
-class StaticMediaCompactCell: CompactMediaCell {
+class StaticMediaCompactCell: GameMediaCell {
     
-    @IBOutlet weak var mediaView: UIImageView!
+    
+    @IBOutlet weak var mediaView: UIImageView! {
+        didSet {
+            tapRecognizer.addTarget(self, action: #selector(contentTapped))
+            mediaView.addGestureRecognizer(tapRecognizer)
+        }
+    }
+    
+    var tapAction: (() -> Void)?
+    @objc func contentTapped() {
+        tapAction?()
+    }
+    
+    let tapRecognizer = UITapGestureRecognizer()
     
     override var staticMediaView: UIImageView? {
-        get {
-            mediaView
-        }
-        set {
-            fatalError("tried to set outlet")
-        }
+        mediaView
     }
 }

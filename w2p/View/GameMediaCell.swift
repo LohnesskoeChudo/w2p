@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CompactMediaCell: UICollectionViewCell {
+class GameMediaCell: UICollectionViewCell {
     
     @IBOutlet weak var infoContainer: UIControl!
     @IBOutlet weak var infoImageView: UIImageView!

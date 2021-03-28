@@ -12,7 +12,7 @@ import XCDYouTubeKit
 
 
 
-class GameVideoCompactCell: CompactMediaCell {
+class GameVideoCompactCell: GameMediaCell {
 
     var videoId: String?
     var tuner: GameVideoCellTuner?

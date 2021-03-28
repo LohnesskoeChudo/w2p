@@ -13,4 +13,8 @@ class TabBarController: UITabBarController{
         selectedIndex = 1
     }
     
+    override var shouldAutorotate: Bool {
+        OrientationResolver.allowToChangeOrientation
+    }
+    
 }
