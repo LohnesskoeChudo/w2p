@@ -12,9 +12,4 @@ class TabBarController: UITabBarController{
     override func viewDidLoad() {
         selectedIndex = 1
     }
-    
-    override var shouldAutorotate: Bool {
-        OrientationResolver.allowToChangeOrientation
-    }
-    
 }

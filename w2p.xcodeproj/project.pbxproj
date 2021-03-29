@@ -391,8 +391,8 @@
 		5DDA01B225DB156100FF2C1C /* Util */ = {
 			isa = PBXGroup;
 			children = (
-				5D0AA4D525DBD90A0026543E /* ImageResizer.swift */,
 				5DEA77FD2610D1B700F3F8FB /* OrientationResolver.swift */,
+				5D0AA4D525DBD90A0026543E /* ImageResizer.swift */,
 				5DB70C69260916B7001A15BE /* GameAnimationSupporter.swift */,
 				5DF307BE25E027B10052433C /* ImageBlurrer.swift */,
 				5DC4752525F8C29600412048 /* RedGreenMaper.swift */,

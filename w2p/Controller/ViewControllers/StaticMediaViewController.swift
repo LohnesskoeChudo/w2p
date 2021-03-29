@@ -13,13 +13,39 @@ class StaticMediaViewController: UIViewController {
     var currentPage: Int!
     
     private let mediaDispatcher = GameMediaDispatcher()
-
-
+    
+    @IBOutlet weak var pageCounter: UILabel!
+    @IBOutlet weak var backButton: CustomButton!
+    
+    @IBAction private func backTapped(_ sender: CustomButton) {
+        FeedbackManager.generateFeedbackForButtonsTapped()
+        navigationController?.popViewController(animated: true)
+    }
+    
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
             collectionView.delegate = self
             collectionView.dataSource = self
         }
+    }
+    
+    override var shouldAutorotate: Bool {
+        true
+    }
+    
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        .allButUpsideDown
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        collectionView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -31,7 +57,6 @@ class StaticMediaViewController: UIViewController {
         super.viewWillDisappear(animated)
         OrientationResolver.allowToChangeOrientation = false
     }
-    
 }
 
 
@@ -44,9 +69,7 @@ extension StaticMediaViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
-    
 
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCell
@@ -59,7 +82,6 @@ extension StaticMediaViewController: UICollectionViewDataSource {
         }
 
         return cell
-        
     }
     
 
