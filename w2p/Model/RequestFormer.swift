@@ -82,7 +82,7 @@ class RequestFormer: PRequestFormer{
         var request = URLRequest(url: url)
                 request.httpMethod = "POST"
         request.allHTTPHeaderFields?["Client-ID"] = "3u8mueqxsplbm66vhse81c8f65pco1"
-        request.allHTTPHeaderFields?["Authorization"] = "Bearer iydn4qze9tz30lelp762msw0tn52oq"
+        request.allHTTPHeaderFields?["Authorization"] = "Bearer 0qptyjs1de4mj8t2q9km3dsu6ap3sb"
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return request
     }
