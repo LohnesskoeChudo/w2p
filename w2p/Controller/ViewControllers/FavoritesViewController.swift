@@ -9,29 +9,39 @@ import UIKit
 
 class FavoritesViewController: UIViewController{
     
-    var favoritesFilter = SearchFilter()
-    var mediaDispatcher = MediaDispatcher()
-    var games: [Game] = []
-    var allFavoriteGames: [Game] = []
+    private let mediaDispatcher = Resolver.shared.container.resolve(PMediaDispatcher.self)!
+    private let cacheManager = Resolver.shared.container.resolve(PCacheManager.self)!
+    private var games: [Game] = []
+    private var allFavoriteGames: [Game] = []
 
+    @IBOutlet private weak var resetButton: CustomButton!
+    @IBOutlet private weak var messageTextLabel: UILabel!
+    @IBOutlet private weak var searchBar: UIView!
+    @IBOutlet private weak var searchTextFieldBackground: UIView!
+    @IBOutlet private weak var searchTextField: UITextField!
+    @IBOutlet private weak var tableView: UITableView!
     
-    @IBAction func searchTapped(_ sender: UIButton) {
+    @IBAction private func searchTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         captureFavorites(animated: true, with: searchTextField.text)
     }
-    
 
-    @IBAction func resetTapped(_ sender: CustomButton) {
+    @IBAction private func resetTapped(_ sender: CustomButton) {
         captureFavorites(animated: true)
         searchTextField.text = ""
     }
     
-    @IBOutlet weak var resetButton: CustomButton!
-    @IBOutlet weak var messageTextLabel: UILabel!
-    @IBOutlet weak var searchBar: UIView!
-    @IBOutlet weak var searchTextFieldBackground: UIView!
-    @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "favoritesToDetailed":
+            let destination = segue.destination as! DetailedViewController
+            let game = sender as! Game
+            destination.shouldUpdate = true
+            destination.game = game
+        default:
+            return
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +51,7 @@ class FavoritesViewController: UIViewController{
         setupAppearance()
     }
     
-    @objc func updateAnimations() {
+    @objc private func updateAnimations() {
         for cell in tableView.visibleCells{
             let gameCell = cell as! FavoriteGameCardCell
             if gameCell.isLoading {
@@ -64,8 +74,8 @@ class FavoritesViewController: UIViewController{
     
     private func captureFavorites( animated: Bool, with search: String? = nil) {
         hideInfoMessage(animated: animated)
-        cleanGames(animated: animated){
-            self.mediaDispatcher.loadFavoriteGames{
+        cleanGames(animated: animated) {
+            self.cacheManager.loadFavoriteGames {
                 games in
                 if let games = games, !games.isEmpty {
                     self.allFavoriteGames = games
@@ -79,27 +89,24 @@ class FavoritesViewController: UIViewController{
                     } else {
                         self.showEmptyResultMessage()
                     }
-    
                 } else {
                     self.showNoFavoritesAtAllMessage()
-
                 }
             }
         }
     }
     
-
-    private func filterGames(search: String){
+    private func filterGames(search: String) {
         self.games = []
         let search = search.lowercased()
-        for game in allFavoriteGames{
+        for game in allFavoriteGames {
             if let name = game.name, name.lowercased().index(of: search) != nil {
                 self.games.append(game)
             }
         }
     }
     
-    private func cleanGames(animated: Bool, completion: @escaping () -> Void ){
+    private func cleanGames(animated: Bool, completion: @escaping () -> Void ) {
         allFavoriteGames = []
         games = []
         let action = { self.tableView.reloadData() }
@@ -117,14 +124,14 @@ class FavoritesViewController: UIViewController{
         tableView.isScrollEnabled = false
     }
     
-    private func showEmptyResultMessage(){
+    private func showEmptyResultMessage() {
         DispatchQueue.main.async {
             self.searchBar.isHidden = false
         }
         showInfo(message: "No results")
     }
     
-    private func showNoFavoritesAtAllMessage(){
+    private func showNoFavoritesAtAllMessage() {
         DispatchQueue.main.async {
             self.searchBar.isHidden = true
         }
@@ -158,14 +165,14 @@ class FavoritesViewController: UIViewController{
         }
     }
     
-    private func setupSearchBar(){
+    private func setupSearchBar() {
         searchBar.layer.cornerRadius = searchBar.frame.height / 2
         searchTextField.delegate = self
         searchTextFieldBackground.layer.cornerRadius = searchTextFieldBackground.frame.height / 2
         searchTextFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-    private func prepareGamesForShowing(completion: () -> Void){
+    private func prepareGamesForShowing(completion: () -> Void) {
         self.games.sort{
             fGame, sGame in
             if let fd = fGame.cacheDate, let sd = sGame.cacheDate {
@@ -183,7 +190,7 @@ class FavoritesViewController: UIViewController{
         completion()
     }
 
-    private func showGames(){
+    private func showGames() {
         DispatchQueue.main.async {
             UIView.transition(with: self.tableView, duration: 0.3, options: [.transitionCrossDissolve], animations: {
                 self.tableView.reloadData()
@@ -191,21 +198,8 @@ class FavoritesViewController: UIViewController{
         }
     }
     
-    private func setupTableView(){
+    private func setupTableView() {
         tableView.dataSource = self
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "favoritesToDetailed":
-            let destination = segue.destination as! DetailedViewController
-            let game = sender as! Game
-            destination.shouldUpdate = true
-            destination.game = game
-        default:
-            return
-        }
     }
 }
 
@@ -234,13 +228,11 @@ extension FavoritesViewController: UITableViewDataSource{
         loadImage(for: cell, game: game)
     }
     
-    private func loadImage(for cell: FavoriteGameCardCell, game: Game){
+    private func loadImage(for cell: FavoriteGameCardCell, game: Game) {
         guard let cover = game.cover else { return }
         let id = cell.id
         cell.isLoading = true
         cell.startContentLoadingAnimation()
-        
-        
         self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: cover, targetWidth: FavoriteGameCardCell.imageWidth, sizeKey: .S264X374) {
             image, error in
             DispatchQueue.main.async {
@@ -257,8 +249,7 @@ extension FavoritesViewController: UITableViewDataSource{
     }
 }
 
-
-extension FavoritesViewController: UITextFieldDelegate{
+extension FavoritesViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()

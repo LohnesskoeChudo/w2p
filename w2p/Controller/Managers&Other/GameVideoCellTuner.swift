@@ -5,15 +5,15 @@ import XCDYouTubeKit
 
 class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
     
-    static var imageLoader = ImageLoader()
-    weak var cell: GameVideoCompactCell?
-    var videoId: String
-    var video: XCDYouTubeVideo?
-    var player: AVPlayer?
-    var initialId: UUID?
-    var playerIsReadyToken: NSKeyValueObservation?
-    var playerStatusToken: NSKeyValueObservation?
-    var connectionIsLostToken: NSKeyValueObservation?
+    static var imageLoader = Resolver.shared.container.resolve(PImageLoader.self)!
+    private weak var cell: GameVideoCompactCell?
+    private var videoId: String
+    private var video: XCDYouTubeVideo?
+    private var player: AVPlayer?
+    private var initialId: UUID?
+    private var playerIsReadyToken: NSKeyValueObservation?
+    private var playerStatusToken: NSKeyValueObservation?
+    private var connectionIsLostToken: NSKeyValueObservation?
     
     init(cell: GameVideoCompactCell, videoId: String, parentVC: UIViewController) {
         self.videoId = videoId
@@ -58,7 +58,7 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         }
     }
 
-    func getYTvideo(completion: ((_ succes: Bool)->Void)? = nil) {
+    private func getYTvideo(completion: ((_ succes: Bool)->Void)? = nil) {
         XCDYouTubeClient.default().getVideoWithIdentifier(videoId) {
             video, error in
             
@@ -74,8 +74,7 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         }
     }
 
-    
-    func loadThumbnail() {
+    private func loadThumbnail() {
         if let thumbUrls = video?.thumbnailURLs, !thumbUrls.isEmpty {
             let url = thumbUrls.last!
             
@@ -114,9 +113,7 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         }
     }
     
-
     private func setPlayer(lowQualityMode: Bool = false) {
-        
         if lowQualityMode {
             guard let streamURL = video?.streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? video?.streamURLs[XCDYouTubeVideoQuality.HD720] ?? video?.streamURLs[XCDYouTubeVideoQuality.medium360.rawValue] ?? video?.streamURLs[XCDYouTubeVideoQuality.small240.rawValue] else { fatalError("No stream URL") }
            self.player = AVPlayer(url: streamURL)
@@ -128,7 +125,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         }
         
         player?.automaticallyWaitsToMinimizeStalling = false
-
         playerStatusToken?.invalidate()
         playerStatusToken = player?.observe(\.timeControlStatus , options: [.new]) { [weak self]
             
@@ -137,7 +133,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
                 self?.cell?.thumbView.image = nil
             }
         }
-        
         playerIsReadyToken?.invalidate()
         playerIsReadyToken = player?.observe(\.currentItem?.isPlaybackLikelyToKeepUp, options: [.new]) { [weak self]
             avvc , _ in
@@ -165,7 +160,6 @@ class GameVideoCellTuner: NSObject, AVPlayerViewControllerDelegate {
         playerIsReadyToken?.invalidate()
         playerStatusToken?.invalidate()
         connectionIsLostToken?.invalidate()
-        
     }
 }
 

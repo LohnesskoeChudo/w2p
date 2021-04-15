@@ -9,8 +9,8 @@ import UIKit
 
 class CategoryShowButton: UIControl {
     
+    @IBOutlet var nameLabel: UILabel!
     @IBOutlet private var contentView: UIView!
-    @IBOutlet private var nameLabel: UILabel!
     @IBOutlet private var imageView: UIImageView!
     
     var opened: Bool = false

@@ -8,8 +8,6 @@
 import UIKit
 
 class ThemeManager {
-    
-
     static weak var window: UIWindow? {
         didSet {
             updateUIAppearance()
@@ -17,7 +15,6 @@ class ThemeManager {
     }
         
     static func contentItemsHaveShadows(trait: UITraitCollection) -> Bool{
-        
         switch trait.userInterfaceStyle {
         case .dark:
             return false
@@ -26,7 +23,6 @@ class ThemeManager {
         default:
             return false
         }
-
     }
     
     static func colorForContentItemBackground(trait: UITraitCollection) -> UIColor {
@@ -169,8 +165,5 @@ class ThemeManager {
     static func updateUIAppearance() {
         window?.overrideUserInterfaceStyle = uiStyleForCurrentAppearanceMode()
     }
-    
-    
-
 }
 

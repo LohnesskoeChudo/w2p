@@ -8,18 +8,18 @@
 import UIKit
 class SearchViewController: GameBrowserController{
 
-    var panGestureRecognizer: UIPanGestureRecognizer!
+    private var panGestureRecognizer: UIPanGestureRecognizer!
+    private var initialAnimationExecuted = false
+    private var initialCall = true
+    private var gameRandomizer = GameRandomizer()
+    
     override var upperSpacing: CGFloat { searchBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height + 10 }
-    var initialAnimationExecuted = false
-    var gameRandomizer = GameRandomizer()
     
-    @IBOutlet weak var searchBar: UIVisualEffectView!
-    @IBOutlet weak var searchFieldBackground: UIView!
-    @IBOutlet weak var searchButton: UIButton!
-    @IBOutlet weak var searchField: UITextField!
-    
-    @IBOutlet weak var randomButton: UIButton!
-    
+    @IBOutlet private weak var searchBar: UIVisualEffectView!
+    @IBOutlet private weak var searchFieldBackground: UIView!
+    @IBOutlet private weak var searchButton: UIButton!
+    @IBOutlet private weak var searchField: UITextField!
+    @IBOutlet private weak var randomButton: UIButton!
     
     @IBAction private func searchButtonTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
@@ -45,6 +45,15 @@ class SearchViewController: GameBrowserController{
         }
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0{
+            self.searchBar.isHidden = false
+            UIView.animate(withDuration: 0.3, animations: {
+                self.searchBar.alpha = 1
+            })
+        }
+    }
+    
     private func prepareToLoad() {
         DispatchQueue.main.async {
             self.disableActionButtons()
@@ -63,7 +72,6 @@ class SearchViewController: GameBrowserController{
             }
         }
     }
-    
     
     private func presentRandomGames() {
         prepareToLoad()
@@ -94,22 +102,19 @@ class SearchViewController: GameBrowserController{
             self.afterLoad()
         }
     }
-    
-    
+
     @IBAction func filterTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
     }
     
     @IBAction func searchFieldEditingChanged(_ sender: UITextField) {
         searchFilter.searchString = sender.text
-        
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
     }
-    
-    var initialCall = true
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -121,7 +126,6 @@ class SearchViewController: GameBrowserController{
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if initialCall {
-            
             prepareForInitialAnimation()
             performInitialAnimation()
             initialCall = false
@@ -134,12 +138,10 @@ class SearchViewController: GameBrowserController{
             let navigationVC = segue.destination as! UINavigationController
             let filterVC = navigationVC.viewControllers.first as! FilterViewController
             filterVC.filter = searchFilter
-            
         case "detailed":
             let game = sender as! Game
             let detailedVC = segue.destination as! DetailedViewController
             detailedVC.game = game
-
         default:
             return
         }
@@ -164,21 +166,21 @@ class SearchViewController: GameBrowserController{
         }
     }
 
-    private func setupSearchBar(){
-        searchBar.layer.cornerRadius = searchBar.frame.height / 2
+    private func setupSearchBar() {
+        searchBar.layer.cornerRadius = searchBar.frame.height/2
         searchField.delegate = self
-        searchFieldBackground.layer.cornerRadius = searchFieldBackground.frame.height / 2
+        searchFieldBackground.layer.cornerRadius = searchFieldBackground.frame.height/2
         searchFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
     
-    private func setupGestureRecognizers(){
+    private func setupGestureRecognizers() {
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
         panGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(panGestureRecognizer)
         panGestureRecognizer.isEnabled = false
     }
     
-    @objc func pan(sender: UIPanGestureRecognizer){
+    @objc func pan(sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .ended:
             let yVelocity = sender.velocity(in: view).y
@@ -204,16 +206,6 @@ class SearchViewController: GameBrowserController{
         }
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-        if scrollView.contentOffset.y <= 0{
-            self.searchBar.isHidden = false
-            UIView.animate(withDuration: 0.3, animations: {
-                self.searchBar.alpha = 1
-            })
-        }
-    }
-    
     private func prepareForInitialAnimation() {
         infoContainer.isHidden = false
         infoContainer.alpha = 1
@@ -223,9 +215,8 @@ class SearchViewController: GameBrowserController{
         infoImageView.image = UIImage(named: "rocket")
         infoImageView.transform = CGAffineTransform(translationX: 0, y: (self.view.frame.height / 2 + infoImageView.frame.height))
     }
-    
 
-    func performInitialAnimation(completion: (() -> Void)? = nil) {
+    private func performInitialAnimation(completion: (() -> Void)? = nil) {
         disableActionButtons()
         UIView.animate(withDuration: 0.8, delay: 0, options: [.curveEaseOut]) {
             UIView.animate(withDuration: 0.3, delay: 0.7) {
@@ -237,7 +228,7 @@ class SearchViewController: GameBrowserController{
         }
     }
     
-    func finishInitialAnimation(completion: (()->Void)? = nil) {
+    private func finishInitialAnimation(completion: (()->Void)? = nil) {
         UIView.animate(withDuration: 0.45) {
             self.infoLabel.alpha = 0
             self.infoImageView.transform = CGAffineTransform(translationX: 0, y: -((self.view.frame.height / 2) + self.infoImageView.frame.height))
@@ -250,8 +241,7 @@ class SearchViewController: GameBrowserController{
 
 
 
-extension SearchViewController: UITextFieldDelegate{
-    
+extension SearchViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

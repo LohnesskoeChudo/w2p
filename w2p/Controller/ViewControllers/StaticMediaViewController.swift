@@ -12,7 +12,7 @@ class StaticMediaViewController: UIViewController {
     var staticMedia: [MediaDownloadable]!
     var currentPage: Int!
     
-    private let mediaDispatcher = MediaDispatcher()
+    private let mediaDispatcher = Resolver.shared.container.resolve(PMediaDispatcher.self)!
     
     @IBOutlet weak var pageCounter: UILabel!
     @IBOutlet weak var backButton: CustomButton!
@@ -71,11 +71,9 @@ extension StaticMediaViewController: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCell
         
         let media = staticMedia[indexPath.item]
-        
         setup(cell: cell, with: media)
         cell.reloadAction = { [weak self, cell, media] in
             self?.setup(cell: cell, with: media)
@@ -84,7 +82,6 @@ extension StaticMediaViewController: UICollectionViewDataSource {
         return cell
     }
     
-
     private func setup(cell: StaticMediaCell, with media: MediaDownloadable) {
         cell.id = UUID()
         cell.startLoadingAnimation()

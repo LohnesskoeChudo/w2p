@@ -9,8 +9,7 @@ import Foundation
 
 
 extension Array {
-    
-    
+
     func growingOrderedSubarrays() -> [[Element]] {
         var result = [[Element]]()
         for index in self.indices{
@@ -18,5 +17,4 @@ extension Array {
         }
         return result
     }
-
 }

@@ -11,8 +11,8 @@ class DoubleSlider: UIControl{
 
     weak var delegate: DoubleSliderDelegate?
     
-    private var upperValue: CGFloat
-    private var lowerValue: CGFloat
+    var upperValue: CGFloat
+    var lowerValue: CGFloat
     private var maxValue: CGFloat
     private var minValue: CGFloat
     private let track = CALayer()
@@ -40,6 +40,14 @@ class DoubleSlider: UIControl{
         fatalError("init(coder:) is not implemented")
     }
     
+    func updateAppeareance() {
+        track.frame = bounds.insetBy(dx: sizeForThumb.width/2, dy: bounds.height/4)
+        track.cornerRadius = bounds.height/4
+        updateThumbsFrames()
+        upperThumb.cornerRadius = upperThumb.bounds.width/2
+        lowerThumb.cornerRadius = lowerThumb.bounds.width/2
+    }
+    
     override func layoutSubviews() {
         updateAppeareance()
     }
@@ -63,14 +71,6 @@ class DoubleSlider: UIControl{
         addGestureRecognizer(panGestureRecognizer)
     }
 
-    private func updateAppeareance() {
-        track.frame = bounds.insetBy(dx: sizeForThumb.width/2, dy: bounds.height/4)
-        track.cornerRadius = bounds.height/4
-        updateThumbsFrames()
-        upperThumb.cornerRadius = upperThumb.bounds.width/2
-        lowerThumb.cornerRadius = lowerThumb.bounds.width/2
-    }
-    
     private func updateThumbsFrames() {
         upperThumb.frame = CGRect(origin: upperThumbOrigin(for: upperValue) , size: sizeForThumb)
         lowerThumb.frame = CGRect(origin: lowerThumbOrigin(for: lowerValue), size: sizeForThumb)

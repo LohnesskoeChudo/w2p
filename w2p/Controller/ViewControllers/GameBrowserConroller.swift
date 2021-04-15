@@ -9,24 +9,23 @@ import UIKit
 
 class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDelegate {
 
-    
-    var gamesSource = FifoQueue<Game>()
-    var games = [Game]()
-    let searchFilter = SearchFilter()
-    let jsonLoader = JsonLoader()
-    let mediaDispatcher = MediaDispatcher()
-    let imageResizer = ImageResizer()
-    var columnWidth: CGFloat {
+    internal var games = [Game]()
+    internal let searchFilter = SearchFilter()
+    internal let mediaDispatcher = Resolver.shared.container.resolve(PMediaDispatcher.self)!
+    internal let requestFormer = Resolver.shared.container.resolve(PRequestFormer.self)!
+    internal var footerImageView: UIImageView!
+    internal var gameApiRequestItem: GameApiRequestItem?
+    internal var currentOffset = 0
+    internal var feedStep = 50
+    internal var gamesPerRequest = 500
+    internal var isLoading = false
+    private var gamesSource = FifoQueue<Game>()
+    private let jsonLoader = Resolver.shared.container.resolve(PJsonLoader.self)!
+    private let imageResizer = ImageResizer()
+    private var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth
     }
-    var footer: UIControl!
-    var footerImageView: UIImageView!
-    var gameApiRequestItem: GameApiRequestItem?
-    var currentOffset = 0
-    var feedStep = 50
-    var gamesPerRequest = 500
-    var isLoading = false
-    
+
     lazy var afterLoadApiItemAction: (() -> Void)? = {
         self.currentOffset += self.gamesPerRequest
         self.gameApiRequestItem?.offset = self.currentOffset
@@ -36,7 +35,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     @IBOutlet weak var infoImageView: UIImageView!
     @IBOutlet weak var infoLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
-    
     
     func refreshGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil) {
         
@@ -60,15 +58,12 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
             }
         }
     }
-    
-    
-    
 
     func loadGames(withAnimation: Bool, completion: ((Bool) -> Void)? = nil){
         isLoading = true
         if games.isEmpty { collectionView.isScrollEnabled = false }
         guard let gameApiRequestItem = gameApiRequestItem else { return }
-        let request = RequestFormer.shared.formRequest(with: gameApiRequestItem)
+        let request = requestFormer.formRequest(with: gameApiRequestItem)
         
         let action = {
             (games: [Game]?, error: NetworkError?) in
@@ -88,16 +83,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                     self.gamesSource.push(array: games)
                     self.endAnimationsLoading(){
                         self.appendToFeed(newGames: self.gamesSource.pop(numOfElements: self.feedStep), withAnimation: withAnimation){
-                            
-                            
                             self.afterLoadApiItemAction?()
-                            
                             /*
                             self.currentOffset += self.gamesPerRequest
                             self.gameApiRequestItem?.offset = self.currentOffset
                             */
-                            
-                            
                             completion?(true)
                             self.collectionView.isScrollEnabled = true
                             self.isLoading = false
@@ -113,7 +103,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
                 }
             }
         }
-        
         hideInfoMessages() {
             self.startAnimationLoading(){
                 self.jsonLoader.load(request: request, completion: action)
@@ -157,7 +146,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         completion?()
     }
     
-
     private func showInfoMessage(type: InfoMessage, completion: (() -> Void)? = nil){
         switch type {
         case .connectionError:
@@ -180,7 +168,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         }
     }
 
-    
     private func hideInfoMessages(completion: (()->Void)? = nil ){
         if !infoContainer.isHidden {
             UIView.animate(withDuration: 0.3) {
@@ -207,7 +194,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     private func startAnimationLoadingWithNoItems(completion: (()->Void)? = nil){
         
         infoLabel.text = "Loading"
-        
         infoImageView.image = UIImage(named: "gamepad")
         infoContainer.alpha = 0
         infoContainer.isHidden = false
@@ -237,13 +223,11 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     
     private func endAnimationLoadingWithNoItems(completion: (() -> Void)? = nil){
         DispatchQueue.main.async {
-            
             /*
             guard !self.infoContainer.isHidden else {
                 completion?()
                 return
             }*/
-            
             UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState]) {
                 self.infoContainer.alpha = 0
             } completion: { _ in
@@ -263,7 +247,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         completion?()
     }
     
-    
     private func endAnimationsLoading(completion: (()->Void)? = nil){
         if games.isEmpty {
             endAnimationLoadingWithNoItems(completion: completion)
@@ -279,8 +262,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         NotificationCenter.default.addObserver(self, selector: #selector(updateAnimations), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
-
-    func setupCollectionView(){
+    func setupCollectionView() {
         collectionView.register(HeaderWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
         
         collectionView.register(FooterWaterfallLayoutView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "footer")
@@ -297,7 +279,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         updateAnimations()
     }
     
-    @objc private func updateAnimations(){
+    @objc private func updateAnimations() {
         if self.isLoading {
             startAnimationLoading()
         }
@@ -343,7 +325,6 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
         }
     }
     
-
     func setup(header: HeaderWaterfallLayoutView) {}
     func setup(footer: FooterWaterfallLayoutView) {}
     
@@ -371,14 +352,9 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var headerHeight: CGFloat? {
         nil
     }
-    
-    
-    
 }
 
-
-extension GameBrowserController: UICollectionViewDelegate{
-
+extension GameBrowserController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.item == max(0,games.count - 10){
             if !isLoading{
@@ -394,16 +370,12 @@ extension GameBrowserController: UICollectionViewDelegate{
 
 
 extension GameBrowserController: UICollectionViewDataSource {
-    
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let gameCardCell = cell as? GameCardCell, indexPath.item == 0 {
             gameCardCell.endContentLoadingAnimation()
         }
     }
-    
-    
 
-    
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "header", for: indexPath) as! HeaderWaterfallLayoutView
@@ -416,7 +388,6 @@ extension GameBrowserController: UICollectionViewDataSource {
         }
     }
     
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
@@ -435,10 +406,7 @@ extension GameBrowserController: UICollectionViewDataSource {
         return cardCell
     }
     
-    
-    
-    
-    func configureCell(_ cell: GameCardCell, game: Game){
+    func configureCell(_ cell: GameCardCell, game: Game) {
         cell.id = game.id ?? -1
         cell.customContent.label.text = game.name
         let action = { [weak self] in
@@ -448,7 +416,7 @@ extension GameBrowserController: UICollectionViewDataSource {
         cell.setActionToControl(action: action)
     }
     
-    func setCoverToCardCell(_ cell: GameCardCell, game: Game){
+    func setCoverToCardCell(_ cell: GameCardCell, game: Game) {
         cell.customContent.imageView.alpha = 0
         guard let cover = game.cover else { return }
         cell.startContentLoadingAnimation()

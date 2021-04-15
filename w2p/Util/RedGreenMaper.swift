@@ -21,5 +21,4 @@ class RedGreenMaper {
         let percentage = value / (maxValue - minValue)
         return UIColor(hue: CGFloat(percentage) * (1/3), saturation: 1, brightness: 1, alpha: 1)
     }
-
 }

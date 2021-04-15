@@ -8,7 +8,6 @@
 import Foundation
 
 class FifoQueue<T> {
-        
     var queue: LinkedList<T>
     
     init(array: [T]){
@@ -59,5 +58,4 @@ class FifoQueue<T> {
     var isEmpty: Bool {
         count == 0
     }
-    
 }

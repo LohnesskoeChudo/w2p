@@ -87,19 +87,13 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         
         return CGSize(width: contentWidth, height: height)
     }
-    
 
-    
     //MARK: - using binary search to find elements
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        
-
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
-        
         if let headerAttrs = headerAttrs, headerAttrs.frame.intersects(rect) {
             visibleLayoutAttributes.append(headerAttrs)
         }
-
         if cache.count > 0 {
             let indexOfPredecessorOfFirstVisibleItem = customBinarySearch(collection: cache,trueProperty: {
                 index in
@@ -122,7 +116,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
             } else {
                 index = 0
             }
-    
             let lowerRectBoundOffset = rect.height + rect.origin.y
             var currentAttrs: UICollectionViewLayoutAttributes = cache[index]
             while currentAttrs.frame.origin.y < lowerRectBoundOffset{
@@ -186,7 +179,6 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         return nil
     }
     
-
     override class var invalidationContextClass: AnyClass {
         WFLayoutInvalidationContext.self
     }
@@ -223,20 +215,13 @@ class WaterfallCollectionViewLayout: UICollectionViewLayout{
         attrs.alpha = 0
         return attrs
     }
-
 }
 
 
 protocol WaterfallCollectionViewLayoutDelegate: AnyObject {
-    
-    func heightForCell(at indexPath: IndexPath) -> CGFloat
-    
     var numberOfColumns: Int {get}
-    
     var spacing: CGFloat {get}
-    
     var upperSpacing: CGFloat {get}
-    
     var headerHeight: CGFloat? {get}
-    
+    func heightForCell(at indexPath: IndexPath) -> CGFloat
 }

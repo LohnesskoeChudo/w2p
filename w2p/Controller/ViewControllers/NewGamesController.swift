@@ -9,21 +9,20 @@ import UIKit
 
 class NewGamesController: GameBrowserController {
     
+    private var panGestureRecognizer: UIPanGestureRecognizer!
+    private var initialLoad = true
+
+    @IBOutlet weak var reloadButton: CustomButton!
+    
+    @IBAction func reloadTapped(_ sender: CustomButton) {
+        reloadGames()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(true, animated: false)
         setupRequestItem()
         setupGestureRecognizers()
-    }
-    
-    var panGestureRecognizer: UIPanGestureRecognizer!
-    var initialLoad = true
-    
-    
-    @IBOutlet weak var reloadButton: CustomButton!
-    @IBAction func reloadTapped(_ sender: CustomButton) {
-        reloadGames()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -39,12 +38,10 @@ class NewGamesController: GameBrowserController {
         disableReloadButton()
         refreshGames(withAnimation: true) {
             success in
-            
             if success, !self.games.isEmpty {
                 self.panGestureRecognizer.isEnabled = true
             }
             self.enableReloadButton()
-
         }
         initialLoad = false
     }
@@ -68,8 +65,7 @@ class NewGamesController: GameBrowserController {
         reloadButton.layer.cornerRadius = reloadButton.frame.height / 2
     }
     
-    
-    private func setupGestureRecognizers(){
+    private func setupGestureRecognizers() {
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
         panGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(panGestureRecognizer)
@@ -103,7 +99,6 @@ class NewGamesController: GameBrowserController {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
         if scrollView.contentOffset.y <= 0{
             self.reloadButton.isHidden = false
             UIView.animate(withDuration: 0.3, animations: {
@@ -111,18 +106,14 @@ class NewGamesController: GameBrowserController {
             })
         }
     }
-    
-    
+
     override var headerHeight: CGFloat? {
         70
     }
     
-    
-    
     override func setup(header: HeaderWaterfallLayoutView) {
         header.label.text = "New Games"
     }
-    
     
     private func setupRequestItem() {
         gameApiRequestItem = GameApiRequestItem.formRequestItemForNewAvailableGames()
@@ -139,7 +130,7 @@ class NewGamesController: GameBrowserController {
     }
 }
 
-extension NewGamesController: UIGestureRecognizerDelegate{
+extension NewGamesController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }

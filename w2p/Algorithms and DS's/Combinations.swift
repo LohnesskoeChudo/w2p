@@ -7,9 +7,8 @@
 
 import Foundation
 
-
 // combinations(sequense: [1,2,3,4], k:3) -> [[1,2,3], [1,2,4], [1,3,4], [2,3,4]]
-func combinations<T>(collection: T, k: Int) -> [[T.Element]]? where T: RandomAccessCollection, T.Index == Int{
+func combinations<T>(collection: T, k: Int) -> [[T.Element]]? where T: RandomAccessCollection, T.Index == Int {
     var result = [[T.Element]]()
     let n = collection.count
     if k > n {

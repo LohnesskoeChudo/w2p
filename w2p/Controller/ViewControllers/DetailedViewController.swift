@@ -11,11 +11,14 @@ class DetailedViewController: UIViewController{
     
     var game: Game!
     var shouldUpdate: Bool = false
-
-    var mediaDispatcher = GameMediaDispatcher()
-    var imageBlurrer = ImageBlurrer()
-    var staticMediaContent = [MediaDownloadable]()
-    var videoMediaContent = [Video]()
+    
+    private var isLoading = false
+    private var mediaDispatcher = Resolver.shared.container.resolve(PMediaDispatcher.self)!
+    private var gameDispatcher = Resolver.shared.container.resolve(PGameDispatcher.self)!
+    private var cacheManager = Resolver.shared.container.resolve(PCacheManager.self)!
+    private var imageBlurrer = ImageBlurrer()
+    private var staticMediaContent = [MediaDownloadable]()
+    private var videoMediaContent = [Video]()
     
     var isMediaSectionAvailable: Bool {
         if let videos = game.videos, !videos.isEmpty {
@@ -30,7 +33,6 @@ class DetailedViewController: UIViewController{
         return false
     }
    
-    
     @IBOutlet weak var ratingVIew: LineRatingView!
     @IBOutlet weak var firstReleaseContainer: UIView!
     @IBOutlet weak var firstReleaseLabel: UILabel!
@@ -75,11 +77,9 @@ class DetailedViewController: UIViewController{
         DispatchQueue.global(qos: .userInteractive).async {
             let dispatchGroup = DispatchGroup()
             var activityItems = [Any]()
-
             if let websiteStr = self.game.websites?.first?.url, let siteUrl = URL(string: websiteStr) {
                 activityItems.append(siteUrl)
             }
-            
             if let name = self.game.name {
                 if let description = self.game.summary {
                     activityItems.append("\(name)\n\n\(description)")
@@ -87,7 +87,6 @@ class DetailedViewController: UIViewController{
                     activityItems.append(name)
                 }
             }
-            
             dispatchGroup.enter()
             DispatchQueue.global(qos: .userInteractive).async {
                 if let cover = self.game.cover {
@@ -136,10 +135,8 @@ class DetailedViewController: UIViewController{
             game.inFavorites = true
         }
         updateFavoritesButton(animated: true)
-        mediaDispatcher.save(game: game)
+        cacheManager.save(game: game, completion: nil)
     }
-    
-
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
@@ -160,7 +157,6 @@ class DetailedViewController: UIViewController{
         }
     }
    
-    
     // MARK: -IMPLEMENT
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,7 +167,6 @@ class DetailedViewController: UIViewController{
             //updateGame()
         }
         setupUI()
-        
     }
     
     private func updateAnimationsIfNeeded() {
@@ -185,16 +180,15 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    // set favorites
+    // MARK: -Set favorites
     private func updateGame() {
         guard let id = game.id else { return }
         DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 2) {
-            self.mediaDispatcher.updateGame(id: id)
+            self.gameDispatcher.updateGame(id: id, completion: nil)
         }
     }
-    ///////////////////////////
-    
-    private func setupUI(){
+
+    private func setupUI() {
         updateFavoritesButton(animated: false)
         setupNameLabel()
         setupRating()
@@ -208,8 +202,7 @@ class DetailedViewController: UIViewController{
         setupWebsites()
     }
     
-    
-    private func setupRating(){
+    private func setupRating() {
         if let rating = game.totalRating, rating > 0 {
             ratingVIew.rating = rating
         } else {
@@ -217,10 +210,10 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setupGameMetadata(completion: @escaping (_ success: Bool)->Void){
+    private func setupGameMetadata(completion: @escaping (_ success: Bool)->Void) {
         guard let id = game.id else { return }
         DispatchQueue.global(qos: .userInteractive).async {
-            self.mediaDispatcher.loadGame(with: id) {
+            self.cacheManager.loadGame(with: id) {
                 dbGame, error in
                 if let dbGame = dbGame {
                     self.game.inFavorites = dbGame.inFavorites
@@ -231,13 +224,10 @@ class DetailedViewController: UIViewController{
             }
         }
     }
-    
-    
-    
+
     private func setupUIAfterLoadingGameMetadata() {
         updateFavoritesButton(animated: true)
     }
-    
     
     private func updateFavoritesButton(animated: Bool) {
         DispatchQueue.main.async {
@@ -254,8 +244,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    
-    var laidOut = false
+    private var laidOut = false
     override func viewWillAppear(_ animated: Bool) {
         updateAnimationsIfNeeded()
         print(view.frame)
@@ -265,7 +254,6 @@ class DetailedViewController: UIViewController{
             layoutMedia(newWidth: view.frame.width)
             laidOut = true
         }
-
         setupGameMetadata() {
             success in
             if success {
@@ -274,11 +262,9 @@ class DetailedViewController: UIViewController{
         }
     }
 
-    private func setupMedia(){
+    private func setupMedia() {
         mediaCollectionView.delegate = self
         mediaCollectionView.dataSource = self
-        
-        
         if let videos = game.videos {
             videoMediaContent += videos
         }
@@ -296,9 +282,8 @@ class DetailedViewController: UIViewController{
 
     }
     
-    private func setupSecondaryInfo(){
-        
-        if let releaseDate = game.firstReleaseDate{
+    private func setupSecondaryInfo() {
+        if let releaseDate = game.firstReleaseDate {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMMM yyyy"
             let dateStr = dateFormatter.string(from: releaseDate)
@@ -318,15 +303,13 @@ class DetailedViewController: UIViewController{
         } else {
             categoryContainer.isHidden = true
         }
-        
-        if let companies = game.involvedCompanies?.compactMap({$0.company}){
+        if let companies = game.involvedCompanies?.compactMap({$0.company}) {
             let lowerIdCompany = companies.min(by: { first, second in (first.id ?? 0) < (second.id ?? 0)})
             companyLabel.text = lowerIdCompany?.name
 
         } else {
             companyContainer.isHidden = true
         }
-        
         if let engines = game.gameEngines {
             let lowerIdEngine = engines.min(by: {first, second in (first.id ?? 0) < (second.id ?? 0)})
             gameEngineLabel.text = lowerIdEngine?.name
@@ -335,7 +318,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setupWebsites(){
+    private func setupWebsites() {
         websitesFlowView.superview?.isHidden = true
         if let sites = game.websites {
             if !sites.isEmpty {
@@ -356,7 +339,7 @@ class DetailedViewController: UIViewController{
         websitesOpeningButton.superview?.isHidden = true
     }
     
-    private func setupWebsiteButton(website: Website, index: Int) -> UIView?{
+    private func setupWebsiteButton(website: Website, index: Int) -> UIView? {
         guard let siteCategory = website.category, let websiteName = WebsiteCategory(rawValue: siteCategory)?.name else { return nil }
         let button = CustomButton()
         button.tag = index
@@ -384,7 +367,7 @@ class DetailedViewController: UIViewController{
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
-    private func setupWebsitesFlow(with views: [UIView]){
+    private func setupWebsitesFlow(with views: [UIView]) {
         for view in views {
             websitesFlowView.addSubview(view)
         }
@@ -392,7 +375,7 @@ class DetailedViewController: UIViewController{
         websitesFlowView.layoutIfNeeded()
     }
     
-    private func setupMediaCounter(){
+    private func setupMediaCounter() {
         updateMediaCounter()
     }
     
@@ -401,7 +384,7 @@ class DetailedViewController: UIViewController{
         mediaCollectionView.collectionViewLayout.invalidateLayout()
     }
     
-    private func setupNavigationButtons(){
+    private func setupNavigationButtons() {
         if GameApiRequestItem.similarGamesRequestAvailableFor(game: game) {
             similarGamesButton.textLabel.text = "Similar games"
         } else {
@@ -419,8 +402,8 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setupNameLabel(){
-        if let gameName = game.name{
+    private func setupNameLabel() {
+        if let gameName = game.name {
             nameLabel.text = gameName
             nameLabel.font = UIFont.boldSystemFont(ofSize: 25)
         } else {
@@ -428,23 +411,23 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func setupSummaryLabel(){
-        if let summary = game.summary{
+    private func setupSummaryLabel() {
+        if let summary = game.summary {
             summaryLabel.text = summary
         } else {
             summaryLabel.superview?.isHidden = true
         }
     }
     
-    private func setupStorylineLabel(){
-        if let storyline = game.storyline{
+    private func setupStorylineLabel() {
+        if let storyline = game.storyline {
             storylineLabel.text = storyline
         } else {
             storylineLabel.superview?.isHidden = true
         }
     }
     
-    private func setupGameAttributesViews(){
+    private func setupGameAttributesViews() {
         for subview in attributesFlowView.subviews {
             subview.removeFromSuperview()
         }
@@ -461,7 +444,7 @@ class DetailedViewController: UIViewController{
             themeAttr.setup(text: theme.name ?? "", color: color)
             gameAttrs.append(themeAttr)
         }
-        for mode in game.gameModes ?? []{
+        for mode in game.gameModes ?? [] {
             let modeAttr = GameAttributeView()
             let color = ThemeManager.colorForGameModeAttribute(trait: traitCollection)
             modeAttr.setup(text: mode.name ?? "", color: color)
@@ -477,7 +460,7 @@ class DetailedViewController: UIViewController{
         if gameAttrs.isEmpty {
             attributesContainer.isHidden = true
         } else {
-            for attrView in gameAttrs{
+            for attrView in gameAttrs {
                 attrView.translatesAutoresizingMaskIntoConstraints = false
                 attributesFlowView.addSubview(attrView)
             }
@@ -487,9 +470,7 @@ class DetailedViewController: UIViewController{
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         setupGameAttributesViews()
     }
-    
-    var isLoading = false
-    
+   
     private func addBlinkAnimationTo(layer: CALayer) {
         
         let animation = CABasicAnimation(keyPath: "backgroundColor")
@@ -503,7 +484,7 @@ class DetailedViewController: UIViewController{
     }
     
 
-    private func setupCover(){
+    private func setupCover() {
         self.coverView.contentMode = .scaleAspectFit
         setDefaultMediaAppearance()
         guard let cover = game.cover else {
@@ -551,7 +532,7 @@ class DetailedViewController: UIViewController{
         if isMediaSectionAvailable {
             DispatchQueue.main.async {
                 let width = self.view.frame.width / 2
-                DispatchQueue.global(qos: .userInteractive).async{
+                DispatchQueue.global(qos: .userInteractive).async {
                     let backgroundImage = UIImage(named: "mediaBackground")!
                     let resized = ImageResizer.resizeImageToFit(width: width, image: backgroundImage)
                     let blurred = self.imageBlurrer.blurImage(with: resized, radius: 10)
@@ -597,16 +578,12 @@ class DetailedViewController: UIViewController{
         
     }
     
-    private func layoutCover(size: CGSize){
-        
+    private func layoutCover(size: CGSize) {
         let heightPercentage: CGFloat = 0.58
-            
-        
         let padding: CGFloat = 20
 
         guard let aspect = game.cover?.aspect else { return }
         if CGFloat(aspect) > (size.height * heightPercentage) / size.width {
-
             let estimatedHeight = size.height * heightPercentage
             let estimatedWidth = (1 / CGFloat(aspect)) * estimatedHeight
             let maxWidth = size.width - 2 * padding
@@ -616,8 +593,6 @@ class DetailedViewController: UIViewController{
             } else {
                 coverHeightConstraint.constant = estimatedWidth * CGFloat(aspect)
             }
-            
-            
         } else {
             let width = size.width - (2 * padding)
             coverWidthConstraint.constant = width
@@ -625,7 +600,7 @@ class DetailedViewController: UIViewController{
         }
     }
     
-    private func updateMediaCounter(){
+    private func updateMediaCounter() {
         let pageNumber = getMediaPageNumber()
         mediaCounterLabel.text = "\(pageNumber) / \(staticMediaContent.count + videoMediaContent.count)"
     }
@@ -639,7 +614,7 @@ class DetailedViewController: UIViewController{
 }
 
 
-extension DetailedViewController: UICollectionViewDelegateFlowLayout{
+extension DetailedViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: view.bounds.width, height: view.bounds.width * 500 / 889 )
     }
@@ -653,63 +628,54 @@ extension DetailedViewController: UICollectionViewDelegateFlowLayout{
             videoCell.pauseVideo()
         }
     }
-
 }
 
 extension DetailedViewController: UICollectionViewDataSource{
-    
-
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return staticMediaContent.count + videoMediaContent.count
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        
-      if indexPath.item >= videoMediaContent.count{
-            let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCompactCell
-            
-            let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
-            staticMediaCell.id = UUID()
-            staticMediaCell.tapAction = { [weak self] in
-                
-                if let pageNumber = self?.getMediaPageNumber() {
-                    self?.performSegue(withIdentifier: "staticMedia", sender: pageNumber)
-                }
-                
-                
-            }
-            setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
-            return staticMediaCell
-            
-            
-       } else {
-            let videoMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCompactCell", for: indexPath) as! GameVideoCompactCell
-
-            if let videoId = videoMediaContent[indexPath.item].videoId  {
-                let tuner = GameVideoCellTuner(cell: videoMediaCell, videoId: videoId, parentVC: self)
-                videoMediaCell.tuner = tuner
-                tuner.setup()
-            }
-            return videoMediaCell
-       }
+        if indexPath.item >= videoMediaContent.count{
+            return preparedStaticMediaCell(collectionView: collectionView, indexPath: indexPath)
+        } else {
+            return preparedVideoMediaCell(collectionView: collectionView, indexPath: indexPath)
+        }
     }
     
-    func setStaticContent(staticMedia: MediaDownloadable, cell: GameMediaCell){
-        
+    private func preparedStaticMediaCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let staticMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "staticMediaCell", for: indexPath) as! StaticMediaCompactCell
+        let staticMedia = staticMediaContent[indexPath.item - videoMediaContent.count]
+        staticMediaCell.id = UUID()
+        staticMediaCell.tapAction = { [weak self] in
+            if let pageNumber = self?.getMediaPageNumber() {
+                self?.performSegue(withIdentifier: "staticMedia", sender: pageNumber)
+            }
+        }
+        setStaticContent(staticMedia: staticMedia, cell: staticMediaCell)
+        return staticMediaCell
+    }
+    
+    private func preparedVideoMediaCell(collectionView: UICollectionView, indexPath: IndexPath) -> UICollectionViewCell {
+        let videoMediaCell = collectionView.dequeueReusableCell(withReuseIdentifier: "videoCompactCell", for: indexPath) as! GameVideoCompactCell
+
+        if let videoId = videoMediaContent[indexPath.item].videoId  {
+            let tuner = GameVideoCellTuner(cell: videoMediaCell, videoId: videoId, parentVC: self)
+            videoMediaCell.tuner = tuner
+            tuner.setup()
+        }
+        return videoMediaCell
+    }
+    
+    private func setStaticContent(staticMedia: MediaDownloadable, cell: GameMediaCell){
         let id = cell.id
         let width = mediaCollectionView.frame.width
         cell.isLoading = true
         cell.startLoadingAnimation()
-        
-        print(id)
         self.mediaDispatcher.fetchPreparedToSetStaticMedia(with: staticMedia, targetWidth: width, sizeKey: .S889X500){
             image, error in
             if let image = image {
                 DispatchQueue.main.async {
-                    print(cell.id)
                     if id == cell.id {
                         cell.setupStaticMediaView(image: image)
                     }

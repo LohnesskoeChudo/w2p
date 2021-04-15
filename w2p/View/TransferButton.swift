@@ -7,7 +7,7 @@ import UIKit
 class TransferButton: UIControl {
     
     @IBOutlet weak private var contentView: UIView!
-    @IBOutlet weak private var textLabel: UILabel!
+    @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak private var imageView: UIImageView!
     
     override init(frame: CGRect) {

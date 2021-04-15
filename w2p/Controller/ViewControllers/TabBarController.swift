@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController{
+class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         selectedIndex = 1

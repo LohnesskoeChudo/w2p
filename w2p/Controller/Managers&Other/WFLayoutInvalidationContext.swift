@@ -8,7 +8,6 @@
 import UIKit
 
 class WFLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
-    
     var action: WFInvalidationAction?
     var indexPaths: [IndexPath]?
 }

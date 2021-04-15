@@ -10,7 +10,7 @@ import UIKit
 class StaticMediaCompactCell: GameMediaCell {
     
     var tapAction: (() -> Void)?
-    let tapRecognizer = UITapGestureRecognizer()
+    private let tapRecognizer = UITapGestureRecognizer()
     
     @IBOutlet weak var mediaView: UIImageView! {
         didSet {

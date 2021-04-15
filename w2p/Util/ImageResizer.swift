@@ -21,5 +21,4 @@ class ImageResizer {
             image.draw(in: rect)
         }
     }
-    
 }

@@ -10,7 +10,7 @@ protocol PRequestFormer {
 
 class RequestFormer: PRequestFormer{
     
-    static var shared = Resolver.shared.container.resolve(PRequestFormer.self)!
+    static var shared = RequestFormer()
     private var apiStr = "https://api.igdb.com/v4/games/"
     lazy private var api = URL(string: apiStr)!
     

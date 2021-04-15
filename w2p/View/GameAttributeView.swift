@@ -9,10 +9,10 @@ import UIKit
 
 class GameAttributeView: UIControl {
     
+    var attrSelected: Bool = false
     private var label = UILabel(frame: .zero)
     private let horizontalPadding: CGFloat = 15
     private let verticalPadding: CGFloat = 7
-    private var attrSelected: Bool = false
     private var backColor: UIColor!
 
     override init(frame: CGRect) {
@@ -30,7 +30,6 @@ class GameAttributeView: UIControl {
         label.translatesAutoresizingMaskIntoConstraints = false
         self.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
-        
     }
     
     

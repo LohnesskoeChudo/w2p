@@ -8,10 +8,9 @@
 import Foundation
 
 class LifoQueue<T> {
-        
     var queue: LinkedList<T>
     
-    init(array: [T]){
+    init(array: [T]) {
         self.queue = LinkedList(array: array)
     }
 
@@ -20,21 +19,21 @@ class LifoQueue<T> {
     }
     
 
-    func pop() -> T?{
+    func pop() -> T? {
         queue.popBack()
     }
     
-    func push(element: T){
+    func push(element: T) {
         queue.appendToBack(element)
     }
     
-    func push(array: [T]){
+    func push(array: [T]) {
         for item in array{
             push(element: item)
         }
     }
     
-    func pop(numOfElements: Int) -> [T]{
+    func pop(numOfElements: Int) -> [T] {
         let numOfElements = min(self.count, numOfElements)
         var result = [T]()
         
@@ -48,7 +47,7 @@ class LifoQueue<T> {
         return result
     }
     
-    func clear(){
+    func clear() {
         self.queue = LinkedList()
     }
     

@@ -8,7 +8,6 @@
 import UIKit
 
 class FeedbackManager {
-    
     static let feedBackGenerator = UIImpactFeedbackGenerator(style: .light)
     
     static func generateFeedbackForButtonsTapped() {

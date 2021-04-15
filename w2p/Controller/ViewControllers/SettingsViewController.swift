@@ -9,27 +9,29 @@ import UIKit
 
 class SettingsViewController: UIViewController{
     
-    let mediaDispatcher = MediaDispatcher()
+    private let mediaDispatcher = Resolver.shared.container.resolve(PMediaDispatcher.self)!
+    private let cacheManager = Resolver.shared.container.resolve(PCacheManager.self)!
     
-    @IBOutlet weak var hapticSwitch: UISwitch!
-    @IBOutlet weak var darkModeSwitch: UISwitch!
-    @IBOutlet weak var cacheImagesSizeLabel: UILabel!
+    @IBOutlet private weak var hapticSwitch: UISwitch!
+    @IBOutlet private weak var heartImage: UIImageView!
+    @IBOutlet private weak var darkModeSwitch: UISwitch!
+    @IBOutlet private weak var cacheImagesSizeLabel: UILabel!
     
-    @IBAction func hapticFeedbackSwitched(_ sender: UISwitch) {
+    @IBAction private func hapticFeedbackSwitched(_ sender: UISwitch) {
         GlobalSettings.shared.hapticFeedback.toggle()
     }
     
-    @IBAction func darkModeSwitched(_ sender: UISwitch) {
+    @IBAction private func darkModeSwitched(_ sender: UISwitch) {
         GlobalSettings.shared.darkMode.toggle()
         ThemeManager.updateUIAppearance()
     }
     
-    @IBAction func clearFavoritesTapped(_ sender: UIButton) {
+    @IBAction private func clearFavoritesTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         showClearFavoritesAVController()
     }
     
-    @IBAction func clearCacheTapped(_ sender: UIButton) {
+    @IBAction private func clearCacheTapped(_ sender: UIButton) {
         FeedbackManager.generateFeedbackForButtonsTapped()
         showClearCacheAVController()
     }
@@ -50,9 +52,6 @@ class SettingsViewController: UIViewController{
         cacheImagesSizeLabel.text = "\(String(format: "%.1f", cacheImagesSize)) Mb"
     }
     
-    @IBOutlet weak var heartImage: UIImageView!
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         heartImage.alpha = 0
@@ -66,42 +65,37 @@ class SettingsViewController: UIViewController{
     
     @objc private func startHeartAnimation(){
         let animation = CABasicAnimation(keyPath: "transform.scale")
-        
         animation.duration = 1.2
         animation.autoreverses = true
         animation.fromValue = 1
         animation.toValue = 0.8
         animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         animation.repeatCount = .infinity
-        
         heartImage.layer.add(animation, forKey: "beating animation")
         UIView.animate(withDuration: 0.65) {
             self.heartImage.alpha = 1
         }
-        
     }
     
-    
-    private func showClearFavoritesAVController(){
+    private func showClearFavoritesAVController() {
         let avc = UIAlertController(title: nil , message: "Do you really want to clear favorites?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel , handler: nil)
         avc.addAction(cancelAction)
         let confirmAction = UIAlertAction(title: "Delete", style: .destructive) {
             _ in
-            self.mediaDispatcher.clearFavorites()
-            
+            self.cacheManager.clearFavorites(completion: nil)
         }
         avc.addAction(confirmAction)
         present(avc, animated: true, completion: nil)
     }
     
-    private func showClearCacheAVController(){
+    private func showClearCacheAVController() {
         let avc = UIAlertController(title: nil, message: "Do you really want to clear cache?", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel , handler: nil)
         avc.addAction(cancelAction)
         let confirmAction = UIAlertAction(title: "Delete", style: .destructive) {
             _ in
-            self.mediaDispatcher.clearImageCache() {
+            self.cacheManager.clearAllStaticMediaData {
                 _ in
                 UserDefaults.standard.setValue(0, forKey: UserDefaults.keyForCachedImagesSize)
                 DispatchQueue.main.async {
@@ -113,5 +107,4 @@ class SettingsViewController: UIViewController{
         avc.addAction(confirmAction)
         present(avc, animated: true, completion: nil)
     }
-   
 }

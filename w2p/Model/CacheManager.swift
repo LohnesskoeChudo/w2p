@@ -22,7 +22,7 @@ protocol PCacheManager {
 
 class CacheManager: PCacheManager {
     
-    static var shared = Resolver.shared.container.resolve(PCacheManager.self)!
+    static var shared = CacheManager()
     
     private var container: NSPersistentContainer
     private var moc: NSManagedObjectContext

@@ -14,15 +14,15 @@ class LinkedList<T> {
     weak var tail: LinkedListNode<T>?
     
     
-    init(array: [T]){
-        for index in array.indices{
+    init(array: [T]) {
+        for index in array.indices {
             appendToBack(array[index])
         }
     }
     
     init() {}
     
-    func appendToBack(_ data: T){
+    func appendToBack(_ data: T) {
         if let tail = tail{
             let node = LinkedListNode(data: data, previousNode: tail)
             tail.nextNode = node
@@ -35,7 +35,7 @@ class LinkedList<T> {
         count += 1
     }
     
-    func appendToFront(_ data: T){
+    func appendToFront(_ data: T) {
         if let head = head{
             let node = LinkedListNode(data: data, nextNode: head)
             head.previousNode = node
@@ -48,7 +48,7 @@ class LinkedList<T> {
         count += 1
     }
     
-    func popFront() -> T?{
+    func popFront() -> T? {
         if count == 0 {
             return nil
         } else if count == 1 {
@@ -66,7 +66,7 @@ class LinkedList<T> {
         }
     }
     
-    func popBack() -> T?{
+    func popBack() -> T? {
         if count == 0 {
             return nil
         } else if count == 1 {
@@ -84,7 +84,7 @@ class LinkedList<T> {
         }
     }
     
-    func insertAfter(element: T, data: T) throws where T: Equatable{
+    func insertAfter(element: T, data: T) throws where T: Equatable {
         
         if count == 0 { throw LinkedListError.noElements }
         
@@ -92,7 +92,7 @@ class LinkedList<T> {
         var currentNode = head
         
         while currentNode != nil {
-            if currentNode!.data == element{
+            if currentNode!.data == element {
                 if currentNode!.nextNode == nil {
                     tail!.nextNode = node
                     node.previousNode = tail
@@ -114,7 +114,7 @@ class LinkedList<T> {
         throw LinkedListError.noMatches
     }
     
-    func printLL(){
+    func printLL() {
         var currentNode = head
         
         while currentNode != nil {
@@ -128,7 +128,6 @@ class LinkedList<T> {
 }
 
 class LinkedListNode<T> {
-    
     var data: T
     var nextNode: LinkedListNode<T>?
     weak var previousNode: LinkedListNode<T>?
@@ -138,12 +137,10 @@ class LinkedListNode<T> {
         self.nextNode = nextNode
         self.previousNode = previousNode
     }
-    
-    
 }
 
 
-enum LinkedListError: Error{
+enum LinkedListError: Error {
     case noElements
     case noMatches
 }

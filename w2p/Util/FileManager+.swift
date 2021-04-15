@@ -9,7 +9,6 @@ import Foundation
 
 
 extension FileManager {
-    
     func documentsUrlForFile(with filename: String) -> URL?{
         if let documentDirectory = try? self.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false) {
             let fileUrl = documentDirectory.appendingPathComponent(filename)
@@ -17,6 +16,4 @@ extension FileManager {
         }
         return nil
     }
-    
-    
 }

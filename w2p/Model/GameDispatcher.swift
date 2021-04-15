@@ -12,19 +12,21 @@ protocol PGameDispatcher {
     func getTotalAmountOfGames(completion: ((Int) -> Void)?)
 }
 
-final class GameDispatcher {
-    private var jsonLoader = Resolver.shared.container.resolve(PJsonLoader.self)!
+final class GameDispatcher: PGameDispatcher {
+    private let jsonLoader = Resolver.shared.container.resolve(PJsonLoader.self)!
+    private let cacheManager = Resolver.shared.container.resolve(PCacheManager.self)!
+    private let requestFormer = Resolver.shared.container.resolve(PRequestFormer.self)!
     
     func updateGame(id: Int, completion: ((_ success: Bool) -> Void)? = nil) {
         guard let requestApiItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: [id]) else {
             completion?(false)
             return
         }
-        let request = RequestFormer.shared.formRequest(with: requestApiItem)
+        let request = requestFormer.formRequest(with: requestApiItem)
         jsonLoader.load(request: request) {
             (games: [Game]?, error: NetworkError?) in
             if let game = games?.first {
-                CacheManager.shared.save(game: game, completion: completion)
+                self.cacheManager.save(game: game, completion: completion)
             } else {
                 completion?(false)
             }
@@ -32,15 +34,15 @@ final class GameDispatcher {
     }
     
     func getTotalAmountOfGames(completion: ((Int) -> Void)? = nil) {
-        let secondsSinceLastSaving = CacheManager.shared.secondsSinceLastSavingTotalApiGamesCount
+        let secondsSinceLastSaving = cacheManager.secondsSinceLastSavingTotalApiGamesCount
         let oneDayInSeconds = 86400
-        if let totalAmount = CacheManager.shared.getTotalApiGamesCount(), let secondsSinceLastSaving = secondsSinceLastSaving, secondsSinceLastSaving < oneDayInSeconds {
+        if let totalAmount = cacheManager.getTotalApiGamesCount(), let secondsSinceLastSaving = secondsSinceLastSaving, secondsSinceLastSaving < oneDayInSeconds {
             completion?(totalAmount)
         } else {
             loadGameApiTotalCount() {
                 count in
                 if let count = count {
-                    CacheManager.shared.saveTotalApiGamesCount(value: count)
+                    self.cacheManager.saveTotalApiGamesCount(value: count)
                     completion?(count)
                 } else {
                     let defaultApiValue = 138000
@@ -51,7 +53,7 @@ final class GameDispatcher {
     }
     
     private func loadGameApiTotalCount(completion: ((Int?)->Void)? = nil) {
-        let request = RequestFormer.shared.formRequestForTotalGameCount()
+        let request = requestFormer.formRequestForTotalGameCount()
         jsonLoader.load(request: request) {
             (response: [String: Int]?, error: Error?) in
             if let response = response {

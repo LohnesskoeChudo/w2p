@@ -15,6 +15,8 @@ protocol PMediaDispatcher {
 final class MediaDispatcher: PMediaDispatcher {
     private let dataLoader = Resolver.shared.container.resolve(PDataLoader.self)!
     private let jsonLoader = Resolver.shared.container.resolve(PJsonLoader.self)!
+    private let cacheManager = Resolver.shared.container.resolve(PCacheManager.self)!
+    private let requestFormer = Resolver.shared.container.resolve(PRequestFormer.self)!
     private var cache: Bool
     
     init(cache: Bool) {
@@ -40,7 +42,7 @@ final class MediaDispatcher: PMediaDispatcher {
     
     func fetchStaticMedia(with media: MediaDownloadable,  sizeKey: GameImageSizeKey, completion: ((Data?, Error?) -> Void)? = nil) {
         DispatchQueue.global(qos: .userInitiated).async {
-            CacheManager.shared.loadStaticMedia(with: media, sizeKey: sizeKey){
+            self.cacheManager.loadStaticMedia(with: media, sizeKey: sizeKey){
                 data in
                 if let data = data {
                     completion?(data, nil)
@@ -59,7 +61,7 @@ final class MediaDispatcher: PMediaDispatcher {
         self.loadStaticMediaFromInet(media: media, sizeKey: sizeKey) {
             data, error in
             if let data = data {
-                CacheManager.shared.saveStaticMedia(data: data, sizeKey: sizeKey, media: media)
+                self.cacheManager.saveStaticMedia(data: data, sizeKey: sizeKey, media: media)
                 completion?(data, nil)
             } else {
                 completion?(nil, error)
@@ -68,7 +70,7 @@ final class MediaDispatcher: PMediaDispatcher {
     }
     
     private func loadStaticMediaFromInet(media: MediaDownloadable, sizeKey: GameImageSizeKey, completion: ((Data?, FetchingError?) -> Void)? = nil) {
-        guard let staticMediaRequest = RequestFormer.shared.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
+        guard let staticMediaRequest = self.requestFormer.formRequestForMediaStaticContent(for: media, sizeKey: sizeKey) else {
             completion?(nil, .canNotFormRequest)
             return
         }

@@ -13,7 +13,6 @@ class AdditionalPlatformsController: UIViewController {
     var searchFilter: SearchFilter!
     
     @IBOutlet weak var flow: LabelFlowView!
-    
     @IBOutlet weak var searchTextFieldBackground: UIView!
     @IBOutlet weak var searchTextField: UITextField!
     
@@ -21,10 +20,8 @@ class AdditionalPlatformsController: UIViewController {
         updateFlow()
     }
     
-    
     private func preparePlatformViews() {
         for platform in SearchFilter.allPlatforms {
-            
             guard let platformName = platform.name, let id = platform.id else {continue}
             let platformAttrView = GameAttributeView()
             let color = ThemeManager.colorForPlatformAttribute(trait: traitCollection)
@@ -39,7 +36,6 @@ class AdditionalPlatformsController: UIViewController {
     }
     
     private func filterPlatforms(search: String) -> BinaryHeap<Platform, String.Index> {
-        
         let filteredPlatforms = BinaryHeap<Platform, String.Index>(type: .min)
         for platform in SearchFilter.allPlatforms {
             if let transformedName = platform.name?.lowercased().replacingOccurrences(of: " ", with: "") {
@@ -48,7 +44,6 @@ class AdditionalPlatformsController: UIViewController {
                 }
             }
         }
-        
         return filteredPlatforms
     }
     
@@ -115,13 +110,12 @@ class AdditionalPlatformsController: UIViewController {
         }
     }
 
-    private func setupSearchBar(){
+    private func setupSearchBar() {
         searchTextField.delegate = self
         searchTextFieldBackground.layer.cornerRadius = searchTextFieldBackground.frame.height / 2
         searchTextFieldBackground.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
     }
 }
-
 
 extension AdditionalPlatformsController: UITextFieldDelegate{
     

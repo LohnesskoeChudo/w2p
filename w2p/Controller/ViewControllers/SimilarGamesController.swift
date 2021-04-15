@@ -6,21 +6,51 @@
 //
 
 import UIKit
-class SimilarGamesController : GameBrowserController{
+class SimilarGamesController : GameBrowserController {
     
     var externalGame: Game!
     var category: BrowserGameCategory!
-    var panGestureRecognizer: UIPanGestureRecognizer!
+    private var needToUpdateGames = true
+    private var panGestureRecognizer: UIPanGestureRecognizer!
     
-    override var upperSpacing: CGFloat {
-        upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
-    }
-
+    @IBOutlet weak var upperBar: UIView!
+    @IBOutlet weak var refreshButton: CustomButton!
+    
     @IBAction func backButtonPressed(_ sender: CustomButton) {
         navigationController?.popViewController(animated: true)
     }
+    
     @IBAction func refresh(_ sender: CustomButton) {
         self.refreshGames(withAnimation: true)
+    }
+        
+    override var upperSpacing: CGFloat {
+        upperBar.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupGestureRecognizers()
+        setupApiRequestItem()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if needToUpdateGames {
+            self.refreshGames(withAnimation: true)
+            needToUpdateGames = false
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "detailed":
+            let game = sender as! Game
+            let detailedVC = segue.destination as! DetailedViewController
+            detailedVC.game = game
+        default:
+            return
+        }
     }
     
     private func refreshGames(withAnimation: Bool) {
@@ -37,8 +67,6 @@ class SimilarGamesController : GameBrowserController{
         }
     }
     
-    @IBOutlet weak var refreshButton: CustomButton!
-    
     private func disableRefreshButton() {
         refreshButton.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.3) {
@@ -53,58 +81,25 @@ class SimilarGamesController : GameBrowserController{
             self.refreshButton.isUserInteractionEnabled = true
         }
     }
-    
-    @IBOutlet weak var upperBar: UIView!
-    
-    var needToUpdateGames = true
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupGestureRecognizers()
-        setupApiRequestItem()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if needToUpdateGames {
-            self.refreshGames(withAnimation: true)
-            needToUpdateGames = false
-        }
-    }
-    
-    
+
     private func setupApiRequestItem() {
-        if category == .similarGames{
+        if category == .similarGames {
             gameApiRequestItem = GameApiRequestItem.formRequestItemForSimilarGames(with: externalGame)
-        } else if category == .franchiseGames{
+        } else if category == .franchiseGames {
             gameApiRequestItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: externalGame.franchise?.games ?? [])
         } else {
             gameApiRequestItem = GameApiRequestItem.formRequestItemForSpecificGames(gamesIds: externalGame.collection?.games ?? [])
         }
     }
     
-
-
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "detailed":
-            let game = sender as! Game
-            let detailedVC = segue.destination as! DetailedViewController
-            detailedVC.game = game
-        default:
-            return
-        }
-    }
-    
-    private func setupGestureRecognizers(){
+    private func setupGestureRecognizers() {
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(pan))
         panGestureRecognizer.delegate = self
         collectionView.addGestureRecognizer(panGestureRecognizer)
 
     }
     
-    @objc func pan(sender: UIPanGestureRecognizer){
+    @objc func pan(sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .ended:
             let yVelocity = sender.velocity(in: view).y
@@ -138,11 +133,9 @@ class SimilarGamesController : GameBrowserController{
             })
         }
     }
-    
 }
 
-
-extension SimilarGamesController: UIGestureRecognizerDelegate{
+extension SimilarGamesController: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         true
     }

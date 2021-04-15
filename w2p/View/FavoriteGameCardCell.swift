@@ -12,11 +12,11 @@ class FavoriteGameCardCell: UITableViewCell {
     static let imageHeight:CGFloat = 110
 
     @IBOutlet weak var ratingView: CircularRatingView!
-    @IBOutlet private weak var label: UILabel!
+    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet private weak var imageHeightConstraint: NSLayoutConstraint!
     @IBOutlet private weak var imageWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var control: CellControlView!
-    @IBOutlet weak var gameImageView: UIImageView!
     @IBOutlet private weak var imageViewContainer: UIView!
     
     var id: Int = 0

@@ -8,7 +8,6 @@
 import Foundation
 
 func customBinarySearch<C>(collection: C, trueProperty: (C.Index) -> Bool, lessThanProperty: (C.Index) -> Bool) -> C.Index? where C: RandomAccessCollection,  C.Index == Int {
-    
     let colllectionLength = collection.count
     var index: C.Index = colllectionLength / 2
     var rightBound: C.Index = colllectionLength - 1
@@ -23,6 +22,5 @@ func customBinarySearch<C>(collection: C, trueProperty: (C.Index) -> Bool, lessT
         index = (leftBound + rightBound) / 2
     }
     return index
-    
 }
 
