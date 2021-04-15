@@ -7,11 +7,10 @@
 import Foundation
 import UIKit
 
-class GameMediaDispatcher{
+class MediaDispatcher {
     
     private let dataLoader = DataLoader()
     private let jsonLoader = JsonLoader()
-
 
     func fetchPreparedToSetStaticMedia(with media: MediaDownloadable, targetWidth: CGFloat, sizeKey: GameImageSizeKey, cache: Bool = true, completion: ((UIImage?, Error?) -> Void)? = nil) {
         
@@ -37,7 +36,8 @@ class GameMediaDispatcher{
     
     func getTotalAmountOfGames(completion: ((Int) -> Void)? = nil){
         let secondsSinceLastSaving = CacheManager.shared.secondsSinceLastSavingTotalApiGamesCount
-        if let totalAmount = CacheManager.shared.getTotalApiGamesCount(), let secondsSinceLastSaving = secondsSinceLastSaving, secondsSinceLastSaving < 86400{
+        let oneDayInSeconds = 86400
+        if let totalAmount = CacheManager.shared.getTotalApiGamesCount(), let secondsSinceLastSaving = secondsSinceLastSaving, secondsSinceLastSaving < oneDayInSeconds {
             completion?(totalAmount)
         } else {
             loadGameApiTotalCount() {
@@ -145,7 +145,7 @@ class GameMediaDispatcher{
             return
         }
         let request = RequestFormer.shared.formRequest(with: requestApiItem)
-        jsonLoader.load(request: request){
+        jsonLoader.load(request: request) {
             (games: [Game]?, error: NetworkError?) in
             if let game = games?.first {
                 self.save(game: game,completion: completion)
@@ -156,7 +156,7 @@ class GameMediaDispatcher{
     }
 }
 
-enum FetchingError: Error{
+enum FetchingError: Error {
     case connectionError
     case canNotFormRequest
     case noCoverId

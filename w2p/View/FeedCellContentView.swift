@@ -9,7 +9,7 @@ import UIKit
 
 class CellContentView: UIView {
     
-    @IBOutlet var contentView: UIView!
+    @IBOutlet private var contentView: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var label: UILabel!
     

@@ -7,14 +7,20 @@
 
 import UIKit
 
-class CustomButton: UIControl{
+class CustomButton: UIControl {
     
-    var colorForPressedState: UIColor = UIColor.black.withAlphaComponent(0.3)
-    var colorForReleasedState: UIColor = UIColor.black.withAlphaComponent(0.6)
+    private var colorForPressedState: UIColor = UIColor.black.withAlphaComponent(0.3)
+    private var colorForReleasedState: UIColor = UIColor.black.withAlphaComponent(0.6)
+    private var touchDownAnimationFinished = true
     
-    override init(frame: CGRect){
+    override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.layer.cornerRadius = bounds.size.height / 2
     }
     
     required init?(coder: NSCoder) {
@@ -26,31 +32,21 @@ class CustomButton: UIControl{
         self.colorForPressedState = colorPressed
         self.colorForReleasedState = colorReleazed
         self.backgroundColor = colorReleazed
-        
     }
     
-    private func commonInit(){
+    private func commonInit() {
         setActions()
         self.backgroundColor = colorForReleasedState
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.layer.cornerRadius = bounds.size.height / 2
-    }
-    
-    func setActions(){
+
+    private func setActions() {
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
-    var touchDownAnimationFinished = true
-
-    
-    
-    @objc func touchDown(){
+    @objc func touchDown() {
         touchDownAnimationFinished = false
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
             self.backgroundColor = self.colorForPressedState
@@ -60,19 +56,17 @@ class CustomButton: UIControl{
         })
     }
     
-    @objc func touchUp(){
-        
+    @objc func touchUp() {
         UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             FeedbackManager.generateFeedbackForButtonsTapped()
             self.backgroundColor = self.colorForReleasedState
         })
     }
     
-    @objc func touchDragExit(){
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
+    @objc func touchDragExit() {
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]) {
             self.backgroundColor = self.colorForReleasedState
         }
     }
-    
 }
     

@@ -7,11 +7,12 @@
 
 import UIKit
 
-class GameCardCell: UICollectionViewCell{
+class GameCardCell: UICollectionViewCell {
         
     var reusing = false
     var id: Int = 0
     var isLoading = false
+    @IBOutlet weak var customContent: CellContentView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,20 +22,17 @@ class GameCardCell: UICollectionViewCell{
         setupControl()
     }
     
-    func setActionToControl(action: @escaping () -> Void ){
+    func setActionToControl(action: @escaping () -> Void ) {
         let control = contentView as! CellControlView
         control.action = action
     }
     
-    private func setupControl(){
+    private func setupControl() {
         let control = contentView as! CellControlView
         control.container = self
         control.viewToAnimate = customContent
     }
     
-    @IBOutlet weak var customContent: CellContentView!
-    
-        
     override func prepareForReuse() {
         super.prepareForReuse()
         customContent.imageView.superview!.isHidden = false
@@ -43,7 +41,7 @@ class GameCardCell: UICollectionViewCell{
         isLoading = false
     }
     
-    private func setupAppearance(){
+    private func setupAppearance() {
         customContent.imageView.superview!.backgroundColor = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection)
         self.clipsToBounds = false
         self.contentView.layer.cornerRadius = 16
@@ -57,7 +55,7 @@ class GameCardCell: UICollectionViewCell{
         }
     }
     
-    func startContentLoadingAnimation(){
+    func startContentLoadingAnimation() {
         let animation = CABasicAnimation(keyPath: "backgroundColor")
         
         animation.fromValue = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection).cgColor
@@ -69,7 +67,7 @@ class GameCardCell: UICollectionViewCell{
         customContent.imageView.superview?.layer.add(animation, forKey: "image loading animation")
     }
     
-    func endContentLoadingAnimation(){
+    func endContentLoadingAnimation() {
         customContent.imageView.superview?.layer.removeAllAnimations()
     }
     

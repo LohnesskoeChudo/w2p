@@ -8,7 +8,6 @@
 import Foundation
 
 class SearchFilter{
-    
     var searchString: String?
     var genres: Set<Genre> = []
     var themes: Set<Theme> = []
@@ -44,7 +43,6 @@ class SearchFilter{
     static func loadAllGameAttributes<A>(resourceName: String) -> [A]? where A: Decodable{
         if let path = Bundle.main.path(forResource: resourceName, ofType: "json"),
            let data = try? Data(contentsOf: URL(fileURLWithPath: path)){
-            
             let jsonDecoder = JSONDecoder()
             if let decodedAttrs = try? jsonDecoder.decode([A].self, from: data){
                 return decodedAttrs

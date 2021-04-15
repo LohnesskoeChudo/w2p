@@ -14,7 +14,7 @@ class GameBrowserController: UIViewController, WaterfallCollectionViewLayoutDele
     var games = [Game]()
     let searchFilter = SearchFilter()
     let jsonLoader = JsonLoader()
-    let mediaDispatcher = GameMediaDispatcher()
+    let mediaDispatcher = MediaDispatcher()
     let imageResizer = ImageResizer()
     var columnWidth: CGFloat {
         (collectionView.collectionViewLayout as! WaterfallCollectionViewLayout).columnWidth

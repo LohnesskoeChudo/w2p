@@ -1,16 +1,22 @@
+
 import Foundation
-class RequestFormer{
+
+protocol PRequestFormer {
+    func formRequestForCover(with cover: Cover, sizeKey: GameImageSizeKey) -> URLRequest?
+    func formRequestForTotalGameCount() -> URLRequest
+    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest?
+    func formRequest(with gameRequest: GameApiRequestItem) -> URLRequest
+}
+
+class RequestFormer: PRequestFormer{
     
-    var apiStr = "https://api.igdb.com/v4/games/"
-    lazy var api = URL(string: apiStr)!
+    static var shared = Resolver.shared.container.resolve(PRequestFormer.self)!
+    private var apiStr = "https://api.igdb.com/v4/games/"
+    lazy private var api = URL(string: apiStr)!
     
-    static var shared = RequestFormer()
-    private init() { }
+    private init() {}
    
-    //var api = "http://192.168.1.64:8002/"
-    
-    
-    func formRequestForCover(with cover: Cover, sizeKey: GameImageSizeKey) -> URLRequest?{
+    func formRequestForCover(with cover: Cover, sizeKey: GameImageSizeKey) -> URLRequest? {
         guard let imageIdComponent = getImageIdComponent(for: cover) else {return nil}
         var urlComponents = configuredComponentsForRequest()
         let path = pathForImageRequest(sizeKey: .S264X374, idComponent: imageIdComponent)
@@ -19,13 +25,13 @@ class RequestFormer{
         return URLRequest(url: url)
     }
     
-    func formRequestForTotalGameCount() -> URLRequest{
+    func formRequestForTotalGameCount() -> URLRequest {
         let gameCountApi = URL(string: apiStr + "count/")!
         let request = setupRequest(url: gameCountApi)
         return request
     }
 
-    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest?{
+    func formRequestForMediaStaticContent(for media: MediaDownloadable, sizeKey: GameImageSizeKey) -> URLRequest? {
         guard let imageIdComponent = getImageIdComponent(for: media) else {return nil}
         var urlComponents = configuredComponentsForRequest()
         let path = pathForImageRequest(sizeKey: sizeKey, idComponent: imageIdComponent)
@@ -34,35 +40,32 @@ class RequestFormer{
         return URLRequest(url: url)
     }
     
-    func formRequest(with gameRequest: GameApiRequestItem) -> URLRequest {
+    func formRequest(with gameApiItem: GameApiRequestItem) -> URLRequest {
         var request = setupRequest(url: api)
         var body = ""
-        if let fields = gameRequest.fields {
+        if let fields = gameApiItem.fields {
             body += fields
         }
-        if let sort = gameRequest.sorting {
+        if let sort = gameApiItem.sorting {
             body += sort
         }
-        if let search = gameRequest.search {
+        if let search = gameApiItem.search {
             body += search
         }
-        if let filter = gameRequest.filter {
+        if let filter = gameApiItem.filter {
             body += filter
         }
-        if let offset = gameRequest.offsetStr {
+        if let offset = gameApiItem.offsetStr {
             body += offset
         }
-        if let limit = gameRequest.limitStr {
+        if let limit = gameApiItem.limitStr {
             body += limit
         }
-        
         request.httpBody = body.data(using: .utf8)
         return request
     }
     
-    
-    
-    private func configuredComponentsForRequest() -> URLComponents{
+    private func configuredComponentsForRequest() -> URLComponents {
             var urlComponents = URLComponents()
             urlComponents.scheme = "http"
             urlComponents.host = "images.igdb.com"
@@ -84,15 +87,13 @@ class RequestFormer{
         return request
     }
 
-    private func getImageIdComponent(for media: MediaDownloadable) -> String?{
+    private func getImageIdComponent(for media: MediaDownloadable) -> String? {
         guard let basicImageUrl = media.url else { return nil }
         let components = basicImageUrl.split(separator: "/")
-        if let idComponent = components.last{
+        if let idComponent = components.last {
             return String(idComponent)
         } else {
             return nil
         }
     }
 }
-
-

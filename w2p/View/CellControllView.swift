@@ -9,29 +9,29 @@ import UIKit
 
 class CellControlView: UIControl {
     
-    var action: (() -> Void)?
-    weak var container: UIView?
-    weak var viewToAnimate: UIView?
+    internal var action: (() -> Void)?
+    internal weak var container: UIView?
+    internal weak var viewToAnimate: UIView?
+    private var touchDownAnimationFinished = true
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
     
-    private func commonInit(){
+    private func commonInit() {
         setupActionsForEvents()
     }
     
-    private func setupActionsForEvents(){
+    private func setupActionsForEvents() {
         addTarget(self, action: #selector(touchDown), for: .touchDown)
         addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
         addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
-    var touchDownAnimationFinished = true
 
-    @objc func touchDown(){
+    @objc func touchDown() {
         touchDownAnimationFinished = false
         UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseIn,.beginFromCurrentState], animations: {
             self.viewToAnimate?.alpha = 0.6
@@ -44,24 +44,22 @@ class CellControlView: UIControl {
         })
     }
     
-    @objc func touchUp(){
+    @objc func touchUp() {
         FeedbackManager.generateFeedbackForButtonsTapped()
         self.action?()
         UIView.animate(withDuration: 0.15, delay: touchDownAnimationFinished ? 0 : 0.15, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState], animations: {
             self.viewToAnimate?.alpha = 1
-            if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection){
+            if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection) {
                 self.container?.layer.shadowOpacity = 1
             }
         })
     }
     
-    @objc func touchDragExit(){
-        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]){
+    @objc func touchDragExit() {
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.allowUserInteraction, .curveEaseOut, .beginFromCurrentState]) {
             self.viewToAnimate?.alpha = 1
-            if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection){
+            if ThemeManager.contentItemsHaveShadows(trait: self.traitCollection) {
                 self.container?.layer.shadowOpacity = 1
             }}
     }
-    
-    
 }

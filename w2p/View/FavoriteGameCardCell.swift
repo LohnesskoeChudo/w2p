@@ -7,55 +7,41 @@
 
 import UIKit
 
-class FavoriteGameCardCell: UITableViewCell{
-        
-    var id: Int = 0
+class FavoriteGameCardCell: UITableViewCell {
     static let imageWidth:CGFloat = 80
     static let imageHeight:CGFloat = 110
-    
-    @IBOutlet weak var ratingView: CircularRatingView!
-    
-    var isLoading = false
 
+    @IBOutlet weak var ratingView: CircularRatingView!
+    @IBOutlet private weak var label: UILabel!
+    @IBOutlet private weak var imageHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var imageWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var control: CellControlView!
+    @IBOutlet weak var gameImageView: UIImageView!
+    @IBOutlet private weak var imageViewContainer: UIView!
+    
+    var id: Int = 0
+    var isLoading = false
+    
     override func awakeFromNib() {
         setupAppearance()
         setupControl()
     }
     
-
-    @IBOutlet weak var label: UILabel!
-
-    @IBOutlet weak var imageHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var imageWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var control: CellControlView!
-    @IBOutlet weak var gameImageView: UIImageView!
-    @IBOutlet weak var imageViewContainer: UIView!
-    
-    private func setupAppearance(){
-        self.clipsToBounds = false
-        control.layer.cornerRadius = 16
-        if ThemeManager.contentItemsHaveShadows(trait: traitCollection) {
-            control.layer.shadowColor = UIColor.darkGray.cgColor
-            control.layer.shadowRadius = 2.5
-            control.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
-            
-            control.layer.shadowOpacity = 1
-        } else {
-            control.layer.shadowOpacity = 0
-        }
-        gameImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-        imageViewContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
-        gameImageView.layer.cornerRadius = 16
-        imageViewContainer.layer.cornerRadius = 16
-        
-        imageWidthConstraint.constant = Self.imageWidth
-        imageHeightConstraint.constant = Self.imageHeight
+    override func prepareForReuse() {
+        gameImageView.image = nil
+        label.text = nil
+        gameImageView.alpha = 0
+        isLoading = false
+        id = 0
+        ratingView.isHidden = false
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        setupAppearance()
+    }
     
-    func startContentLoadingAnimation(){
+    func startContentLoadingAnimation() {
         let animation = CABasicAnimation(keyPath: "backgroundColor")
-        
         animation.fromValue = ThemeManager.secondColorForImagePlaceholder(trait: traitCollection).cgColor
         animation.toValue = ThemeManager.firstColorForImagePlaceholder(trait: traitCollection).cgColor
         animation.duration = 1
@@ -65,13 +51,8 @@ class FavoriteGameCardCell: UITableViewCell{
         imageViewContainer.layer.add(animation, forKey: "image loading animation")
     }
     
-    func endContentLoadingAnimation(){
+    func endContentLoadingAnimation() {
         imageViewContainer.layer.removeAllAnimations()
-    }
-    
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        setupAppearance()
     }
     
     func setupRatingView(with rating: Double?) {
@@ -86,18 +67,27 @@ class FavoriteGameCardCell: UITableViewCell{
         control.action = action
     }
     
-    private func setupControl(){
-        control.container = control
-        control.viewToAnimate = control
+    private func setupAppearance() {
+        self.clipsToBounds = false
+        control.layer.cornerRadius = 16
+        if ThemeManager.contentItemsHaveShadows(trait: traitCollection) {
+            control.layer.shadowColor = UIColor.darkGray.cgColor
+            control.layer.shadowRadius = 2.5
+            control.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+            control.layer.shadowOpacity = 1
+        } else {
+            control.layer.shadowOpacity = 0
+        }
+        gameImageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        imageViewContainer.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        gameImageView.layer.cornerRadius = 16
+        imageViewContainer.layer.cornerRadius = 16
+        imageWidthConstraint.constant = Self.imageWidth
+        imageHeightConstraint.constant = Self.imageHeight
     }
     
-
-    override func prepareForReuse() {
-        gameImageView.image = nil
-        label.text = nil
-        gameImageView.alpha = 0
-        isLoading = false
-        id = 0
-        ratingView.isHidden = false
+    private func setupControl() {
+        control.container = control
+        control.viewToAnimate = control
     }
 }

@@ -4,11 +4,11 @@
 
 import UIKit
 
-class TransferButton: UIControl{
+class TransferButton: UIControl {
     
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak private var contentView: UIView!
+    @IBOutlet weak private var textLabel: UILabel!
+    @IBOutlet weak private var imageView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,24 +20,24 @@ class TransferButton: UIControl{
         commonInit()
     }
     
-    func commonInit(){
+    func commonInit() {
         Bundle.main.loadNibNamed("TransferButton", owner: self, options: nil)
         contentView.fixIn(view: self)
         setupActions()
     }
     
-    func setup(name: String){
+    func setup(name: String) {
         textLabel.text = name
     }
     
-    func setupActions(){
+    func setupActions() {
         self.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
         self.addTarget(self, action: #selector(touchDown), for: .touchDown)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchDragExit)
         self.addTarget(self, action: #selector(touchDragExit), for: .touchCancel)
     }
     
-    @objc func touchUp(){
+    @objc func touchUp() {
         FeedbackManager.generateFeedbackForButtonsTapped()
         UIView.animate(withDuration: 0.1, delay: 0.1, options: [.allowUserInteraction]) {
             self.textLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
@@ -45,19 +45,17 @@ class TransferButton: UIControl{
         }
     }
     
-    @objc func touchDown(){
+    @objc func touchDown() {
         UIView.animate(withDuration: 0.1 , delay: 0, options: [.allowUserInteraction]){
             self.textLabel.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             self.imageView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }
     }
     
-    @objc func touchDragExit(){
+    @objc func touchDragExit() {
         UIView.animate(withDuration: 0.1, delay: 0.1, options: [.allowUserInteraction]) {
             self.textLabel.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.imageView.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
     }
-    
-    
 }

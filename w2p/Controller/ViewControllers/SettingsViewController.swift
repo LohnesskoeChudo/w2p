@@ -9,7 +9,7 @@ import UIKit
 
 class SettingsViewController: UIViewController{
     
-    let mediaDispatcher = GameMediaDispatcher()
+    let mediaDispatcher = MediaDispatcher()
     
     @IBOutlet weak var hapticSwitch: UISwitch!
     @IBOutlet weak var darkModeSwitch: UISwitch!

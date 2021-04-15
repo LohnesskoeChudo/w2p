@@ -7,12 +7,11 @@
 
 import UIKit
 
-
 class LabelFlowView: UIView{
     
-    var vertivalSpacing: CGFloat = 10
-    var horizontalSpacing: CGFloat = 10
-    var height: CGFloat = 0
+    private var vertivalSpacing: CGFloat = 10
+    private var horizontalSpacing: CGFloat = 10
+    private var height: CGFloat = 0
     
     override func layoutSubviews(){
         super.layoutSubviews()
@@ -25,15 +24,12 @@ class LabelFlowView: UIView{
     }
     
     private func flowLayout(){
-            
         guard let subviewHeight = subviews.first?.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height else {return}
-
         var lineBuffer = [(UIView, CGFloat)]()
         var yOffset: CGFloat = 0
         var subviewsLineWidth: CGFloat = 0
         var subviewIndex = 0
         while subviewIndex < subviews.count {
-            
             let subview = subviews[subviewIndex]
             let subviewWidth = subview.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
             
@@ -74,14 +70,3 @@ class LabelFlowView: UIView{
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-

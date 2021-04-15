@@ -10,7 +10,7 @@ import UIKit
 class FavoritesViewController: UIViewController{
     
     var favoritesFilter = SearchFilter()
-    var mediaDispatcher = GameMediaDispatcher()
+    var mediaDispatcher = MediaDispatcher()
     var games: [Game] = []
     var allFavoriteGames: [Game] = []
 

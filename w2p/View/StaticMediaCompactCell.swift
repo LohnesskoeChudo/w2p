@@ -9,6 +9,8 @@ import UIKit
 
 class StaticMediaCompactCell: GameMediaCell {
     
+    var tapAction: (() -> Void)?
+    let tapRecognizer = UITapGestureRecognizer()
     
     @IBOutlet weak var mediaView: UIImageView! {
         didSet {
@@ -16,13 +18,10 @@ class StaticMediaCompactCell: GameMediaCell {
             mediaView.addGestureRecognizer(tapRecognizer)
         }
     }
-    
-    var tapAction: (() -> Void)?
+
     @objc func contentTapped() {
         tapAction?()
     }
-    
-    let tapRecognizer = UITapGestureRecognizer()
     
     override var staticMediaView: UIImageView? {
         mediaView

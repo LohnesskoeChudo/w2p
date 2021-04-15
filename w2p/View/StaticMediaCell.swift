@@ -8,16 +8,13 @@
 import UIKit
 
 class StaticMediaCell: GameMediaCell {
-    
-    
+    var reloadAction: (() -> Void)?
     
     @IBOutlet weak var mediaImageView: UIImageView!
     
     override var staticMediaView: UIImageView? {
         mediaImageView
     }
-    
-    var reloadAction: (() -> Void)?
     
     override func reload() {
         reloadAction?()
@@ -28,6 +25,4 @@ class StaticMediaCell: GameMediaCell {
         mediaImageView.image = nil
         reloadAction = nil
     }
-    
-    
 }

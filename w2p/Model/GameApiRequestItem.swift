@@ -9,15 +9,8 @@ import Foundation
 
 
 class GameApiRequestItem {
-    var offset: Int? {
-        didSet{
-            if let offset = offset, offset >= 0{
-                offsetStr = "offset \(offset);"
-            }
-        }
-    }
     
-    static var basicFields =
+    static private var basicFields =
     """
         fields
         name,
@@ -43,13 +36,19 @@ class GameApiRequestItem {
         involved_companies.company.name, game_engines.name;
 
     """
-    
+    var offset: Int? {
+        didSet{
+            if let offset = offset, offset >= 0{
+                offsetStr = "offset \(offset);"
+            }
+        }
+    }
     var offsetStr: String?
     var filter: String?
     var search: String?
     var fields: String?
     var sorting: String?
-    
+    var limitStr: String?
     var limit: Int? {
         didSet {
             if let limit = limit, (1...500).contains(limit) {
@@ -57,8 +56,7 @@ class GameApiRequestItem {
             }
         }
     }
-    var limitStr: String?
-    
+
     func replaceFilterWithSpecificGamesIds(gameIds: [Int]) {
         filter = "where id = \(gameIds.toIdArrayString(firstBracket: "(", secondBracket: ")"));"
     }
@@ -67,7 +65,6 @@ class GameApiRequestItem {
         return "where \(filterStr) & themes != (42);"
     }
     
-    
     static func formRequestItemForRandomGames() -> GameApiRequestItem {
         let gameRequestItem = GameApiRequestItem()
         gameRequestItem.offset = 0
@@ -75,11 +72,9 @@ class GameApiRequestItem {
         gameRequestItem.fields = basicFields
         return gameRequestItem
     }
-    
+
     static func formRequestItemForSearching(filter: SearchFilter, limit: Int?) -> GameApiRequestItem {
-        
         let gameRequestItem = GameApiRequestItem()
-            
         gameRequestItem.limit = limit
         if let searchStr = filter.searchString, !searchStr.isEmpty {
             gameRequestItem.search = "search \"\(searchStr)\";"
@@ -112,54 +107,40 @@ class GameApiRequestItem {
         gameRequestItem.offset = 0
         gameRequestItem.limit = 500
         gameRequestItem.fields = basicFields
-        
         let nowStamp = Int(Date(timeIntervalSinceNow: 0).timeIntervalSince1970)
-        
         let monthInSeconds = 30 * 24 * 60 * 60
-        
         var alreadyAvailableFilter = "(first_release_date >= \(nowStamp - monthInSeconds) & (first_release_date <= \(nowStamp) | (first_release_date >= \(nowStamp) & status = (3,4))))"
         
         alreadyAvailableFilter = "(\(alreadyAvailableFilter) & hypes != null)"
-        
-
         let filter = addCommonFilters(to: alreadyAvailableFilter)
         gameRequestItem.filter = filter
-        
         gameRequestItem.sorting = "sort hypes desc;"
-        
         return gameRequestItem
     }
     
     static func formRequestItemForSimilarGames(with game: Game) -> GameApiRequestItem? {
-        
         var filterComponents = [String]()
         let genresCriteria = genresCriteriaForSimilarGame(with: game)
         let themeCriteria = themesCriteriaForSimilarGame(with: game)
-        
         if genresCriteria == nil && game.similarGames == nil {
             return nil
         }
-            
         if let genresCriteria = genresCriteria {
             filterComponents.append(genresCriteria)
         }
         if let themeCriteria = themeCriteria {
             filterComponents.append(themeCriteria)
         }
-        
         var filter = ""
         filter = filterComponents.joined(separator: "&")
         if let similarGames = game.similarGames {
             filter = "(\(filter)) | id = \(similarGames.toIdArrayString(firstBracket: "(", secondBracket: ")"))"
         }
-        
-
         let gameRequestItem = GameApiRequestItem()
         gameRequestItem.fields = basicFields
         gameRequestItem.limit = 500
         gameRequestItem.offset = 0
         gameRequestItem.filter = addCommonFilters(to: filter)
-
         return gameRequestItem
     }
     
@@ -173,21 +154,16 @@ class GameApiRequestItem {
     
     static private func genresCriteriaForSimilarGame(with game: Game) -> String?{
         if var genres = game.genres, genres.count != 0{
-            
-            
             if genres.count > 6 {
                 genres.shuffle()
                 genres = genres.suffix(6)
             }
-            
-            
             var genresCombinations = [[Genre]]()
             if genres.count > 3 {
                 genresCombinations += combinations(collection: genres, k: 3) ?? []
                 genresCombinations += combinations(collection: genres, k: 4) ?? []
             } else if genres.count > 2 {
                 genresCombinations += combinations(collection: genres, k: 3) ?? []
-                
             } else {
                 genresCombinations += combinations(collection: genres, k: genres.count) ?? []
             }
@@ -202,12 +178,10 @@ class GameApiRequestItem {
     
     static private func themesCriteriaForSimilarGame(with game: Game) -> String?{
         if var themes = game.themes, themes.count != 0{
-            
             if themes.count > 6 {
                 themes.shuffle()
                 themes = themes.suffix(6)
             }
-            
             var themesCombinations = [[Theme]]()
             if themes.count > 2 {
                 themesCombinations += combinations(collection: themes, k: 2) ?? []
@@ -224,7 +198,6 @@ class GameApiRequestItem {
     }
     
     static private func formSearchingFilters(with filter: SearchFilter) -> String?{
-        
         if filter.isDefault {
             return "(cover != null & total_rating_count != null)"
         }
@@ -256,7 +229,6 @@ class GameApiRequestItem {
         if filter.excludeExtensions {
             filterComponents.append("category != (1,2,5)")
         }
-        
         if !filterComponents.isEmpty {
              return "(\(filterComponents.joined(separator: "&")))"
         }

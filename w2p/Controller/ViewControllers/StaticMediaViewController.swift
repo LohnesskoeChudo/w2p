@@ -12,7 +12,7 @@ class StaticMediaViewController: UIViewController {
     var staticMedia: [MediaDownloadable]!
     var currentPage: Int!
     
-    private let mediaDispatcher = GameMediaDispatcher()
+    private let mediaDispatcher = MediaDispatcher()
     
     @IBOutlet weak var pageCounter: UILabel!
     @IBOutlet weak var backButton: CustomButton!

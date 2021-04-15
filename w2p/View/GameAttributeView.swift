@@ -7,16 +7,14 @@
 
 import UIKit
 
-class GameAttributeView: UIControl{
+class GameAttributeView: UIControl {
     
-    var label = UILabel(frame: .zero)
-    let horizontalPadding: CGFloat = 15
-    let verticalPadding: CGFloat = 7
-    
-    var attrSelected: Bool = false
-    var backColor: UIColor!
-    
-    
+    private var label = UILabel(frame: .zero)
+    private let horizontalPadding: CGFloat = 15
+    private let verticalPadding: CGFloat = 7
+    private var attrSelected: Bool = false
+    private var backColor: UIColor!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -45,7 +43,6 @@ class GameAttributeView: UIControl{
             backgroundColor = backColor
         }
         label.text = text
-
     }
     
     override func layoutSubviews() {
@@ -58,7 +55,7 @@ class GameAttributeView: UIControl{
         self.layer.cornerRadius = (labelSize.height + 2 * verticalPadding) / 2
     }
     
-    override var intrinsicContentSize: CGSize{
+    override var intrinsicContentSize: CGSize {
         return CGSize(width: label.intrinsicContentSize.width + horizontalPadding * 2, height: label.intrinsicContentSize.height + verticalPadding * 2)
     }
     
@@ -95,12 +92,10 @@ class GameAttributeView: UIControl{
     
     func clear(animated: Bool){
         attrSelected = false
-        
         let action = {
             self.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.backgroundColor = self.backColor
         }
-        
         if animated {
             UIView.animate(withDuration: 0.2) { action() }
         } else {

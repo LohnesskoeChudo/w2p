@@ -7,12 +7,15 @@
 
 import UIKit
 
-class ImageLoader {
+protocol PImageLoader {
+    func load(with request: URLRequest, completion: @escaping (UIImage?, Error?) -> Void)
+}
+
+class ImageLoader: PImageLoader {
     
-    private var dataLoader = DataLoader(session: URLSession.shared)
+    private var dataLoader = Resolver.shared.container.resolve(PDataLoader.self)!
     
     func load(with request: URLRequest, completion: @escaping (UIImage?, Error?) -> Void) {
-        
         dataLoader.load(with: request) {
             data, error in
             if let data = data {

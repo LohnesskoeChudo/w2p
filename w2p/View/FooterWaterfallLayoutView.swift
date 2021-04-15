@@ -19,6 +19,4 @@ class FooterWaterfallLayoutView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-    
-
 }

@@ -7,9 +7,9 @@
 
 import UIKit
 
-class CircularRatingView: UIView{
+class CircularRatingView: UIView {
     
-    var ratingLabel = UILabel()
+    private var ratingLabel = UILabel()
     var rating: Double = 0 {
         didSet {
             ratingLabel.text = "\(Int(rating))"
@@ -27,8 +27,7 @@ class CircularRatingView: UIView{
         commonInit()
     }
     
-
-    private func commonInit(){
+    private func commonInit() {
         ratingLabel.text = "\(Int(rating))"
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         ratingLabel.textColor = .secondaryLabel
@@ -39,27 +38,23 @@ class CircularRatingView: UIView{
         ])
     }
     
-    
     override func draw(_ rect: CGRect) {
         let backPath = UIBezierPath()
         let lineWidth: CGFloat = 8
-        let radius = (bounds.width / 2) - (lineWidth / 2)
+        let radius = (bounds.width/2) - (lineWidth/2)
         backPath.lineWidth = lineWidth
         
         let backColor = ThemeManager.colorForUIelementsBackground(trait: traitCollection)
         backColor.setStroke()
-        backPath.addArc(withCenter: bounds.center, radius: radius, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        backPath.addArc(withCenter: bounds.center, radius: radius, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
         backPath.stroke()
         
         let path = UIBezierPath()
         path.lineCapStyle = .round
-        path.lineWidth = lineWidth * 0.5
+        path.lineWidth = lineWidth*0.5
         let ratingColor = RedGreenMaper(minValue: 0, maxValue: 100).mapToColor(value: rating)
         ratingColor?.setStroke()
         path.addArc(withCenter: bounds.center, radius: radius, startAngle: -CGFloat.pi/2, endAngle: -(CGFloat.pi * CGFloat(rating) / 50) - CGFloat.pi/2, clockwise: false)
         path.stroke()
     }
-    
-    
-    
 }

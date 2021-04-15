@@ -9,8 +9,11 @@ import UIKit
 
 class GameMediaCell: UICollectionViewCell {
     
-    @IBOutlet weak var infoContainer: UIControl!
-    @IBOutlet weak var infoImageView: UIImageView!
+    internal var isLoading = false
+    internal var id: UUID?
+    
+    @IBOutlet internal weak var infoContainer: UIControl!
+    @IBOutlet internal weak var infoImageView: UIImageView!
 
     var staticMediaView: UIImageView? {
         get { fatalError("Need to override staticMediaView") }
@@ -24,9 +27,6 @@ class GameMediaCell: UICollectionViewCell {
     private func setupControl() {
         infoContainer.addTarget(self, action: #selector(touchUp), for: .touchUpInside)
     }
-    
-    var isLoading = false
-    var id: UUID?
     
     func reload() {
         fatalError("override reload()")

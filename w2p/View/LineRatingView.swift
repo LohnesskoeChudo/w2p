@@ -9,18 +9,19 @@ import UIKit
 
 class LineRatingView: UIView {
     
-    let ratingLabel = UILabel()
-    let ratingLabelContainer = UIView()
-    let backRatingView = UIView()
-    let ratingViewPadding: CGFloat = 5
-    let spacing: CGFloat = 10
-    let ratingView = UIView()
     var rating: Double = 0 {
         didSet{
             setNeedsLayout()
         }
     }
     
+    private let ratingLabel = UILabel()
+    private let ratingLabelContainer = UIView()
+    private let backRatingView = UIView()
+    private let ratingViewPadding: CGFloat = 5
+    private let spacing: CGFloat = 10
+    private let ratingView = UIView()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -58,31 +59,20 @@ class LineRatingView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
         let extCornerRadius = frame.height * 0.8 / 2
         ratingLabelContainer.layer.cornerRadius = extCornerRadius
         backRatingView.layer.cornerRadius = extCornerRadius
         let insCornerRadius = extCornerRadius - ratingViewPadding
         ratingView.layer.cornerRadius = insCornerRadius
-        
         ratingView.backgroundColor = RedGreenMaper(minValue: 0, maxValue: 100).mapToColor(value: rating)
-        
         ratingLabel.text = "\(Int(rating))"
-        
-        
         let labelContainerWidth = ratingLabelContainer.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).width
         let ratingBackWidth = frame.width - (labelContainerWidth + spacing)
-        
-        
         let backYOffset = (frame.height - frame.height * 0.8) / 2
         backRatingView.frame = CGRect(x: labelContainerWidth + spacing, y: backYOffset, width: ratingBackWidth, height: frame.height * 0.8)
-
         let ratingWidth: CGFloat = max((CGFloat(rating) / 100) * (backRatingView.frame.width - 2 * ratingViewPadding), 2 * insCornerRadius)
         let ratingHeight: CGFloat = backRatingView.frame.height - 2 * ratingViewPadding
-        
         ratingView.frame = CGRect(x: ratingViewPadding, y: ratingViewPadding, width: ratingWidth, height: ratingHeight )
-        
-
     }
     
     private func updateAppearance(){

@@ -5,8 +5,6 @@ class Game: Codable, Equatable{
         lhs.id == rhs.id
     }
     
-    
-
     var id: Int?
     var name: String?
     var summary: String?
@@ -28,25 +26,19 @@ class Game: Codable, Equatable{
     var franchise: Franchise?
     var collection: GameCollection?
     var ageRatings: [AgeRating]?
-    
     var involvedCompanies: [InvolvedCompany]?
     var gameEngines: [GameEngine]?
-    
     var cacheDate: Date?
     var inFavorites: Bool? = false
-    
 }
 
 class Genre: Codable, Hashable, Identifiable{
-    
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
     static func == (lhs: Genre, rhs: Genre) -> Bool {
         lhs.id == rhs.id
     }
-    
     var name: String?
     var id: Int?
 }
@@ -68,7 +60,6 @@ class GameMode: Codable, Hashable, Identifiable{
         hasher.combine(id)
     }
     static func == (lhs: GameMode, rhs: GameMode) -> Bool {
-        
         lhs.id == rhs.id
     }
     var id: Int?
@@ -79,7 +70,6 @@ class Website: Codable{
     var id: Int?
     var url: String?
     var category: Int?
-    
 }
 
 class Theme: Codable, Hashable, Identifiable{
@@ -113,14 +103,12 @@ class Video: Codable{
     var id: Int?
     var name: String?
     var videoId: String?
-    
 }
 
 class Franchise: Codable{
     var id: Int?
     var name: String?
     var games: [Int]?
-    
 }
 
 class GameCollection: Codable{
@@ -165,10 +153,6 @@ class GameEngine: Codable {
     var id: Int?
     var name: String?
 }
-
-
-
-
 
 enum GameStatus: Int{
     case released = 0,
@@ -311,7 +295,6 @@ enum WebsiteCategory: Int{
 }
 
 enum GameImageSizeKey: String , CaseIterable{
-
     case S90X128 = "cover_small",
          S569X320 = "screenshot_med",
          S264X374 = "cover_big",
@@ -347,8 +330,6 @@ enum GameImageSizeKey: String , CaseIterable{
             return 100
         }
     }
-    
-    
 }
 
 protocol MediaDownloadable {

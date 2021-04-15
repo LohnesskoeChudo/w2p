@@ -10,27 +10,15 @@ import AVFoundation
 import AVKit
 import XCDYouTubeKit
 
-
-
 class GameVideoCompactCell: GameMediaCell {
 
     var videoId: String?
     var tuner: GameVideoCellTuner?
     var isSetup = false
-
-    override var staticMediaView: UIImageView?{
-        thumbView
-    }
-    
     let avPlayerController = AVPlayerViewController()
-    
     var player: AVPlayer? {
         avPlayerController.player
     }
-    
-    
-    @IBOutlet weak var preloadThumb: UIImageView!
-    
     
     lazy var thumbView: UIImageView = {
         guard let overlayView = avPlayerController.contentOverlayView else { fatalError("no overlay view") }
@@ -41,11 +29,26 @@ class GameVideoCompactCell: GameMediaCell {
         return thumbView
     }()
     
+    @IBOutlet weak var preloadThumb: UIImageView!
+    
+    override var staticMediaView: UIImageView?{
+        thumbView
+    }
+    
+    override func reload() {
+        tuner?.reload()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        preloadThumb.alpha = 0
+        avPlayerController.view.alpha = 0
+    }
+    
     func setupPlayerController(parentVC: UIViewController) {
         parentVC.addChild(avPlayerController)
         avPlayerController.didMove(toParent: parentVC)
         avPlayerController.allowsPictureInPicturePlayback = false
-
         if let playerControllerView = avPlayerController.view {
             playerControllerView.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview(playerControllerView)
@@ -61,11 +64,11 @@ class GameVideoCompactCell: GameMediaCell {
             playerControllerView.addGestureRecognizer(tapGR)
 
         }
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(audioInterruptionHandler), name: AVAudioSession.interruptionNotification, object:  AVAudioSession.sharedInstance())
-        
-
+    }
+    
+    func pauseVideo() {
+        player?.pause()
     }
     
     @objc func playVideo() {
@@ -83,21 +86,7 @@ class GameVideoCompactCell: GameMediaCell {
             self.player?.pause()
         }
     }
-    
-    override func reload() {
-        tuner?.reload()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        preloadThumb.alpha = 0
-        avPlayerController.view.alpha = 0
-    }
-    
-    func pauseVideo() {
-        player?.pause()
-    }
-    
+   
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
